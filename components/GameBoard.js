@@ -1,8 +1,7 @@
 import React, { Component } from "react";
-import { Text } from "react-native";
-import { Col, Row, Grid } from "react-native-easy-grid";
+import { Text, Animated } from "react-native";
+import { Row, Grid } from "react-native-easy-grid";
 import _ from "lodash";
-import { Spring } from "react-spring";
 import Tile from "./Tile";
 
 // Current colors used in the game
@@ -19,7 +18,8 @@ export default class GameBoard extends Component {
                 ['', '', '', ''],
                 ['', '', '', '']
             ],
-            firstClick: {}
+            firstClick: {},
+            fadeAnimation: new Animated.Value(0)
         }
     }
 
@@ -42,6 +42,7 @@ export default class GameBoard extends Component {
                 tile.xIndex = xIndex;
                 tile.yIndex = yIndex;
                 tile.key = "" + xIndex + yIndex;
+                tile.switched = false;
                 // Push new tile in newRow array
                 return newRow.push(tile);
             });
@@ -63,6 +64,7 @@ export default class GameBoard extends Component {
 
     // Render game board according to the current tile state 
     renderBoard = () => {
+        this.fadeInBoard();
         // Go through each row of tiles
         return (this.state.tile.map((row, index) => {
             // For each tile in the row
@@ -70,13 +72,23 @@ export default class GameBoard extends Component {
                 <Row key={ index }>
                     {row.map(tile => {
                         // Deconstruct the tile object into variables
-                        const {color, xIndex, yIndex} = tile;
+                        const {color, switched, xIndex, yIndex} = tile;
                         // Then pass the variables as props into the Tile component
-                        return <Tile color={color} xIndex={xIndex} yIndex={yIndex} key={`${xIndex}${yIndex}`} click={this.handleClicks}/>
+                        return <Tile color={color} switched={switched} xIndex={xIndex} yIndex={yIndex} key={`${xIndex}${yIndex}`} click={this.handleClicks}/>
                     })}
                 </Row>
             );
         }));
+    }
+
+    fadeInBoard = () => {
+        Animated.timing(
+            this.state.fadeAnimation,
+            {
+                toValue: 1,
+                duration: 1000
+            }
+        ).start();
     }
 
     // Function to handle clicking of Tiles on the Board
@@ -108,24 +120,32 @@ export default class GameBoard extends Component {
         const tiles = this.state.tile;
         // Switch the color of the two tiles using the coordinates grabbed at the click event
         // Lovely straighforward way to switch elements in an array using ES6!
-        [ tiles[firstClick.x][firstClick.y].color, tiles[secondClick.x][secondClick.y].color ] = [tiles[secondClick.x][secondClick.y].color, tiles[firstClick.x][firstClick.y].color]
+        [ tiles[firstClick.x][firstClick.y].color, tiles[secondClick.x][secondClick.y].color, tiles[firstClick.x][firstClick.y].switched, tiles[secondClick.x][secondClick.y].switched ] = [tiles[secondClick.x][secondClick.y].color, tiles[firstClick.x][firstClick.y].color, true, true]
         // Set tile state to new array after switch and clear firstClick state to player can click again
         this.setState({tile: tiles, firstClick: {}}, () => {
             let enemyScore = this.props.enemyScore;
-            enemyScore++;
+            enemyScore+=3;
+            this.props.updateScore([name = "enemyScore", value = enemyScore]);
             // After new tiles are set, check the board for matches of 3 or more
-            this.checkMatchesOnBoard();
+            this.state.gameStarted ? 
+                setTimeout(
+                    function(){
+                        this.checkMatchesOnBoard();
+                    }
+                    .bind(this),
+                    300)
+                : 
+                this.checkMatchesOnBoard();
         });
     }
 
     // Checks game board for matches of 3 or more 
     checkMatchesOnBoard = () => {
-        console.log("checking board");
         const tiles = this.state.tile;
         let tilesToDelete = [];
         tiles.forEach((row, i) => {
             row.forEach((tile, j) => {
-                
+                tile.switched = false;
                 if(j < tiles[i].length-2){
                     // If three in a row are matching, store tile coordinates in an array of objects
                     if(tile.color === tiles[i][j+1].color && tiles[i][j].color === tiles[i][j+2].color){
@@ -153,7 +173,7 @@ export default class GameBoard extends Component {
         }
         // If there are no tiles that match, then game is started and board will become visible to player
         else if(tilesToDelete.length === 0){
-            this.setState({gameStarted: true});
+            this.setState({gameStarted: true, tile: tiles});
         }
     }
 
@@ -202,17 +222,6 @@ export default class GameBoard extends Component {
         tiles.forEach((row, xIndex) =>{
             row.forEach((tile, yIndex) => {
                 this.dynamicShift(tiles.length, tiles, xIndex, yIndex);
-                //If the tile is not in the last row and does not have a color, switch it with next tile in column
-                // if(xIndex < tiles.length-1 && tiles[xIndex][yIndex].color === ""){
-                //     // If the next tile over also doesn't have a color, then switch tile with next next tile in the column
-                //     if(xIndex < tiles.length-2 && tiles[xIndex+1][yIndex].color === ""){
-                //         if(xIndex < tiles.length-3 && tiles[xIndex+2][yIndex].color === ""){
-                //             return [tiles[xIndex][yIndex].color, tiles[xIndex+3][yIndex].color] = [tiles[xIndex+3][yIndex].color, tiles[xIndex][yIndex].color];
-                //         }
-                //         return [tiles[xIndex][yIndex].color, tiles[xIndex+2][yIndex].color] = [tiles[xIndex+2][yIndex].color, tiles[xIndex][yIndex].color];
-                //     }
-                //     [tiles[xIndex][yIndex].color, tiles[xIndex+1][yIndex].color] = [tiles[xIndex+1][yIndex].color, tiles[xIndex][yIndex].color];
-                // }
             })
         });
         // Reverse the array again to get back to origin array order
@@ -266,10 +275,12 @@ export default class GameBoard extends Component {
     render() {
         return (
             this.state.gameStarted ? 
-            <Grid>
-                { this.renderBoard() }
-            </Grid>
-            : <Text className="text-center">Game Loading</Text>
+            <Animated.View style={{ opacity: this.state.fadeAnimation }}>
+                <Grid> 
+                { this.renderBoard() } 
+                </Grid> 
+            </Animated.View>
+            : <Text> Game Loading </Text>
         )
     }
 }

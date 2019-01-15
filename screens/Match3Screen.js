@@ -35,6 +35,7 @@ export default class Match3Screen extends Component {
         </Header>
 				<Content contentContainerStyle={{ alignItems: "center" }}>
 					<Text>Score: { this.state.playerScore }</Text>
+					<Text>Enemy Score: { this.state.enemyScore }</Text>
 					<GameBoard pet={{ color: "red" }} playerScore={ this.state.playerScore } enemyScore={ this.state.enemyScore } updateScore={ this.updateScore }/>
 				</Content>
 			</Container>
