@@ -5,7 +5,7 @@ import _ from "lodash";
 import Tile from "./Tile";
 
 // Current colors used in the game
-const colors = ["red", "green", "blue", "magenta"];
+const colors = ["red", "green", "blue", "magenta", "yellow", "cyan"];
 
 export default class GameBoard extends Component {
     constructor(props){
@@ -13,10 +13,11 @@ export default class GameBoard extends Component {
         this.state= {
             gameStarted: false,
             tile: [
-                ['', '', '', ''],
-                ['', '', '', ''],
-                ['', '', '', ''],
-                ['', '', '', '']
+                ['', '', '', '', ''],
+                ['', '', '', '', ''],
+                ['', '', '', '', ''],
+                ['', '', '', '', ''],
+                ['', '', '', '', '']
             ],
             firstClick: {},
             fadeAnimation: new Animated.Value(0)
@@ -123,9 +124,9 @@ export default class GameBoard extends Component {
         [ tiles[firstClick.x][firstClick.y].color, tiles[secondClick.x][secondClick.y].color, tiles[firstClick.x][firstClick.y].switched, tiles[secondClick.x][secondClick.y].switched ] = [tiles[secondClick.x][secondClick.y].color, tiles[firstClick.x][firstClick.y].color, true, true]
         // Set tile state to new array after switch and clear firstClick state to player can click again
         this.setState({tile: tiles, firstClick: {}}, () => {
-            let enemyScore = this.props.enemyScore;
-            enemyScore+=3;
-            this.props.updateScore([name = "enemyScore", value = enemyScore]);
+            // let enemyScore = this.props.enemyScore;
+            // enemyScore+=3;
+            this.props.updateScore([name = "enemyScore", value = this.randomEnemyScore()]);
             // After new tiles are set, check the board for matches of 3 or more
             this.state.gameStarted ? 
                 setTimeout(
@@ -137,6 +138,26 @@ export default class GameBoard extends Component {
                 : 
                 this.checkMatchesOnBoard();
         });
+    }
+
+    randomEnemyScore = () => {
+        let enemyScore = this.props.enemyScore;
+        const randomNumber = Math.floor(Math.random() * 100);
+        if(randomNumber < 25){
+            return enemyScore += 3;
+        }
+        else if(randomNumber < 50){
+            return enemyScore += 4;
+        }
+        else if (randomNumber < 75){
+            return enemyScore += 5;
+        }
+        else if(randomNumber < 90){
+            return enemyScore += 6;
+        }
+        else{
+            return enemyScore += 7;
+        }
     }
 
     // Checks game board for matches of 3 or more 

@@ -44,13 +44,17 @@ class Tile extends Component{
         let iconName = "";
         switch (this.state.color){
             case "green":
-                return iconName += "ios-globe";
+                return iconName += "md-planet";
             case "blue":
-                return iconName += "ios-water";
+                return iconName += "md-water";
             case "magenta":
-                return iconName += "ios-heart";
+                return iconName += "md-heart";
             case "red":
-                return iconName += "ios-flame";
+                return iconName += "md-flame";
+            case "yellow":
+                return iconName += "md-sunny";
+            case "cyan" :
+                return iconName += "md-cloud";
             default:
                 return iconName += "md-medal";
         }
