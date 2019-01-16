@@ -64,7 +64,7 @@ class Tile extends Component{
             onPress={()=> this.props.click({x: this.props.xIndex, y: this.props.yIndex})}
             >
                 <Animated.View style={{ top : this.state.dropInAnimation }}>
-                    <Ionicons name={ this.updateIcon() } size={ 40 } color={ this.state.color !== "" ? this.state.color : "white"}/>
+                    <Ionicons name={ this.updateIcon() } size={ 40 } color={ this.state.color !== "" ? this.state.color : "transparent"}/>
                 </Animated.View>
             </Col>
         );

@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
+import { Alert } from "react-native";
 import { Container, Header, Body, Title, Left, Right, Button, Icon, Content, H1, Text } from "native-base";
 import { Grid, Row } from "react-native-easy-grid";
-import { StackActions, NavigationActions } from 'react-navigation';
+import { NavigationActions } from 'react-navigation';
 import GameBoard from '../components/Match3Game/GameBoard';
 import RaceDisplay from "../components/Match3Game/RaceDisplay";
 import MyModal from "../components/Modal";
@@ -77,6 +78,17 @@ export default class Match3Screen extends Component {
 		this.setState({ gameEnded: true });
 	}
 
+	showAlert = () => {
+		Alert.alert(
+			"Are you sure?",
+			"Returning to the stable will exit the game, and your pet will not earn any experience points!",
+			[
+				{ text: "Cancel", style: 'cancel' },
+				{ text: "Return to stable", onPress: this.navigateHome }
+			]
+		)
+	}
+
 	navigateHome = () => {
 		this.setState({ gameStarted: false }, () => {
 			const navigateHome = NavigationActions.navigate({
@@ -94,7 +106,7 @@ export default class Match3Screen extends Component {
         <Header>
           <Left>
             <Button transparent
-							onPress={ this.navigateHome }
+							onPress={ this.state.gameStarted ? this.showAlert : this.navigateHome }
 						>
               <Icon name='arrow-back' />
               <Text> To Stable </Text>
@@ -108,7 +120,7 @@ export default class Match3Screen extends Component {
 				
 					
 					{ this.state.gameStarted ? 
-						<Content padder contentContainerStyle={{ justifyContent: "flex-start", alignItems: "center" }}>
+						<Content padder scrollEnabled={false} contentContainerStyle={{ justifyContent: "flex-start", alignItems: "center" }}>
 							<RaceDisplay playerScore={ this.state.playerScore } enemyScore={ this.state.enemyScore } playerImg={ exampleImg } enemyImg={ exampleImg }/>
 							<GameBoard startGame={ this.state.gameStarted } pet={ this.state.petInfo } playerScore={ this.state.playerScore } enemyScore={ this.state.enemyScore } updateScore={ this.updateScore }/>
 							<MyModal visible={ this.state.gameEnded }>
@@ -117,12 +129,12 @@ export default class Match3Screen extends Component {
 										<H1 style={{ alignSelf: "center", color: "white" }}> { modalMessage }</H1>
 									</Row>
 									<Row size={ 1 }>
-										<Button danger rounded style={{ alignSelf: "center", margin: 5 }}
+										<Button success rounded style={{ alignSelf: "center", margin: 5 }}
 											onPress={ this.startGame }
 										> 
 											<Text style={{ color: "white" }}> Play Again </Text> 
 										</Button>
-										<Button success rounded style={{ alignSelf: "center", margin: 5 }}
+										<Button danger rounded style={{ alignSelf: "center", margin: 5 }}
 											onPress={ this.navigateHome }
 										> 
 											<Text style={{ color: "white" }}> Return to Stable </Text> 
