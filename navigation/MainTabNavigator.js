@@ -43,7 +43,7 @@ const Match3Stack = createStackNavigator({
 });
 
 Match3Stack.navigationOptions = {
-  tabBarLabel: 'Game',
+  swipeEnabled: false,
   tabBarVisible: false,
   tabBarIcon: ({ focused }) => (
     <TabBarIcon
@@ -59,6 +59,7 @@ export default createBottomTabNavigator({
   Match3Stack
 },
 {
+  swipeEnabled: true,
   tabBarOptions: {
     showLabel: false,
     style: { height: "10%" },
