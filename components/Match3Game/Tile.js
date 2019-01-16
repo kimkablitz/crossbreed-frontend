@@ -8,7 +8,8 @@ class Tile extends Component{
         super(props);
         this.state = { 
             color: "", 
-            dropInAnimation: new Animated.Value(-10)
+            dropInAnimation: new Animated.Value(-10),
+            rotateAnimation: "0deg"
         }
     }
 
@@ -19,15 +20,25 @@ class Tile extends Component{
 
     componentDidUpdate(prevProps){
         if(this.props.color !== prevProps.color){
-            if(!this.props.switched){
-                this.setState({ color: this.props.color, dropInAnimation: new Animated.Value(-10) }, ()=>{    
+            if(this.props.color === ""){
+                return this.rotateTile();
+            }
+            else if(!this.props.switched){
+                this.setState({ color: this.props.color, dropInAnimation: new Animated.Value(-10), rotateAnimation: "0deg" }, ()=>{    
                     this.dropDownTile();
                 });
             }
+            
             else{
                 this.setState({ color: this.props.color });
             }
         }
+        else if( this.props.color === prevProps.color && this.props.dropped !== prevProps.dropped && this.props.dropped === true ){
+            console.log("dropped same color");
+            this.setState({ color: this.props.color, dropInAnimation: new Animated.Value(-10), rotateAnimation: "0deg" }, ()=>{    
+                this.dropDownTile();
+            });
+        }   
     }
 
     dropDownTile = () => {
@@ -37,7 +48,22 @@ class Tile extends Component{
                 toValue: 0,
                 duration: 300
             }
-        ).start()
+        ).start();
+    }
+
+    rotateTile = () => {
+        let rotateValue = new Animated.Value(0);
+        Animated.timing(
+            rotateValue,
+            {
+                toValue: 1,
+                duration: 300
+            }
+        ).start(() => {this.setState({ color: this.props.color })});
+        this.state.rotateAnimation = rotateValue.interpolate({
+            inputRange: [0, 1],
+            outputRange: ["0deg", "180deg"]
+        });
     }
 
     updateIcon = () => {
@@ -63,7 +89,7 @@ class Tile extends Component{
             <Col style={{ width: 50, alignItems: "center", justifyContent: "center" }}
             onPress={()=> this.props.click({x: this.props.xIndex, y: this.props.yIndex})}
             >
-                <Animated.View style={{ top : this.state.dropInAnimation }}>
+                <Animated.View style={{ top : this.state.dropInAnimation, transform: [{rotate: this.state.rotateAnimation}] }}>
                     <Ionicons name={ this.updateIcon() } size={ 40 } color={ this.state.color !== "" ? this.state.color : "transparent"}/>
                 </Animated.View>
             </Col>

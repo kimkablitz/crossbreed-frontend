@@ -122,7 +122,7 @@ export default class Match3Screen extends Component {
 					{ this.state.gameStarted ? 
 						<Content padder scrollEnabled={false} contentContainerStyle={{ justifyContent: "flex-start", alignItems: "center" }}>
 							<RaceDisplay playerScore={ this.state.playerScore } enemyScore={ this.state.enemyScore } playerImg={ exampleImg } enemyImg={ exampleImg }/>
-							<GameBoard startGame={ this.state.gameStarted } pet={ this.state.petInfo } playerScore={ this.state.playerScore } enemyScore={ this.state.enemyScore } updateScore={ this.updateScore }/>
+							<GameBoard gameEnded={ this.state.gameEnded } pet={ this.state.petInfo } playerScore={ this.state.playerScore } enemyScore={ this.state.enemyScore } updateScore={ this.updateScore }/>
 							<MyModal visible={ this.state.gameEnded }>
 								<Grid style={{ backgroundColor: "rgba(0,0,0,0.7)", justifyContent: "center", alignItems: "center"}}>
 									<Row size={ 2 }>

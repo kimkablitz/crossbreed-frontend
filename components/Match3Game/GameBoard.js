@@ -31,7 +31,8 @@ export default class GameBoard extends Component {
 
     componentDidUpdate(prevProps){
         // 
-        if(prevProps.startGame === false && this.props.startGame === true){
+        if(prevProps.gameEnded === true && this.props.gameEnded === false){
+            console.log("re=render board");
             this.setState({ displayBoard: false }, () => {
                 this.generateRandomBoard();
             })
@@ -53,6 +54,7 @@ export default class GameBoard extends Component {
                 tile.yIndex = yIndex;
                 tile.key = "" + xIndex + yIndex;
                 tile.switched = false;
+                tile.dropped = false;
                 // Push new tile in newRow array
                 return newRow.push(tile);
             });
@@ -82,9 +84,9 @@ export default class GameBoard extends Component {
                 <Row key={ index }>
                     {row.map(tile => {
                         // Deconstruct the tile object into variables
-                        const {color, switched, xIndex, yIndex} = tile;
+                        const {color, switched, dropped, xIndex, yIndex} = tile;
                         // Then pass the variables as props into the Tile component
-                        return <Tile color={color} switched={switched} xIndex={xIndex} yIndex={yIndex} key={`${xIndex}${yIndex}`} click={this.handleClicks}/>
+                        return <Tile color={color} switched={switched} dropped={dropped} xIndex={xIndex} yIndex={yIndex} key={`${xIndex}${yIndex}`} click={this.handleClicks}/>
                     })}
                 </Row>
             );
@@ -176,10 +178,16 @@ export default class GameBoard extends Component {
         tiles.forEach((row, i) => {
             row.forEach((tile, j) => {
                 tile.switched = false;
+                tile.dropped = false;
                 if(j < tiles[i].length-2){
                     // If three in a row are matching, store tile coordinates in an array of objects
                     if(tile.color === tiles[i][j+1].color && tiles[i][j].color === tiles[i][j+2].color){
-                        tilesToDelete.push(tile.key, tiles[i][j+1].key, tiles[i][j+2].key);
+                        if(_.includes(tilesToDelete, tile.key)){
+                            tilesToDelete.push(tiles[i][j+1].key, tiles[i][j+2].key);
+                        }
+                        else{
+                            tilesToDelete.push(tile.key, tiles[i][j+1].key, tiles[i][j+2].key);
+                        }
                     }
                 }
             
@@ -233,11 +241,16 @@ export default class GameBoard extends Component {
             function(){
                 this.setState({tile: tiles}, () =>{
                     this.props.updateScore([ name = "playerScore", value = score ]);
-                    this.shiftTilesDown();
+                    setTimeout(
+                        function(){
+                            this.shiftTilesDown();
+                        }
+                        .bind(this),
+                        300)
                 })
             }
             .bind(this),
-            300)
+            100)
         : 
         this.setState({tile: tiles}, () =>{
             this.shiftTilesDown();
@@ -263,7 +276,7 @@ export default class GameBoard extends Component {
                 this.fillInEmptyTiles(tiles)
             }
             .bind(this),
-            500)
+            300)
         : this.fillInEmptyTiles(tiles)
     }
 
@@ -275,7 +288,12 @@ export default class GameBoard extends Component {
                 shiftIndex++;
             }
         }
-        return [tilesArray[xIndex][yIndex].color, tilesArray[xIndex+shiftIndex][yIndex].color] = [tilesArray[xIndex+shiftIndex][yIndex].color, tilesArray[xIndex][yIndex].color];
+        if(shiftIndex > 0){
+            return [tilesArray[xIndex][yIndex].color, tilesArray[xIndex+shiftIndex][yIndex].color, tilesArray[xIndex+shiftIndex][yIndex].dropped ] = [tilesArray[xIndex+shiftIndex][yIndex].color, tilesArray[xIndex][yIndex].color, true];
+        }
+        else{
+            return [tilesArray[xIndex][yIndex].color, tilesArray[xIndex+shiftIndex][yIndex].color ] = [tilesArray[xIndex+shiftIndex][yIndex].color, tilesArray[xIndex][yIndex].color ]
+        }
     }
 
     // Function to fill in any remaining empty spaces after existing tiles have already been shifted down
