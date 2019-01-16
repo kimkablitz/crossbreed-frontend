@@ -47,14 +47,12 @@ class Tile extends Component{
                 return iconName += "md-planet";
             case "blue":
                 return iconName += "md-water";
-            case "magenta":
-                return iconName += "md-heart";
             case "red":
                 return iconName += "md-flame";
-            case "yellow":
-                return iconName += "md-sunny";
-            case "cyan" :
-                return iconName += "md-cloud";
+            case "white":
+                return iconName += "md-cloudy";
+            case "black": 
+                return iconName += "md-paw";
             default:
                 return iconName += "md-medal";
         }

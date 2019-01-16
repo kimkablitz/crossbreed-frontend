@@ -13,43 +13,27 @@ const HomeStack = createStackNavigator({
 });
 
 HomeStack.navigationOptions = {
-  tabBarLabel: 'Home',
   tabBarIcon: ({ focused }) => (
     <TabBarIcon
       focused={focused}
       name={
         Platform.OS === 'ios'
-          ? `ios-information-circle${focused ? '' : '-outline'}`
-          : 'md-information-circle'
+          ? `ios-home`
+          : 'md-home'
       }
     />
   ),
 };
 
-const LinksStack = createStackNavigator({
-  Links: LinksScreen,
+const BreedStack = createStackNavigator({
+  Breed: LinksScreen,
 });
 
-LinksStack.navigationOptions = {
-  tabBarLabel: 'Links',
+BreedStack.navigationOptions = {
   tabBarIcon: ({ focused }) => (
     <TabBarIcon
       focused={focused}
-      name={Platform.OS === 'ios' ? 'ios-link' : 'md-link'}
-    />
-  ),
-};
-
-const SettingsStack = createStackNavigator({
-  Settings: SettingsScreen,
-});
-
-SettingsStack.navigationOptions = {
-  tabBarLabel: 'Settings',
-  tabBarIcon: ({ focused }) => (
-    <TabBarIcon
-      focused={focused}
-      name={Platform.OS === 'ios' ? 'ios-options' : 'md-options'}
+      name='md-git-network'
     />
   ),
 };
@@ -60,17 +44,27 @@ const Match3Stack = createStackNavigator({
 
 Match3Stack.navigationOptions = {
   tabBarLabel: 'Game',
+  tabBarVisible: false,
   tabBarIcon: ({ focused }) => (
     <TabBarIcon
       focused={focused}
-      name={Platform.OS === 'ios' ? 'logo-game-controller-a' : 'logo-game-controller-a'}
+      name='logo-game-controller-b'
     />
   ),
 };
 
 export default createBottomTabNavigator({
   HomeStack,
-  LinksStack,
-  SettingsStack,
+  BreedStack,
   Match3Stack
-});
+},
+{
+  tabBarOptions: {
+    showLabel: false,
+    style: { height: "10%" },
+    activeBackgroundColor: "black",
+    inactiveBackgroundColor: "black",
+    activeTintColor: "white"
+  }
+}
+);

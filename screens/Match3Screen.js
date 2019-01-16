@@ -8,6 +8,29 @@ import MyModal from "../components/Modal";
 
 const exampleImg = "https://facebook.github.io/react-native/docs/assets/favicon.png ";
 let modalMessage = "";
+const examplePet = {
+	name: "Red",
+	baseImage: "testPet.svg",
+	baseColor: {
+			red: 255,
+			blue: 0,
+			green: 0,
+			transparency: 1 
+	},
+	outlineColor: {
+			red: 0,
+			blue: 0,
+			green: 0,
+			transparency: 1
+	},
+	gameColor: {
+			primary: "red",
+			secondary: "red"
+	},
+	isFavorite: false,
+	parents: [],
+	dna: {}, //NOTE: dna will go here soon
+};
 
 export default class Match3Screen extends Component {
 	static navigationOptions = {
@@ -18,12 +41,13 @@ export default class Match3Screen extends Component {
 		playerScore: 0,
 		enemyScore: 0,
 		gameStarted: false,
-		gameEnded: false
+		gameEnded: false,
+		petInfo: {}
 	};
 
 	componentDidMount(){
 		// TODO: add GET request to get Pet info
-		
+		this.setState({ petInfo: examplePet });
 		// TODO: add GET request to get random enemy 
 		
 	}
@@ -50,12 +74,19 @@ export default class Match3Screen extends Component {
 		else{
 			modalMessage = "You Lost!"
 		}
-		this.setState({ gameEnded: true, gameStarted: false });
+		this.setState({ gameEnded: true });
+	}
+
+	navigateHome = () => {
+		this.setState({ gameStarted: false }, () => {
+			const navigateHome = NavigationActions.navigate({
+				routeName: 'Home'});
+			this.props.navigation.dispatch(navigateHome);
+		});
 	}
 
   render() {
-		const navigateHome = NavigationActions.navigate({
-			routeName: 'Home'});
+		
 		
 
     return (
@@ -63,7 +94,7 @@ export default class Match3Screen extends Component {
         <Header>
           <Left>
             <Button transparent
-							onPress={ () => {this.props.navigation.dispatch(navigateHome) }}
+							onPress={ this.navigateHome }
 						>
               <Icon name='arrow-back' />
               <Text> To Stable </Text>
@@ -74,29 +105,51 @@ export default class Match3Screen extends Component {
           </Body>
           <Right />
         </Header>
-				<Content padder contentContainerStyle={{ justifyContent: "flex-start", alignItems: "center" }}>
-					<MyModal visible={ this.state.gameEnded }>
-						<Grid style={{ backgroundColor: "rgba(0,0,0,0.7)", justifyContent: "center", alignItems: "center"}}>
-							<Row size={ 2 }>
-								<H1 style={{ alignSelf: "center", color: "white" }}> { modalMessage }</H1>
-							</Row>
-							<Row size={ 1 }>
-								<Button danger rounded style={{ alignSelf: "center", margin: 5 }}
-									onPress={ this.startGame }
-								> 
-									<Text style={{ color: "white" }}> Play Again </Text> 
-								</Button>
-								<Button success rounded style={{ alignSelf: "center", margin: 5 }}
-									onPress={ () => this.setState({ gameEnded: false}, () => {this.props.navigation.dispatch(navigateHome) })}
-								> 
-									<Text style={{ color: "white" }}> Return to Stable </Text> 
-								</Button>
-							</Row>
-						</Grid>
-					</MyModal>
-					<RaceDisplay playerScore={ this.state.playerScore } enemyScore={ this.state.enemyScore } playerImg={ exampleImg } enemyImg={ exampleImg }/>
-					<GameBoard startGame={ this.state.gameStarted } pet={{ color: "red" }} playerScore={ this.state.playerScore } enemyScore={ this.state.enemyScore } updateScore={ this.updateScore }/>
-				</Content>
+				
+					
+					{ this.state.gameStarted ? 
+						<Content padder contentContainerStyle={{ justifyContent: "flex-start", alignItems: "center" }}>
+							<RaceDisplay playerScore={ this.state.playerScore } enemyScore={ this.state.enemyScore } playerImg={ exampleImg } enemyImg={ exampleImg }/>
+							<GameBoard startGame={ this.state.gameStarted } pet={ this.state.petInfo } playerScore={ this.state.playerScore } enemyScore={ this.state.enemyScore } updateScore={ this.updateScore }/>
+							<MyModal visible={ this.state.gameEnded }>
+								<Grid style={{ backgroundColor: "rgba(0,0,0,0.7)", justifyContent: "center", alignItems: "center"}}>
+									<Row size={ 2 }>
+										<H1 style={{ alignSelf: "center", color: "white" }}> { modalMessage }</H1>
+									</Row>
+									<Row size={ 1 }>
+										<Button danger rounded style={{ alignSelf: "center", margin: 5 }}
+											onPress={ this.startGame }
+										> 
+											<Text style={{ color: "white" }}> Play Again </Text> 
+										</Button>
+										<Button success rounded style={{ alignSelf: "center", margin: 5 }}
+											onPress={ this.navigateHome }
+										> 
+											<Text style={{ color: "white" }}> Return to Stable </Text> 
+										</Button>
+									</Row>
+								</Grid>
+							</MyModal>
+						</Content>
+					: <Content>
+							<Grid>
+								<Row size={ 1 } style={{ justifyContent: "center"}}>
+									<Text style={{ marginVertical: 10 }}> Play Game </Text>
+								</Row>
+								<Row size={ 1 } style={{ justifyContent: "center"}}>
+									<Button primary rounded style={{ marginVertical: 10}}
+										onPress={ this.startGame }
+									> 
+										<Text>Easy</Text> 
+									</Button>
+								</Row>
+								<Row size={ 2 } style={{ justifyContent: "center"}}>
+									<Text style={{ marginVertical: 10}}>Instructions on how to play the game!</Text>
+								</Row>
+							</Grid>
+						</Content>
+					}
+				
 			</Container>
     )
   }

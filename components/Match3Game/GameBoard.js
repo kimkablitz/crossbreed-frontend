@@ -5,7 +5,7 @@ import _ from "lodash";
 import Tile from "./Tile";
 
 // Current colors used in the game
-const colors = ["red", "green", "blue", "magenta", "yellow", "cyan"];
+const colors = ["red", "green", "blue", "white", "black"];
 
 export default class GameBoard extends Component {
     constructor(props){
@@ -30,6 +30,7 @@ export default class GameBoard extends Component {
     }
 
     componentDidUpdate(prevProps){
+        // 
         if(prevProps.startGame === false && this.props.startGame === true){
             this.setState({ displayBoard: false }, () => {
                 this.generateRandomBoard();
@@ -217,7 +218,7 @@ export default class GameBoard extends Component {
             tiles[tile[0]][tile[1]].color = "";
             // Only increase the score if the game has started
             if(this.state.displayBoard){
-                if(deletedColor === this.props.pet.color){
+                if(deletedColor === this.props.pet.gameColor.primary){
                     score+=2;
                 }
                 else{
@@ -304,8 +305,8 @@ export default class GameBoard extends Component {
     render() {
         return (
             this.state.displayBoard ? 
-            <Animated.View style={{ opacity: this.state.fadeAnimation }}>
-                <Grid> 
+            <Animated.View style={{ opacity: this.state.fadeAnimation, marginVertical: 10 }}>
+                <Grid style={{ backgroundColor: "#D5D4D2"}}> 
                 { this.renderBoard() } 
                 </Grid> 
             </Animated.View>
