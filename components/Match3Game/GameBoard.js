@@ -11,7 +11,7 @@ export default class GameBoard extends Component {
     constructor(props){
         super(props)
         this.state= {
-            gameStarted: false,
+            displayBoard: false,
             tile: [
                 ['', '', '', '', ''],
                 ['', '', '', '', ''],
@@ -27,6 +27,14 @@ export default class GameBoard extends Component {
     // The first time the board is mounted, generate a random board
     componentDidMount(){
         this.generateRandomBoard();
+    }
+
+    componentDidUpdate(prevProps){
+        if(prevProps.startGame === false && this.props.startGame === true){
+            this.setState({ displayBoard: false }, () => {
+                this.generateRandomBoard();
+            })
+        }
     }
 
     // Function to generate a random board
@@ -50,7 +58,7 @@ export default class GameBoard extends Component {
             // Push each newRow into newTileState array
             return newTileState.push(newRow);
         });
-        // Set tile state with the newTileState array, and set gameStarted to true
+        // Set tile state with the newTileState array, and set displayBoard to true
         // Then, in call back check if there are any matches on the board
         this.setState({tile: newTileState}, () => {
             this.checkMatchesOnBoard();
@@ -128,7 +136,7 @@ export default class GameBoard extends Component {
             // enemyScore+=3;
             this.props.updateScore([name = "enemyScore", value = this.randomEnemyScore()]);
             // After new tiles are set, check the board for matches of 3 or more
-            this.state.gameStarted ? 
+            this.state.displayBoard ? 
                 setTimeout(
                     function(){
                         this.checkMatchesOnBoard();
@@ -194,7 +202,7 @@ export default class GameBoard extends Component {
         }
         // If there are no tiles that match, then game is started and board will become visible to player
         else if(tilesToDelete.length === 0){
-            this.setState({gameStarted: true, tile: tiles});
+            this.setState({displayBoard: true, tile: tiles});
         }
     }
 
@@ -208,7 +216,7 @@ export default class GameBoard extends Component {
             // Set the color to nothing
             tiles[tile[0]][tile[1]].color = "";
             // Only increase the score if the game has started
-            if(this.state.gameStarted){
+            if(this.state.displayBoard){
                 if(deletedColor === this.props.pet.color){
                     score+=2;
                 }
@@ -219,7 +227,7 @@ export default class GameBoard extends Component {
         });
         // Set tile state to new tiles array and shift tiles down
 
-        this.state.gameStarted ? 
+        this.state.displayBoard ? 
         setTimeout(
             function(){
                 this.setState({tile: tiles}, () =>{
@@ -248,7 +256,7 @@ export default class GameBoard extends Component {
         // Reverse the array again to get back to origin array order
         tiles.reverse();
         // Fill in any remaining empty tiles with new random tiles
-        this.state.gameStarted ? 
+        this.state.displayBoard ? 
         setTimeout(
             function(){
                 this.fillInEmptyTiles(tiles)
@@ -282,7 +290,7 @@ export default class GameBoard extends Component {
             });
         });
         this.setState({tile: tiles}, () => {
-            this.state.gameStarted ? 
+            this.state.displayBoard ? 
             setTimeout(
                 function(){
                     this.checkMatchesOnBoard();
@@ -295,7 +303,7 @@ export default class GameBoard extends Component {
 
     render() {
         return (
-            this.state.gameStarted ? 
+            this.state.displayBoard ? 
             <Animated.View style={{ opacity: this.state.fadeAnimation }}>
                 <Grid> 
                 { this.renderBoard() } 
