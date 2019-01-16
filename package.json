@@ -21,6 +21,7 @@
     "react": "16.5.0",
     "react-native": "https://github.com/expo/react-native/archive/sdk-32.0.0.tar.gz",
     "react-native-easy-grid": "^0.2.0",
+    "react-native-swipe-gestures": "^1.0.3",
     "react-navigation": "^3.0.9"
   },
   "devDependencies": {

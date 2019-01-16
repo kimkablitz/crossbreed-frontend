@@ -86,7 +86,7 @@ export default class GameBoard extends Component {
                         // Deconstruct the tile object into variables
                         const {color, switched, dropped, xIndex, yIndex} = tile;
                         // Then pass the variables as props into the Tile component
-                        return <Tile color={color} switched={switched} dropped={dropped} xIndex={xIndex} yIndex={yIndex} key={`${xIndex}${yIndex}`} click={this.handleClicks}/>
+                        return <Tile color={color} switched={switched} dropped={dropped} xIndex={xIndex} yIndex={yIndex} key={`${xIndex}${yIndex}`} swipe={this.handleSwipes}/>
                     })}
                 </Row>
             );
@@ -103,29 +103,47 @@ export default class GameBoard extends Component {
         ).start();
     }
 
-    // Function to handle clicking of Tiles on the Board
-    handleClicks = (coordinates) => {
-        const firstClick = this.state.firstClick;
-        // If firstClick is empty, set clicked Tile as firstClick
-        if(Object.keys(firstClick).length === 0){
-            this.setState({firstClick: coordinates});
+    handleSwipes = (direction, firstTile) => {
+        let secondTile = _.clone(firstTile);
+        switch(direction){
+            case "SWIPE_UP":
+                if(firstTile.x !== 0){
+                    secondTile.x = (firstTile.x - 1);
+                }
+                else{
+                    console.log("cannot swipe up")
+                }
+                break;
+            case "SWIPE_DOWN":
+                if(firstTile.x < (this.state.tile.length -1)){
+                    secondTile.x = (firstTile.x + 1);
+                }
+                else{
+                    console.log("cannot swipe down")
+                }
+                break;
+            case "SWIPE_LEFT":
+                if(firstTile.y !== 0){
+                    secondTile.y = (firstTile.y -1);
+                }
+                else{
+                    console.log("cannot swipe left")
+                }
+                break;
+            case "SWIPE_RIGHT":
+                if(firstTile.y < (this.state.tile[0].length - 1)){
+                    secondTile.y = (firstTile.y + 1);
+                }
+                else{
+                    console.log("cannot swipe right")
+                }
+                break;
+            default:
+                console.log("no direction found");
+                break
         }
-        // If firstClick already exists, set clicked Tile as secondClick
-        // Then check the secondClick to see if it was contiguous to firstClick
-        else{
-            const secondClick = coordinates;
-            if(((firstClick.x === secondClick.x) && (Math.abs(firstClick.y - secondClick.y) === 1)) || ((firstClick.y === secondClick.y) && (Math.abs(firstClick.x - secondClick.x) === 1))){
-                // If two clicked tiles are contiguous, then switch the tiles
-                this.switchTiles(firstClick, secondClick);
-            }
-            // If they are not contiguous, clear the firstClick state so player can click again
-            else{
-                // TODO: INSERT ANIMATION TO SHOW TILES CANNOT BE SWITCHED!!!
-                console.log("cannot swap tiles!");
-                this.setState({ firstClick: {} });
-            }
-        }
-    }
+        this.switchTiles(firstTile, secondTile);
+    } 
 
     // Switch the color of two tiles
     switchTiles = (firstClick, secondClick) => {

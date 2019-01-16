@@ -2,6 +2,7 @@ import React , { Component } from 'react';
 import { Animated } from "react-native";
 import { Col } from "react-native-easy-grid";
 import { Ionicons } from '@expo/vector-icons';
+import GestureRecognizer, {swipeDirections} from 'react-native-swipe-gestures';
 
 class Tile extends Component{
     constructor(props){
@@ -46,7 +47,8 @@ class Tile extends Component{
             this.state.dropInAnimation,
             {
                 toValue: 0,
-                duration: 300
+                duration: 300,
+                useNativeDriver: true
             }
         ).start();
     }
@@ -57,7 +59,8 @@ class Tile extends Component{
             rotateValue,
             {
                 toValue: 1,
-                duration: 300
+                duration: 300,
+                useNativeDriver: true
             }
         ).start(() => {this.setState({ color: this.props.color })});
         this.state.rotateAnimation = rotateValue.interpolate({
@@ -86,13 +89,16 @@ class Tile extends Component{
     
     render(){
         return (
-            <Col style={{ width: 50, alignItems: "center", justifyContent: "center" }}
-            onPress={()=> this.props.click({x: this.props.xIndex, y: this.props.yIndex})}
+            <GestureRecognizer 
+                config={{ velocityThreshold: 0.3, directionalOffsetThreshold: 80 }}
+                onSwipe={(direction) => this.props.swipe(direction, {x: this.props.xIndex, y: this.props.yIndex})}
             >
-                <Animated.View style={{ top : this.state.dropInAnimation, transform: [{rotate: this.state.rotateAnimation}] }}>
-                    <Ionicons name={ this.updateIcon() } size={ 40 } color={ this.state.color !== "" ? this.state.color : "transparent"}/>
-                </Animated.View>
-            </Col>
+                <Col style={{ width: 50, alignItems: "center", justifyContent: "center" }}>
+                    <Animated.View style={{ transform: [{rotate: this.state.rotateAnimation}, {translateY: this.state.dropInAnimation}] }}>
+                        <Ionicons name={ this.updateIcon() } size={ 40 } color={ this.state.color !== "" ? this.state.color : "transparent"}/>
+                    </Animated.View>
+                </Col>
+            </GestureRecognizer>
         );
     }
 }
