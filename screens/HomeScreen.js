@@ -11,45 +11,229 @@ import {
 import axios from "axios";
 import SearchBar from '../components/SearchBar';
 import RecipeCard from '../components/RecipeCard'
+import { Col, Row, Grid } from "react-native-easy-grid";
 export default class HomeScreen extends React.Component {
   static navigationOptions = {
     header: null,
   };
 
   state = {
-    recipeSearch: "",
-    recipes: []
+    // this will eventually hold all the users's pets and eggs
+    stalls: [
+      {
+          name: "Red",
+          baseImage: "testPet.svg",
+          baseColor: {
+              red: 255,
+              blue: 0,
+              green: 0,
+              transparency: 1 
+          },
+          outlineColor: {
+              red: 0,
+              blue: 0,
+              green: 0,
+              transparency: 1
+          },
+          gameColor: {
+              primary: "red",
+              secondary: "red"
+          },
+          isFavorite: false,
+          parents: [],
+          dna: {}, //NOTE: dna will go here soon
+      },
+      {
+          name: "Blue",
+          baseImage: "testPet.svg",
+          baseColor: {
+              red: 0,
+              blue: 255,
+              green: 0,
+              transparency: 1 
+          },
+          outlineColor: {
+              red: 0,
+              blue: 0,
+              green: 0,
+              transparency: 1
+          },
+          gameColor: {
+              primary: "blue",
+              secondary: "blue"
+          },
+          isFavorite: false,
+          parents: [],
+          dna: {}, //NOTE: dna will go here soon
+      },
+      {
+          name: "Green",
+          baseImage: "testPet.svg",
+          baseColor: {
+              red: 0,
+              blue: 0,
+              green: 255,
+              transparency: 1 
+          },
+          outlineColor: {
+              red: 0,
+              blue: 0,
+              green: 0,
+              transparency: 1
+          },
+          gameColor: {
+              primary: "green",
+              secondary: "green"
+          },
+          isFavorite: false,
+          parents: [],
+          dna: {}, //NOTE: dna will go here soon
+      },
+      {
+          name: "Magenta",
+          baseImage: "testPet.svg",
+          baseColor: {
+              red: 255,
+              blue: 255,
+              green: 0,
+              transparency: 1 
+          },
+          outlineColor: {
+              red: 0,
+              blue: 0,
+              green: 0,
+              transparency: 1
+          },
+          gameColor: {
+              primary: "magenta",
+              secondary: "magenta"
+          },
+          isFavorite: false,
+          parents: [],
+          dna: {}, //NOTE: dna will go here soon
+      },
+      {
+          name: "Cyan",
+          baseImage: "testPet.svg",
+          baseColor: {
+              red: 0,
+              blue: 255,
+              green: 255,
+              transparency: 1 
+          },
+          outlineColor: {
+              red: 0,
+              blue: 0,
+              green: 0,
+              transparency: 1
+          },
+          gameColor: {
+              primary: "cyan",
+              secondary: "cyan"
+          },
+          isFavorite: false,
+          parents: [],
+          dna: {}, //NOTE: dna will go here soon
+      },
+      {
+          name: "Yellow",
+          baseImage: "testPet.svg",
+          baseColor: {
+              red: 255,
+              blue: 0,
+              green: 255,
+              transparency: 1 
+          },
+          outlineColor: {
+              red: 0,
+              blue: 0,
+              green: 0,
+              transparency: 1
+          },
+          gameColor: {
+              primary: "yellow",
+              secondary: "yellow"
+          },
+          isFavorite: false,
+          parents: [],
+          dna: {}, //NOTE: dna will go here soon
+      },
+      {
+          name: "White",
+          baseImage: "testPet.svg",
+          baseColor: {
+              red: 255,
+              blue: 255,
+              green: 255,
+              transparency: 1 
+          },
+          outlineColor: {
+              red: 0,
+              blue: 0,
+              green: 0,
+              transparency: 1
+          },
+          gameColor: {
+              primary: "white",
+              secondary: "white"
+          },
+          isFavorite: false,
+          parents: [],
+          dna: {}, //NOTE: dna will go here soon
+      },
+      {
+          name: "Black",
+          baseImage: "testPet.svg",
+          baseColor: {
+              red: 0,
+              blue: 0,
+              green: 0,
+              transparency: 1 
+          },
+          outlineColor: {
+              red: 255,
+              blue: 255,
+              green: 255,
+              transparency: 1
+          },
+          gameColor: {
+              primary: "black",
+              secondary: "black"
+          },
+          isFavorite: false,
+          parents: [],
+          dna: {}, //NOTE: dna will go here soon
+      }
+  ]
   }
 
-  searchRecipe = (event) => {
-    event.preventDefault();
-    axios
-    .get("http://www.recipepuppy.com/api/", { params: {q: this.state.recipeSearch }})
-    .then(({ data: { results } }) => {
-      console.log(results)
-      this.setState({recipes: results})
-    })
-    .catch(err => console.log(err));
+  // getPets = (event) => {
+  //   event.preventDefault();
+  //   axios
+  //   .get("localhost:3000/")
+  //   .then(({ data: { results } }) => {
+  //     console.log(results)
+  //     this.setState({stalls: results})
+  //   })
+  //   .catch(err => console.log(err));
     
-  }
-  
-  handleInputChange = (search) => {
-    this.setState({recipeSearch: search})
-  }
+  // }
 
 
   render() {
     return (
       <View style={styles.container}>
-        <SearchBar handleInputChange={this.handleInputChange} 
-          search={this.searchRecipe}
-        />
         <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
-         {this.state.recipes.map(recipe => 
-         
-         <RecipeCard key={recipe.title} data={recipe} />
-         )}
-
+          <Grid>
+            <Row style={{flexWrap: "wrap", justifyContent: 'space-evenly'}} > 
+              {this.state.stalls.map(stall => 
+              
+              <Col key={stall.name} style={{width: 150, height: 200}} >
+                <RecipeCard key={stall.name} data={stall} />
+              </Col>
+              )}
+            </Row>
+          </Grid>
         </ScrollView>
 
       </View>
