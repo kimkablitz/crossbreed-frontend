@@ -3,10 +3,12 @@ import { StyleSheet, Text, View, Image, Button } from "react-native"
 
 
 export default LoggedInPage = (props) => {
-    // console.log(props)
+    console.log(props)
+
     return (
         <View style={styles.container}>
           <Text style={styles.header}>Welcome:{props.name}</Text>
+          {/* <Text style={styles.header}>Welcome:{props.email}</Text> */}
           <Image style={styles.image} source={{ uri: props.photoUrl }}/>
         </View>
       )
