@@ -53,7 +53,7 @@ export default class GameBoard extends Component {
                 tile.xIndex = xIndex;
                 tile.yIndex = yIndex;
                 tile.key = "" + xIndex + yIndex;
-                tile.switched = false;
+                tile.switched = "";
                 tile.dropped = false;
                 // Push new tile in newRow array
                 return newRow.push(tile);
@@ -109,6 +109,7 @@ export default class GameBoard extends Component {
             case "SWIPE_UP":
                 if(firstTile.x !== 0){
                     secondTile.x = (firstTile.x - 1);
+                    direction = "up";
                 }
                 else{
                     console.log("cannot swipe up")
@@ -117,6 +118,7 @@ export default class GameBoard extends Component {
             case "SWIPE_DOWN":
                 if(firstTile.x < (this.state.tile.length -1)){
                     secondTile.x = (firstTile.x + 1);
+                    direction = "down";
                 }
                 else{
                     console.log("cannot swipe down")
@@ -125,6 +127,7 @@ export default class GameBoard extends Component {
             case "SWIPE_LEFT":
                 if(firstTile.y !== 0){
                     secondTile.y = (firstTile.y -1);
+                    direction = "left";
                 }
                 else{
                     console.log("cannot swipe left")
@@ -133,6 +136,7 @@ export default class GameBoard extends Component {
             case "SWIPE_RIGHT":
                 if(firstTile.y < (this.state.tile[0].length - 1)){
                     secondTile.y = (firstTile.y + 1);
+                    direction = "right";
                 }
                 else{
                     console.log("cannot swipe right")
@@ -142,15 +146,32 @@ export default class GameBoard extends Component {
                 console.log("no direction found");
                 break
         }
-        this.switchTiles(firstTile, secondTile);
+        this.switchTiles(firstTile, secondTile, direction);
     } 
 
     // Switch the color of two tiles
-    switchTiles = (firstClick, secondClick) => {
+    switchTiles = (firstClick, secondClick, firstDirection) => {
         const tiles = this.state.tile;
+        let secondDirection = "";
+        switch(firstDirection){
+            case "up":
+                secondDirection = "down";
+                break;
+            case "down":
+                secondDirection = "up";
+                break;
+            case "left":
+                secondDirection = "right";
+                break;
+            case "right":
+                secondDirection = "left";
+                break;
+            default:
+                break;
+        }
         // Switch the color of the two tiles using the coordinates grabbed at the click event
         // Lovely straighforward way to switch elements in an array using ES6!
-        [ tiles[firstClick.x][firstClick.y].color, tiles[secondClick.x][secondClick.y].color, tiles[firstClick.x][firstClick.y].switched, tiles[secondClick.x][secondClick.y].switched ] = [tiles[secondClick.x][secondClick.y].color, tiles[firstClick.x][firstClick.y].color, true, true]
+        [ tiles[firstClick.x][firstClick.y].color, tiles[secondClick.x][secondClick.y].color, tiles[firstClick.x][firstClick.y].switched, tiles[secondClick.x][secondClick.y].switched ] = [tiles[secondClick.x][secondClick.y].color, tiles[firstClick.x][firstClick.y].color, firstDirection, secondDirection]
         // Set tile state to new array after switch and clear firstClick state to player can click again
         this.setState({tile: tiles, firstClick: {}}, () => {
             // let enemyScore = this.props.enemyScore;
@@ -195,7 +216,7 @@ export default class GameBoard extends Component {
         let tilesToDelete = [];
         tiles.forEach((row, i) => {
             row.forEach((tile, j) => {
-                tile.switched = false;
+                tile.switched = "";
                 tile.dropped = false;
                 if(j < tiles[i].length-2){
                     // If three in a row are matching, store tile coordinates in an array of objects

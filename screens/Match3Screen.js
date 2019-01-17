@@ -30,7 +30,7 @@ const examplePet = {
 	},
 	isFavorite: false,
 	parents: [],
-	dna: {}, //NOTE: dna will go here soon
+	dna: {}, 
 };
 
 export default class Match3Screen extends Component {
