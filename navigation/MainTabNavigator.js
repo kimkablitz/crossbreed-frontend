@@ -6,55 +6,66 @@ import TabBarIcon from '../components/TabBarIcon';
 import HomeScreen from '../screens/HomeScreen';
 import LinksScreen from '../screens/LinksScreen';
 import SettingsScreen from '../screens/SettingsScreen';
+import Match3Screen from '../screens/Match3Screen';
 
 const HomeStack = createStackNavigator({
   Home: HomeScreen,
 });
 
 HomeStack.navigationOptions = {
-  tabBarLabel: 'Home',
   tabBarIcon: ({ focused }) => (
     <TabBarIcon
       focused={focused}
       name={
         Platform.OS === 'ios'
-          ? `ios-information-circle${focused ? '' : '-outline'}`
-          : 'md-information-circle'
+          ? `ios-home`
+          : 'md-home'
       }
     />
   ),
 };
 
-const LinksStack = createStackNavigator({
-  Links: LinksScreen,
+const BreedStack = createStackNavigator({
+  Breed: LinksScreen,
 });
 
-LinksStack.navigationOptions = {
-  tabBarLabel: 'Links',
+BreedStack.navigationOptions = {
   tabBarIcon: ({ focused }) => (
     <TabBarIcon
       focused={focused}
-      name={Platform.OS === 'ios' ? 'ios-link' : 'md-link'}
+      name='md-git-network'
     />
   ),
 };
 
-const SettingsStack = createStackNavigator({
-  Settings: SettingsScreen,
+const Match3Stack = createStackNavigator({
+  Match3Game: Match3Screen,
 });
 
-SettingsStack.navigationOptions = {
-  tabBarLabel: 'Settings',
+Match3Stack.navigationOptions = {
+  swipeEnabled: false,
+  tabBarVisible: false,
   tabBarIcon: ({ focused }) => (
     <TabBarIcon
       focused={focused}
-      name={Platform.OS === 'ios' ? 'ios-options' : 'md-options'}
+      name='logo-game-controller-b'
     />
   ),
 };
 
 export default createBottomTabNavigator({
   HomeStack,
-  LinksStack,
-  SettingsStack,
-});
+  BreedStack,
+  Match3Stack
+},
+{
+  swipeEnabled: true,
+  tabBarOptions: {
+    showLabel: false,
+    style: { height: "10%" },
+    activeBackgroundColor: "black",
+    inactiveBackgroundColor: "black",
+    activeTintColor: "white"
+  }
+}
+);
