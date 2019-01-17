@@ -6,6 +6,7 @@ import { NavigationActions } from 'react-navigation';
 import GameBoard from '../components/Match3Game/GameBoard';
 import RaceDisplay from "../components/Match3Game/RaceDisplay";
 import MyModal from "../components/Modal";
+import API from "../utils/API";
 
 const exampleImg = "https://facebook.github.io/react-native/docs/assets/favicon.png ";
 let modalMessage = "";
@@ -29,6 +30,8 @@ const examplePet = {
 			secondary: "red"
 	},
 	isFavorite: false,
+	level: 1,
+	experiencePoints: 0,
 	parents: [],
 	dna: {}, 
 };
@@ -50,6 +53,7 @@ export default class Match3Screen extends Component {
 		// TODO: add GET request to get Pet info
 		this.setState({ petInfo: examplePet });
 		// TODO: add GET request to get random enemy 
+		this.updateLevel("5c40ec4af377c74e611dbfde", { currentLevel: 3, currentXP: 120, gainedXP: 40 });
 		
 	}
 
@@ -76,6 +80,12 @@ export default class Match3Screen extends Component {
 			modalMessage = "You Lost!"
 		}
 		this.setState({ gameEnded: true });
+	}
+
+	updateLevel = (petId, levelObj) => {
+		API.updateLevel(petId, levelObj)
+		.then(res => console.log(res))
+		.catch(err => console.log(err));
 	}
 
 	showAlert = () => {
