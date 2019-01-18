@@ -12,6 +12,8 @@ import axios from "axios";
 import SearchBar from '../components/SearchBar';
 import RecipeCard from '../components/RecipeCard'
 import { Col, Row, Grid } from "react-native-easy-grid";
+import { NavigationActions } from 'react-navigation';
+import { Content, Header, Body, Title } from 'native-base';
 export default class HomeScreen extends React.Component {
   static navigationOptions = {
     header: null,
@@ -22,7 +24,6 @@ export default class HomeScreen extends React.Component {
     stalls: [
       {
           name: "Red",
-          baseImage: "testPet.svg",
           baseColor: {
               red: 255,
               blue: 0,
@@ -40,12 +41,12 @@ export default class HomeScreen extends React.Component {
               secondary: "red"
           },
           isFavorite: false,
-          parents: [],
-          dna: {}, //NOTE: dna will go here soon
+          parents: ["The Wild"],
+          level: 1,
+          experiencePoints: 42
       },
       {
           name: "Blue",
-          baseImage: "testPet.svg",
           baseColor: {
               red: 0,
               blue: 255,
@@ -63,12 +64,12 @@ export default class HomeScreen extends React.Component {
               secondary: "blue"
           },
           isFavorite: false,
-          parents: [],
-          dna: {}, //NOTE: dna will go here soon
+          parents: ["Bob", "Mary"],
+          level: 2,
+          experiencePoints: 42
       },
       {
           name: "Green",
-          baseImage: "testPet.svg",
           baseColor: {
               red: 0,
               blue: 0,
@@ -86,12 +87,12 @@ export default class HomeScreen extends React.Component {
               secondary: "green"
           },
           isFavorite: false,
-          parents: [],
-          dna: {}, //NOTE: dna will go here soon
+          parents: ["Frank", "Sue"],
+          level: 3,
+          experiencePoints: 42
       },
       {
           name: "Magenta",
-          baseImage: "testPet.svg",
           baseColor: {
               red: 255,
               blue: 255,
@@ -109,12 +110,12 @@ export default class HomeScreen extends React.Component {
               secondary: "magenta"
           },
           isFavorite: false,
-          parents: [],
-          dna: {}, //NOTE: dna will go here soon
+          parents: ["Matilda", "Madison"],
+          level: 6,
+          experiencePoints: 42
       },
       {
           name: "Cyan",
-          baseImage: "testPet.svg",
           baseColor: {
               red: 0,
               blue: 255,
@@ -132,12 +133,12 @@ export default class HomeScreen extends React.Component {
               secondary: "cyan"
           },
           isFavorite: false,
-          parents: [],
-          dna: {}, //NOTE: dna will go here soon
+          parents: ["Goldie", "Blackie"],
+          level: 10,
+          experiencePoints: 42
       },
       {
           name: "Yellow",
-          baseImage: "testPet.svg",
           baseColor: {
               red: 255,
               blue: 0,
@@ -155,12 +156,12 @@ export default class HomeScreen extends React.Component {
               secondary: "yellow"
           },
           isFavorite: false,
-          parents: [],
-          dna: {}, //NOTE: dna will go here soon
+          parents: ["The Wild"],
+          level: 15,
+          experiencePoints: 42
       },
       {
           name: "White",
-          baseImage: "testPet.svg",
           baseColor: {
               red: 255,
               blue: 255,
@@ -178,12 +179,12 @@ export default class HomeScreen extends React.Component {
               secondary: "white"
           },
           isFavorite: false,
-          parents: [],
-          dna: {}, //NOTE: dna will go here soon
+          parents: ["The Wild"],
+          level: 20,
+          experiencePoints: 42
       },
       {
           name: "Black",
-          baseImage: "testPet.svg",
           baseColor: {
               red: 0,
               blue: 0,
@@ -201,8 +202,9 @@ export default class HomeScreen extends React.Component {
               secondary: "black"
           },
           isFavorite: false,
-          parents: [],
-          dna: {}, //NOTE: dna will go here soon
+          parents: ["The Wild"],
+          level: 1,
+          experiencePoints: 42
       }
   ]
   }
@@ -219,24 +221,41 @@ export default class HomeScreen extends React.Component {
     
   // }
 
+  handleOnPress = (index) => {
+    const navigateAction = NavigationActions.navigate({
+      routeName: 'PetScreen',
+    
+      params: { pet: this.state.stalls[index] },
+    });
+    
+    this.props.navigation.dispatch(navigateAction);
+  }
+
 
   render() {
     return (
-      <View style={styles.container}>
-        <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
-          <Grid>
-            <Row style={{flexWrap: "wrap", justifyContent: 'space-evenly'}} > 
-              {this.state.stalls.map(stall => 
-              
-              <Col key={stall.name} style={{width: 150, height: 200}} >
-                <RecipeCard key={stall.name} data={stall} />
-              </Col>
-              )}
-            </Row>
-          </Grid>
-        </ScrollView>
+      <Content>
+        <Header> 
+          <Body>
+            <Title style={{alignSelf: 'center'}}>Stable</Title>
+          </Body>
+        </Header>
+        <View style={styles.container}>
+          <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
+            <Grid>
+              <Row style={{flexWrap: "wrap", justifyContent: 'space-evenly'}} > 
+                {this.state.stalls.map( (stall, index) => 
+                
+                <Col key={stall.name} style={{width: 150, height: 200}} >
+                  <RecipeCard key={index} data={stall} press={() => {this.handleOnPress(index)}} />
+                </Col>
+                )}
+              </Row>
+            </Grid>
+          </ScrollView>
 
-      </View>
+        </View>
+      </Content>
     );
   }
 

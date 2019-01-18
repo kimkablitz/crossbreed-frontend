@@ -1,9 +1,9 @@
 import React from 'react';
 import {Linking} from 'react-native';
 
-import { Image } from 'react-native';
+import { Image, StyleSheet, View } from 'react-native';
 import { Svg } from 'expo';
-import { Content, Card, CardItem, Thumbnail, Text, Button, Icon, Left, Body } from 'native-base';
+import { Content, Header, Card, CardItem, Thumbnail, Text, Button, Icon, Left, Body } from 'native-base';
 import { Col, Row, Grid } from "react-native-easy-grid";
 // export default class RecipeCard extends Component {
 
@@ -11,38 +11,34 @@ import { Col, Row, Grid } from "react-native-easy-grid";
 const { Circle } = Svg;
 
 export default RecipeCard = (props) => {
-        // console.log(props)
-        const {name, baseColor } = props.data;
-        console.log(baseColor);
+        const {name, baseColor, outlineColor } = props.data;
         const { red, blue, green, transparency } = baseColor;
     return (
         <Content>
-          <Card style={{flex: 0, height: 190}}>
+          <Card style={{flex: 1}}>
             <CardItem>
-              {/* <Left> */}
-                {/* <Thumbnail large source={require('../assets/images/testPet.svg')} /> */}
                 <Body>
-                  {/* <Text>Name: {name}</Text> */}
-                  <Svg
-                      height="100"
-                      width="100"
-                  >
-                      <Circle
-                          cx="50"
-                          cy="50"
-                          r="45"
-                          fill={`rgba(${red}, ${green},  ${blue}, ${transparency})`}
-                          strokeWidth="3"
-                          stroke="rgb(0,0,0)"
-                      />
-                  </Svg>
+                  <View style={{alignSelf: 'center'}}>
+                    <Svg
+                        height="100"
+                        width="100"
+                    >
+                        <Circle
+                            onPress={props.press}
+                            cx="50"
+                            cy="50"
+                            r="45"
+                            fill={`rgba(${red}, ${green},  ${blue}, ${transparency})`}
+                            strokeWidth="3"
+                            stroke={`rgba(${outlineColor.red}, ${outlineColor.green},  ${outlineColor.blue}, ${outlineColor.transparency})`}
+                        />
+                    </Svg>
+                  </View>
                 </Body>
-              {/* </Left> */}
             </CardItem>
             <CardItem>
               <Body>
-              <Text>{name}</Text>
-                {/* <Image source={{uri: '././assets/images'}} style={{height: 200, width: 200, flex: 1}}/> */}
+              <Text style={{alignSelf: 'center'}}>{name}</Text>
               </Body>
             </CardItem>
           </Card>
@@ -50,3 +46,13 @@ export default RecipeCard = (props) => {
     );
   
 }
+
+const styles = StyleSheet.create({
+  nameText: {
+    marginBottom: 20,
+    color: 'rgba(0,0,0,1)',
+    fontSize: 14,
+    lineHeight: 19,
+    textAlign: 'center',
+  },
+});
