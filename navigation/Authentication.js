@@ -2,11 +2,9 @@ import React, { Component } from 'react'
 import { Platform, StatusBar, StyleSheet, View, Image, Text, Button } from 'react-native';
 import { AppLoading, Asset, Font, Icon } from 'expo';
 import * as Expo from 'expo';
-// import AppNavigator from './navigation/AppNavigator';
 import LoggedInPage from "../components/LoggedInPage"
 
 
-// import googleIcon from "./assets/images/signin-button.png";
 export default class AUTHENTICATION extends React.Component {
   constructor(props) {
     super(props)
@@ -56,23 +54,12 @@ export default class AUTHENTICATION extends React.Component {
 const LoginPage = props => {
   return (
     <View>
-      {/* <Text style={styles.header}>Sign In With Google</Text> */}
-      {/* <Image
-          source={require("./assets/images/signin-button.png")} onPress={() => props.signIn()} 
-        />      */}
       <Button title="Sign in with Google" onPress={() => props.signIn()} />
     </View>
   )
 }
 
-// const LoggedInPage = props => {
-//   return (
-//     <View style={styles.container}>
-//       <Text style={styles.header}>Welcome:{props.name}</Text>
-//       <Image style={styles.image} source={{ uri: props.photoUrl }} />
-//     </View>
-//   )
-// }
+
 
 const styles = StyleSheet.create({
   container: {

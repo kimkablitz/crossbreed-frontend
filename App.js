@@ -2,7 +2,6 @@ import React from 'react';
 import { Platform, StatusBar, StyleSheet, View, Image,Button } from 'react-native';
 import { AppLoading, Asset, Font, Icon } from 'expo';
 import * as Expo from 'expo';
-// import AppNavigator from './navigation/AppNavigator';
 import Authentication from './navigation/Authentication';
 
 export default class App extends React.Component {
@@ -41,17 +40,7 @@ export default class App extends React.Component {
 
   }
 }
-// const LoginPage = props => {
-//   return (
-//     <View>
-//       {/* <Text style={styles.header}>Sign In With Google</Text> */}
-//       {/* <Image
-//           source={require("./assets/images/signin-button.png")} onPress={() => props.signIn()} 
-//         />      */}
-//       <Button title="Sign in with Google" onPress={() => props.signIn()} />
-//     </View>
-//   )
-// }
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
