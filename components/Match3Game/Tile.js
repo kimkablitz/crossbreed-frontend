@@ -34,22 +34,18 @@ class Tile extends Component{
             else if(this.props.switched !== ""){
                 switch(this.props.switched){
                     case "up":
-                        console.log('move up');
                         this.yShiftTile("up");
                         setTimeout(function(){this.setState({color: this.props.color}, this.yShiftTile())}.bind(this), 300);
                         break;
                     case "down":
-                        console.log('move down');
                         this.yShiftTile("down");
                         setTimeout(function(){this.setState({color: this.props.color}, this.yShiftTile())}.bind(this), 300);
                         break;
                     case "left":
-                        console.log('move left');
                         this.xShiftTile("left");
                         setTimeout(function(){this.setState({color: this.props.color}, this.xShiftTile())}.bind(this), 300);
                         break;
                     case "right":
-                        console.log('move right');
                         this.xShiftTile("right");
                         setTimeout(function(){this.setState({color: this.props.color}, this.xShiftTile())}.bind(this), 300);
                         break;
@@ -159,10 +155,10 @@ class Tile extends Component{
     render(){
         return (
             <GestureRecognizer 
-                config={{ velocityThreshold: 0.3, directionalOffsetThreshold: 80 }}
+                config={{ velocityThreshold: 0.3, directionalOffsetThreshold: 1000, gestureIsClickThreshold: 10 }}
                 onSwipe={(direction) => this.props.swipe(direction, {x: this.props.xIndex, y: this.props.yIndex})}
             >
-                <Col style={{ width: 50, alignItems: "center", justifyContent: "center" }}>
+                <Col style={{ width: 70, alignItems: "center", justifyContent: "center" }}>
                     <Animated.View style={{ opacity: this.state.fadeOutAnimation, 
                         transform: [{rotate: this.state.rotateAnimation}, {translateY: this.state.yShiftAnimation}, {translateX: this.state.xShiftAnimation}] 
                     }}>

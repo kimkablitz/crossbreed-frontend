@@ -218,8 +218,11 @@ export default class HomeScreen extends React.Component {
   //     this.setState({stalls: results})
   //   })
   //   .catch(err => console.log(err));
-    
   // }
+  componentDidMount(){
+    const userInfo = this.props.navigation.getParam("user");
+    console.log(userInfo);
+  }
 
   handleOnPress = (index) => {
     const navigateAction = NavigationActions.navigate({

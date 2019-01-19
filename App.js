@@ -1,32 +1,33 @@
 import React from 'react';
-import { Platform, StatusBar, StyleSheet, View } from 'react-native';
+import { Platform, StatusBar, StyleSheet, View, Image,Button } from 'react-native';
 import { AppLoading, Asset, Font, Icon } from 'expo';
+import * as Expo from 'expo';
 import AppNavigator from './navigation/AppNavigator';
 
 export default class App extends React.Component {
   state = {
-    isLoadingComplete: false,
+    isReady: false,
   };
 
   render() {
-    if (!this.state.isLoadingComplete && !this.props.skipLoadingScreen) {
+    if (!this.state.isReady) {
       return (
         <AppLoading
-          startAsync={this._loadResourcesAsync}
-          onError={this._handleLoadingError}
-          onFinish={this._handleFinishLoading}
+          startAsync={this._cacheResourcesAsync}
+          onFinish={() => this.setState({ isReady: true })}
+          onError={console.warn}
         />
       );
-    } else {
-      return (
-        <View style={styles.container}>
-          {Platform.OS === 'ios' && <StatusBar barStyle="default" />}
-          <AppNavigator />
-        </View>
-      );
     }
+
+    return (
+      <View style={{ flex: 1 }}>
+        <AppNavigator />
+      </View>
+    );
   }
 
+<<<<<<< HEAD
   _loadResourcesAsync = async () => {
     return Promise.all([
       Asset.loadAsync([
@@ -43,16 +44,20 @@ export default class App extends React.Component {
       }),
     ]);
   };
+=======
+  async _cacheResourcesAsync() {
+    const images = [
+      require('./assets/images/robot-dev.png'),
+      require('./assets/images/robot-prod.png'),
+    ];
+>>>>>>> 1b0d3e37e1d466ff623fe5510fb6b600497cce90
 
-  _handleLoadingError = error => {
-    // In this case, you might want to report the error to your error
-    // reporting service, for example Sentry
-    console.warn(error);
-  };
+    const cacheImages = images.map((image) => {
+      return Asset.fromModule(image).downloadAsync();
+    });
+    return Promise.all(cacheImages)
 
-  _handleFinishLoading = () => {
-    this.setState({ isLoadingComplete: true });
-  };
+  }
 }
 
 const styles = StyleSheet.create({
