@@ -16,15 +16,16 @@ export default class AUTHENTICATION extends React.Component {
 
   signIn = async () => {
     try {
+      console.log("I am a monkey")
       this.setState({ authenticating: true });
       const result = await Expo.Google.logInAsync({
-        iosClientId:
-          "778512270288-qf47t5td929rgm78g61nm6o7hvfecllr.apps.googleusercontent.com",
-          androidClientId: "865415366088-6beq1kml9n1j99ghe7ep8ql9kd7lk6va.apps.googleusercontent.com",
+        iosClientId: "778512270288-qf47t5td929rgm78g61nm6o7hvfecllr.apps.googleusercontent.com",
+        androidClientId: "865415366088-6beq1kml9n1j99ghe7ep8ql9kd7lk6va.apps.googleusercontent.com",
         scopes: ["profile", "email"]
       })
-
+      console.log("Result type = ", result.type)
       if (result.type === "success") {
+        console.log("Purple Bear")
         this.goToHome(result);
       } else {
         this.setState({ authenticating: false });
@@ -37,6 +38,7 @@ export default class AUTHENTICATION extends React.Component {
   }
 
   goToHome = (result) => {
+    console.log("Red Octopus")
     const navigateHome = NavigationActions.navigate({
       routeName: "GameLobby",
       params: { user: result.user }

@@ -5,14 +5,31 @@ import { Image, StyleSheet, View } from 'react-native';
 import { Svg } from 'expo';
 import { Content, Card, CardItem, Thumbnail, Text, Button, Icon, Left, Body } from 'native-base';
 import { Col, Row, Grid } from "react-native-easy-grid";
+import { NavigationActions } from 'react-navigation';
 import { width, height } from "../constants/Layout"
 const { Circle } = Svg;
 
 export default PetScreen = (props) => {
-      const param = props.navigation.getParam('pet');
-      const {name, baseColor, outlineColor, gameColor, isFavorite, parents, level, experiencePoints } = param;
-      const { red, blue, green, transparency } = baseColor;
-      console.log(gameColor, isFavorite, parents)
+  const param = props.navigation.getParam('pet');
+  const {name, baseColor, outlineColor, gameColor, isFavorite, parents, level, experiencePoints } = param;
+  const { red, blue, green, transparency } = baseColor;
+
+  toGameLobby = (pet) => {
+    const navigateToGameLobby = NavigationActions.navigate({
+        routeName: "GameLobby",
+        params: { pet: pet }
+    });
+    props.navigation.dispatch(navigateToGameLobby);
+  }
+
+  toBreedPage = (pet) => {
+    const navigateToGameLobby = NavigationActions.navigate({
+        routeName: "Breed",
+        params: { pet: pet }
+    });
+    props.navigation.dispatch(navigateToGameLobby);
+  }
+
   return (
       <Content style={styles.centeredContent}>
         <Card style={styles.centeredContent}>
@@ -37,6 +54,18 @@ export default PetScreen = (props) => {
           </CardItem>
           <CardItem>
             <Body>
+              <Row size={ 1 } >
+                <Button success rounded style={{ margin: 10}}
+                    onPress={ () => this.toGameLobby(param) }
+                > 
+                    <Text>Play</Text> 
+                </Button>
+                <Button danger rounded style={{ margin: 10}}
+                    onPress={ () => this.toBreedPage(param) }
+                > 
+                    <Text>Breed</Text> 
+                </Button>
+              </Row>
               <Text style={{alignSelf: "center"}}>Name: {name}</Text>
               <Text style={{alignSelf: "center"}}>Level: {level}</Text>
               {level > 1 && <Text style={{alignSelf: "center"}}>Primary Game Color: {gameColor.primary}</Text>}
