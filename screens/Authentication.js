@@ -38,7 +38,7 @@ export default class AUTHENTICATION extends React.Component {
 
   goToHome = (result) => {
     const navigateHome = NavigationActions.navigate({
-      routeName: "Home",
+      routeName: "GameLobby",
       params: { user: result.user }
     });
     this.props.navigation.dispatch(navigateHome);

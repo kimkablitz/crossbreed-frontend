@@ -10,8 +10,10 @@ import Match3Screen from '../screens/Match3Screen';
 import GameLobbyScreen from "../screens/GameLobbyScreen";
 
 const HomeStack = createStackNavigator(
-{ HomeScreen, PetScreen },
-{ initialRouteName: 'HomeScreen' }
+{ 
+  Home: HomeScreen, 
+  PetScreen: PetScreen },
+{ initialRouteName: 'Home' }
 );
 
 HomeStack.navigationOptions = {
