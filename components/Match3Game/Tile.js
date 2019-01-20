@@ -160,7 +160,7 @@ class Tile extends Component{
             >
                 <Col style={{ width: 70, alignItems: "center", justifyContent: "center" }}>
                     <Animated.View style={{ opacity: this.state.fadeOutAnimation, 
-                        transform: [{rotate: this.state.rotateAnimation}, {translateY: this.state.yShiftAnimation}, {translateX: this.state.xShiftAnimation}] 
+                        transform: [ {translateY: this.state.yShiftAnimation}, {translateX: this.state.xShiftAnimation}] 
                     }}>
                         <Ionicons name={ this.updateIcon() } size={ 40 } color={ this.state.color !== "" ? this.state.color : "transparent"}/>
                     </Animated.View>
