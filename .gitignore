@@ -5,6 +5,3 @@ npm-debug.*
 *.p12
 *.key
 *.mobileprovision
-
-# for MacOS
-.DS_Store
