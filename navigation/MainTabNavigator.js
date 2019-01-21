@@ -7,6 +7,7 @@ import HomeScreen from '../screens/HomeScreen';
 import LinksScreen from '../screens/LinksScreen';
 import SettingsScreen from '../screens/SettingsScreen';
 import Match3Screen from '../screens/Match3Screen';
+import GameLobbyScreen from "../screens/GameLobbyScreen";
 
 const HomeStack = createStackNavigator({
   Home: HomeScreen,
@@ -39,18 +40,33 @@ BreedStack.navigationOptions = {
 };
 
 const Match3Stack = createStackNavigator({
-  Match3Game: Match3Screen,
+  GameLobby: GameLobbyScreen,
+  Match3Game: {
+    screen: Match3Screen,
+    navigationOptions: {
+      gesturesEnabled: false
+    }
+  }
+},{
+  headerMode: "none",
+  initialRouteName: "GameLobby",
 });
 
-Match3Stack.navigationOptions = {
-  swipeEnabled: false,
-  tabBarVisible: false,
-  tabBarIcon: ({ focused }) => (
-    <TabBarIcon
-      focused={focused}
-      name='logo-game-controller-b'
-    />
-  ),
+Match3Stack.navigationOptions = ({ navigation }) => {
+  let tabBarVisible = true;
+  if (navigation.state.index > 0) {
+    tabBarVisible = false;
+  }
+
+  return {
+    tabBarVisible,
+    tabBarIcon: ({ focused }) => (
+      <TabBarIcon
+        focused={focused}
+        name='logo-game-controller-b'
+      />
+    ),
+  };
 };
 
 export default createBottomTabNavigator({
