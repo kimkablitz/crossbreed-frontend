@@ -19,7 +19,6 @@
     "lodash": "^4.17.11",
     "native-base": "^2.10.0",
     "react": "16.5.0",
-    "react-dev-tools": "0.0.1",
     "react-native": "https://github.com/expo/react-native/archive/sdk-32.0.0.tar.gz",
     "react-native-easy-grid": "^0.2.0",
     "react-native-swipe-gestures": "^1.0.3",
