@@ -1,8 +1,8 @@
 import React, { Component } from 'react'
 import { Platform, StatusBar, StyleSheet, View, Image, Text, Button } from 'react-native';
 import { AppLoading, Asset, Font, Icon } from 'expo';
+import { NavigationActions } from "react-navigation";
 import * as Expo from 'expo';
-import LoggedInPage from "../components/LoggedInPage"
 
 
 export default class AUTHENTICATION extends React.Component {
@@ -10,13 +10,13 @@ export default class AUTHENTICATION extends React.Component {
     super(props)
     this.state = {
       signedIn: false,
-      name: "",
-      photoUrl: "",
-      email:""
+      authenticating: false
     }
   }
+
   signIn = async () => {
     try {
+      this.setState({ authenticating: true });
       const result = await Expo.Google.logInAsync({
         iosClientId:
           "778512270288-qf47t5td929rgm78g61nm6o7hvfecllr.apps.googleusercontent.com",
@@ -25,27 +25,32 @@ export default class AUTHENTICATION extends React.Component {
       })
 
       if (result.type === "success") {
-        this.setState({
-          signedIn: true,
-          name: result.user.name,
-          photoUrl: result.user.photoUrl,
-          email: result.user.email
-        })
+        this.goToHome(result);
       } else {
+        this.setState({ authenticating: false });
         console.log("cancelled")
       }
     } catch (e) {
+      this.setState({ authenticating: false });
       console.log("error", e)
     }
   }
+
+  goToHome = (result) => {
+    const navigateHome = NavigationActions.navigate({
+      routeName: "Home",
+      params: { user: result.user }
+    });
+    this.props.navigation.dispatch(navigateHome);
+  }
+  
   render() {
     return (
       <View style={styles.container}>
-        {this.state.signedIn ? (
-          <LoggedInPage name={this.state.name} photoUrl={this.state.photoUrl} email={this.state.email}  />
-        ) : (
-          <LoginPage signIn={this.signIn} />
-        )}
+          {this.state.authenticating ? 
+            <Text> Loading Stable... </Text>
+            : <LoginPage signIn={this.signIn} />
+          }
       </View>
     )
   }

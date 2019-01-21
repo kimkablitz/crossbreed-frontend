@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { Alert } from "react-native";
 import { Container, Header, Body, Title, Left, Right, Button, Icon, Content, H1, Text } from "native-base";
-import { Grid, Row } from "react-native-easy-grid";
-import { NavigationActions } from 'react-navigation';
+import { Grid, Row, Col } from "react-native-easy-grid";
+import { NavigationActions, StackActions } from 'react-navigation';
 import GameBoard from '../components/Match3Game/GameBoard';
 import RaceDisplay from "../components/Match3Game/RaceDisplay";
 import MyModal from "../components/Modal";
@@ -37,24 +37,19 @@ const examplePet = {
 };
 
 export default class Match3Screen extends Component {
-	static navigationOptions = {
-		header: null,
-	};
-
 	state = {
 		playerScore: 0,
 		enemyScore: 0,
-		gameStarted: false,
 		gameEnded: false,
+		difficultyLevel: "",
 		petInfo: {}
 	};
 
 	componentDidMount(){
+		const difficultyLevel = this.props.navigation.getParam("difficultyLevel");
 		// TODO: add GET request to get Pet info
-		this.setState({ petInfo: examplePet });
+		this.setState({ petInfo: examplePet, difficultyLevel: difficultyLevel });
 		// TODO: add GET request to get random enemy 
-		this.updateLevel("5c40ec4af377c74e611dbfde", { currentLevel: 3, currentXP: 120, gainedXP: 40 });
-		
 	}
 
 	updateScore = (newScore) => {
@@ -68,111 +63,115 @@ export default class Match3Screen extends Component {
 		}
 	}
 	
-	startGame = () => {
-		this.setState({ gameStarted: true, gameEnded: false, playerScore: 0, enemyScore: 0 });
+	startGame = (difficultyLevel) => {
+		let newState = { gameEnded: false, playerScore: 0, enemyScore: 0 };
+		if(difficultyLevel){
+			newState.difficultyLevel = difficultyLevel;
+		}
+		this.setState(newState);
 	}
 
 	endGame = (name) => {
+		let baseXP;
+		let winBonusXP;
+		let totalXP;
+		switch(this.state.difficultyLevel){
+			case "easy":
+				baseXP = 150;
+				break;
+			case "normal":
+				baseXP = 200;
+				break;
+			case "hard":
+				baseXP = 250;
+		}
 		if(name === "playerScore"){
-			modalMessage = "You Won!"
+			winBonusXP = 300;
+			totalXP = baseXP + winBonusXP;
+			modalMessage = `You Won! \n ${this.state.petInfo.name} earned ${totalXP} XP!`
 		}
 		else{
-			modalMessage = "You Lost!"
+			totalXP = baseXP;
+			modalMessage = `You Lost! \n ${this.state.petInfo.name} earned ${totalXP} XP!`
 		}
 		this.setState({ gameEnded: true });
 	}
 
 	updateLevel = (petId, levelObj) => {
-		API.updateLevel(petId, levelObj)
-		.then(res => console.log(res))
-		.catch(err => console.log(err));
+		
 	}
 
 	showAlert = () => {
 		Alert.alert(
 			"Are you sure?",
-			"Returning to the stable will exit the game, and your pet will not earn any experience points!",
+			"Returning to the lobby will exit the current game, and your pet will not earn any experience points!",
 			[
 				{ text: "Cancel", style: 'cancel' },
-				{ text: "Return to stable", onPress: this.navigateHome }
+				{ text: "Return to lobby", onPress: () => this.navigate("GameLobby") }
 			]
 		)
 	}
 
-	navigateHome = () => {
-		this.setState({ gameStarted: false }, () => {
-			const navigateHome = NavigationActions.navigate({
-				routeName: 'Home'});
-			this.props.navigation.dispatch(navigateHome);
-		});
+	navigate = (routeName) => {
+		this.setState({ gameEnded: false }, () => {
+			const navigate = NavigationActions.navigate({
+				routeName: routeName });
+			const reset = StackActions.reset({
+				index: 0,
+				actions: [NavigationActions.navigate({ routeName: 'GameLobby' })],
+			})
+			this.props.navigation.dispatch(reset);
+			this.props.navigation.dispatch(navigate);
+		})
 	}
 
   render() {
-		
-		
-
     return (
-			<Container>
-        <Header>
-          <Left>
-            <Button transparent
-							onPress={ this.state.gameStarted ? this.showAlert : this.navigateHome }
-						>
-              <Icon name='arrow-back' />
-              <Text> To Stable </Text>
-            </Button>
-          </Left>
-          <Body>
-            <Title>Match 3</Title>
-          </Body>
-          <Right />
-        </Header>
-				
-					
-					{ this.state.gameStarted ? 
-						<Content padder scrollEnabled={false} contentContainerStyle={{ justifyContent: "flex-start", alignItems: "center" }}>
-							<RaceDisplay playerScore={ this.state.playerScore } enemyScore={ this.state.enemyScore } playerImg={ exampleImg } enemyImg={ exampleImg }/>
-							<GameBoard gameEnded={ this.state.gameEnded } pet={ this.state.petInfo } playerScore={ this.state.playerScore } enemyScore={ this.state.enemyScore } updateScore={ this.updateScore }/>
-							<MyModal visible={ this.state.gameEnded }>
-								<Grid style={{ backgroundColor: "rgba(0,0,0,0.7)", justifyContent: "center", alignItems: "center"}}>
-									<Row size={ 2 }>
-										<H1 style={{ alignSelf: "center", color: "white" }}> { modalMessage }</H1>
-									</Row>
-									<Row size={ 1 }>
-										<Button success rounded style={{ alignSelf: "center", margin: 5 }}
-											onPress={ this.startGame }
-										> 
-											<Text style={{ color: "white" }}> Play Again </Text> 
-										</Button>
-										<Button danger rounded style={{ alignSelf: "center", margin: 5 }}
-											onPress={ this.navigateHome }
-										> 
-											<Text style={{ color: "white" }}> Return to Stable </Text> 
-										</Button>
-									</Row>
-								</Grid>
-							</MyModal>
-						</Content>
-					: <Content>
-							<Grid>
-								<Row size={ 1 } style={{ justifyContent: "center"}}>
-									<Text style={{ marginVertical: 10 }}> Play Game </Text>
-								</Row>
-								<Row size={ 1 } style={{ justifyContent: "center"}}>
-									<Button primary rounded style={{ marginVertical: 10}}
-										onPress={ this.startGame }
-									> 
-										<Text>Easy</Text> 
-									</Button>
-								</Row>
-								<Row size={ 2 } style={{ justifyContent: "center"}}>
-									<Text style={{ marginVertical: 10}}>Instructions on how to play the game!</Text>
-								</Row>
-							</Grid>
-						</Content>
-					}
-				
-			</Container>
+		<Container>
+        	<Header>
+        	  <Left>
+        	    <Button transparent onPress={ this.showAlert }>
+        	      <Icon name='arrow-back' />
+        	      <Text> To Lobby </Text>
+        	    </Button>
+        	  </Left>
+        	  <Body>
+        	    <Title>Match 3 Race</Title>
+        	  </Body>
+        	  <Right />
+        	</Header>	
+			<Content padder scrollEnabled={false} contentContainerStyle={{ justifyContent: "flex-start", alignItems: "center" }}>
+				<RaceDisplay playerScore={ this.state.playerScore } enemyScore={ this.state.enemyScore } playerImg={ exampleImg } enemyImg={ exampleImg }/>
+				<GameBoard gameEnded={ this.state.gameEnded } difficulty={ this.state.difficultyLevel } pet={ this.state.petInfo } playerScore={ this.state.playerScore } enemyScore={ this.state.enemyScore } updateScore={ this.updateScore }/>
+				<MyModal visible={ this.state.gameEnded }>
+					<Grid style={{ backgroundColor: "rgba(0,0,0,0.8)", justifyContent: "center", alignItems: "center"}}>
+						<Row size={ 3 }>
+							<H1 style={{ alignSelf: "center", color: "white", textAlign: "center" }}> { modalMessage }</H1>
+						</Row>
+						<Row size={ 1 }>
+							<Button success rounded style={{ alignSelf: "center", margin: 5 }}
+								onPress={ () => this.startGame() }
+							>
+								<Text> Play Again </Text>
+							</Button>
+						</Row>
+						<Row size={ 1 }>
+							<Button warning rounded style={{ alignSelf: "center", marginHorizontal: 5 }}
+								onPress={ () => this.navigate("GameLobby") }
+							> 
+								<Text style={{ color: "white" }}> Return to Lobby</Text> 
+							</Button>
+							<Button danger rounded style={{ alignSelf: "center", marginHorizontal: 5 }}
+								onPress={ () => this.navigate("Home") }
+							> 
+								<Text style={{ color: "white" }}> Return to Stable </Text> 
+							</Button>
+						</Row>
+					</Grid>
+				</MyModal>
+			</Content>
+			
+		</Container>
     )
   }
 }

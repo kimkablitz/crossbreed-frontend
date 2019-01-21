@@ -2,7 +2,7 @@ import React from 'react';
 import { Platform, StatusBar, StyleSheet, View, Image,Button } from 'react-native';
 import { AppLoading, Asset, Font, Icon } from 'expo';
 import * as Expo from 'expo';
-import Authentication from './navigation/Authentication';
+import AppNavigator from './navigation/AppNavigator';
 
 export default class App extends React.Component {
   state = {
@@ -22,7 +22,7 @@ export default class App extends React.Component {
 
     return (
       <View style={{ flex: 1 }}>
-        <Authentication />
+        <AppNavigator />
       </View>
     );
   }
