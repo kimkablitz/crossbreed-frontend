@@ -32,6 +32,7 @@ export default class GameBoard extends Component {
     componentDidUpdate(prevProps){
         // 
         if(prevProps.gameEnded === true && this.props.gameEnded === false){
+            console.log("re=render board");
             this.setState({ displayBoard: false }, () => {
                 this.generateRandomBoard();
             })
@@ -110,11 +111,17 @@ export default class GameBoard extends Component {
                     secondTile.x = (firstTile.x - 1);
                     direction = "up";
                 }
+                else{
+                    console.log("cannot swipe up")
+                }
                 break;
             case "SWIPE_DOWN":
                 if(firstTile.x < (this.state.tile.length -1)){
                     secondTile.x = (firstTile.x + 1);
                     direction = "down";
+                }
+                else{
+                    console.log("cannot swipe down")
                 }
                 break;
             case "SWIPE_LEFT":
@@ -122,15 +129,22 @@ export default class GameBoard extends Component {
                     secondTile.y = (firstTile.y -1);
                     direction = "left";
                 }
+                else{
+                    console.log("cannot swipe left")
+                }
                 break;
             case "SWIPE_RIGHT":
                 if(firstTile.y < (this.state.tile[0].length - 1)){
                     secondTile.y = (firstTile.y + 1);
                     direction = "right";
                 }
+                else{
+                    console.log("cannot swipe right")
+                }
                 break;
             default:
-                break;
+                console.log("no direction found");
+                break
         }
         this.switchTiles(firstTile, secondTile, direction);
     } 
@@ -162,7 +176,7 @@ export default class GameBoard extends Component {
         this.setState({tile: tiles, firstClick: {}}, () => {
             // let enemyScore = this.props.enemyScore;
             // enemyScore+=3;
-            this.props.updateScore([name = "enemyScore", value = this.randomEnemyScore( this.props.difficulty )]);
+            this.props.updateScore([name = "enemyScore", value = this.randomEnemyScore()]);
             // After new tiles are set, check the board for matches of 3 or more
             this.state.displayBoard ? 
                 setTimeout(
@@ -176,34 +190,23 @@ export default class GameBoard extends Component {
         });
     }
 
-    randomEnemyScore = (difficulty) => {
-        const randomNumber = Math.floor(Math.random() * 100);
+    randomEnemyScore = () => {
         let enemyScore = this.props.enemyScore;
-        let baseNumber;
-        switch(difficulty){
-            case "easy":
-                baseNumber = 2;
-                break;
-            case "hard":
-                baseNumber = 4;
-                break;
-            default:
-                baseNumber = 3;
-        }
+        const randomNumber = Math.floor(Math.random() * 100);
         if(randomNumber < 25){
-            return enemyScore += baseNumber;
+            return enemyScore += 3;
         }
         else if(randomNumber < 50){
-            return enemyScore += (baseNumber + 1);
+            return enemyScore += 4;
         }
         else if (randomNumber < 75){
-            return enemyScore += (baseNumber + 2);
+            return enemyScore += 5;
         }
         else if(randomNumber < 90){
-            return enemyScore += (baseNumber + 3);
+            return enemyScore += 6;
         }
         else{
-            return enemyScore += (baseNumber + 4);
+            return enemyScore += 7;
         }
     }
 
@@ -360,7 +363,7 @@ export default class GameBoard extends Component {
         return (
             this.state.displayBoard ? 
             <Animated.View style={{ opacity: this.state.fadeAnimation, marginVertical: 10 }}>
-                <Grid style={{ backgroundColor: "#D5D4D2", marginVertical: 20 }}> 
+                <Grid style={{ backgroundColor: "#D5D4D2"}}> 
                 { this.renderBoard() } 
                 </Grid> 
             </Animated.View>
