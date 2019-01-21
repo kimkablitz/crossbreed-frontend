@@ -1,9 +1,9 @@
 import axios from "axios";
 
-const baseURL = "http://localhost:5000/"
+const baseURL = "http://localhost:5000/api"
 
 export default {
-    testRoute: () => {
-        return axios.get(baseURL);
+    updateLevel: (petId, levelObj) => {
+        return axios.put(`${baseURL}/pets/level/${petId}`, levelObj);
     }
 }

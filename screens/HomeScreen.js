@@ -21,11 +21,6 @@ export default class HomeScreen extends React.Component {
     recipes: []
   }
 
-  componentDidMount(){
-    const userInfo = this.props.navigation.getParam("user");
-    console.log(userInfo);
-  }
-
   searchRecipe = (event) => {
     event.preventDefault();
     axios
