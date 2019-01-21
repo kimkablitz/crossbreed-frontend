@@ -28,6 +28,9 @@ class MyModal extends Component {
                     animationType="slide"
                     transparent={ true }
                     visible={ this.state.modalVisible }
+                    onRequestClose={() => {
+                        Alert.alert('Modal has been closed.')
+                    }}
                 > 
                 { this.props.children }
                 </Modal>

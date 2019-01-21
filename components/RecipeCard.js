@@ -1,54 +1,58 @@
 import React from 'react';
 import {Linking} from 'react-native';
 
-// import { Image } from 'react-native';
-import { Content, Card, CardItem, Thumbnail, Text, Button, Icon, Left, Body } from 'native-base';
+import { Image, StyleSheet, View } from 'react-native';
+import { Svg } from 'expo';
+import { Content, Header, Card, CardItem, Thumbnail, Text, Button, Icon, Left, Body } from 'native-base';
+import { Col, Row, Grid } from "react-native-easy-grid";
 // export default class RecipeCard extends Component {
 
+// const baseImage = '../assets/images/robot-dev.png';
+const { Circle } = Svg;
+
 export default RecipeCard = (props) => {
-        // console.log(props)
-        const {title, href, ingredients, thumbnail } = props.data;
+        const {name, baseColor, outlineColor } = props.data;
+        const { red, blue, green, transparency } = baseColor;
     return (
-    //   <Container>
-    //     <Header />
         <Content>
-          <Card style={{flex: 0}}>
+          <Card style={{flex: 1}}>
             <CardItem>
-              <Left>
-                <Thumbnail source={{uri: thumbnail}} />
                 <Body>
-                  <Text>NativeBase</Text>
-                  <Text>{title}</Text>
+                  <View style={{alignSelf: 'center'}}>
+                    <Svg
+                        height="100"
+                        width="100"
+                    >
+                        <Circle
+                            onPress={props.press}
+                            cx="50"
+                            cy="50"
+                            r="45"
+                            fill={`rgba(${red}, ${green},  ${blue}, ${transparency})`}
+                            strokeWidth="3"
+                            stroke={`rgba(${outlineColor.red}, ${outlineColor.green},  ${outlineColor.blue}, ${outlineColor.transparency})`}
+                        />
+                    </Svg>
+                  </View>
                 </Body>
-              </Left>
             </CardItem>
             <CardItem>
               <Body>
-                {/* <Image source={{uri: 'Image URL'}} style={{height: 200, width: 200, flex: 1}}/> */}
-                <Text>
-                  Ingredients: {ingredients}
-                </Text>
+              <Text style={{alignSelf: 'center'}}>{name}</Text>
               </Body>
-            </CardItem>
-            <CardItem>
-              <Left>
-                <Button 
-                    transparent 
-                    textStyle={{color: '#87838B'}}
-                    onPress = {() => {
-                        Linking.openURL(href).then(() => {
-                            console.log("Opening link");
-                        }).catch(err => console.error('An error occurred', err))
-                        }
-                    }>
-                  <Icon name="navigate" />
-                  <Text>Go to Recipe</Text>
-                </Button>
-              </Left>
             </CardItem>
           </Card>
         </Content>
-    //   </Container>
     );
   
 }
+
+const styles = StyleSheet.create({
+  nameText: {
+    marginBottom: 20,
+    color: 'rgba(0,0,0,1)',
+    fontSize: 14,
+    lineHeight: 19,
+    textAlign: 'center',
+  },
+});
