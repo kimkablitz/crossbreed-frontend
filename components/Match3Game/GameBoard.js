@@ -359,8 +359,8 @@ export default class GameBoard extends Component {
     render() {
         return (
             this.state.displayBoard ? 
-            <Animated.View style={{ opacity: this.state.fadeAnimation, marginVertical: 10 }}>
-                <Grid style={{ backgroundColor: "#D5D4D2", marginVertical: 20 }}> 
+            <Animated.View style={{ opacity: this.state.fadeAnimation, marginTop: 50, marginBottom: 100 }}>
+                <Grid style={{ backgroundColor: "#D5D4D2" }}> 
                 { this.renderBoard() } 
                 </Grid> 
             </Animated.View>
