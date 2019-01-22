@@ -140,7 +140,7 @@ export default class Match3Screen extends Component {
         	  </Body>
         	  <Right />
         	</Header>	
-			<Content padder scrollEnabled={false} contentContainerStyle={{ justifyContent: "flex-start", alignItems: "center" }}>
+			<Content padder scrollEnabled={false} contentContainerStyle={{ flexGrow: 1, justifyContent: "flex-start", alignItems: "center" }}>
 				<RaceDisplay playerScore={ this.state.playerScore } enemyScore={ this.state.enemyScore } playerImg={ exampleImg } enemyImg={ exampleImg }/>
 				<GameBoard gameEnded={ this.state.gameEnded } difficulty={ this.state.difficultyLevel } pet={ this.state.petInfo } playerScore={ this.state.playerScore } enemyScore={ this.state.enemyScore } updateScore={ this.updateScore }/>
 				<MyModal visible={ this.state.gameEnded }>

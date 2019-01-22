@@ -1,20 +1,23 @@
 import React, { Component } from 'react'
-import { Platform, StatusBar, StyleSheet, View, Image, Text, Button } from 'react-native';
+import { Platform, StatusBar, StyleSheet, View } from 'react-native';
+import { Container, Content, Form, Item, Input, Label, Text, Button} from 'native-base';
 import { AppLoading, Asset, Font, Icon } from 'expo';
 import { NavigationActions } from "react-navigation";
 import * as Expo from 'expo';
+import API from "../utils/API";
 
-
-export default class AUTHENTICATION extends React.Component {
+export default class AUTHENTICATION extends Component {
   constructor(props) {
     super(props)
     this.state = {
       signedIn: false,
-      authenticating: false
+      authenticating: false, 
+      username: "",
+      password: ""
     }
   }
 
-  signIn = async () => {
+  googleSignIn = async () => {
     try {
       console.log("I am a monkey")
       this.setState({ authenticating: true });
@@ -37,10 +40,22 @@ export default class AUTHENTICATION extends React.Component {
     }
   }
 
+  localSignIn = () => {
+    API.login(this.state)
+    .then(res => this.goToHome(res.data))
+    .catch(err => console.log(err));
+  }
+
+  signUp = () => {
+    const navigateAction = NavigationActions.navigate({
+      routeName: "SignUp",
+    });
+    this.props.navigation.dispatch(navigateAction);
+  }
+
   goToHome = (result) => {
-    console.log("Red Octopus")
     const navigateHome = NavigationActions.navigate({
-      routeName: "GameLobby",
+      routeName: "Home",
       params: { user: result.user }
     });
     this.props.navigation.dispatch(navigateHome);
@@ -48,24 +63,45 @@ export default class AUTHENTICATION extends React.Component {
   
   render() {
     return (
-      <View style={styles.container}>
-          {this.state.authenticating ? 
-            <Text> Loading Stable... </Text>
-            : <LoginPage signIn={this.signIn} />
-          }
-      </View>
+      <Container>
+        {Platform.OS === "ios"
+          ? <View style={styles.container }> 
+              <Button onPress={ () => this.googleSignIn() }>
+                <Text>Sign in with Google</Text>
+              </Button>
+            </View>
+          : <Content padder contentContainerStyle={{ flex: 1 , justifyContent: "center" }}>
+              <Form>
+                <Item floatingLabel>
+                  <Label>Username</Label>
+                  <Input onChangeText={(value) => this.setState({username: value})}/>
+                </Item>
+                <Item floatingLabel last>
+                  <Label>Password</Label>
+                  <Input secureTextEntry={true} onChangeText={(value) => this.setState({password: value})}/>
+                </Item>
+                <Button
+                    block
+                    success
+                    style={{ marginVertical: 20 }}
+                    onPress={ () => this.localSignIn() }
+                >
+                  <Text>Login</Text>
+                </Button>
+                <Button
+                    block
+                    onPress={ () => this.signUp() }
+                >
+                  <Text>Register</Text>
+                </Button>
+              </Form>
+            </Content>
+        }
+      
+      </Container>
     )
   }
 }
-// const googleIcon = "./assets/images/signin-button.png"
-const LoginPage = props => {
-  return (
-    <View>
-      <Button title="Sign in with Google" onPress={() => props.signIn()} />
-    </View>
-  )
-}
-
 
 
 const styles = StyleSheet.create({
