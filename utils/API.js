@@ -8,5 +8,8 @@ export default {
     },
     login: (userObj) => {
         return axios.post("https://uw-playground-api.herokuapp.com/auth/login", userObj);
+    },
+    signUp: (userObj) => {
+        return axios.post("https://uw-playground-api.herokuapp.com/auth/signup", userObj)
     }
 }
