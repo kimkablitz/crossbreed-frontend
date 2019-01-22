@@ -9,8 +9,7 @@ import {
   View,
 } from 'react-native';
 import axios from "axios";
-import SearchBar from '../components/SearchBar';
-import RecipeCard from '../components/RecipeCard'
+import RecipeCard from '../components/RecipeCard';
 import { Col, Row, Grid } from "react-native-easy-grid";
 import { NavigationActions } from 'react-navigation';
 import { Content, Header, Body, Title } from 'native-base';
@@ -234,7 +233,6 @@ export default class HomeScreen extends React.Component {
     this.props.navigation.dispatch(navigateAction);
   }
 
-
   render() {
     return (
       <Content>
@@ -247,12 +245,11 @@ export default class HomeScreen extends React.Component {
           <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
             <Grid>
               <Row style={{flexWrap: "wrap", justifyContent: 'space-evenly'}} > 
-                {this.state.stalls.map( (stall, index) => 
-                
-                <Col key={stall.name} style={{width: 150, height: 200}} >
+                {this.state.stalls.map( (stall, index) => {
+                return <Col key={stall.name} style={{width: 150, height: 200}} >
                   <RecipeCard key={index} data={stall} press={() => {this.handleOnPress(index)}} />
                 </Col>
-                )}
+                })}
               </Row>
             </Grid>
           </ScrollView>
