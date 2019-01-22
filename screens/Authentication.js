@@ -66,7 +66,7 @@ export default class AUTHENTICATION extends Component {
       <Container>
         {Platform.OS === "ios"
           ? <View style={styles.container }> 
-              <Button onPress={ () => this.googleSignIn() }>
+              <Button style={{ alignSelf: "center" }} onPress={ () => this.googleSignIn() }>
                 <Text>Sign in with Google</Text>
               </Button>
             </View>

@@ -221,6 +221,7 @@ export default class HomeScreen extends React.Component {
   // }
   componentDidMount(){
     const userInfo = this.props.navigation.getParam("user");
+    this.props.navigation.setParams( { pets: this.state.stalls });
     console.log(userInfo);
   }
 
