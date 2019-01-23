@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "crossbreed",
-    "slug": "breed and level your own personal pets",
+    "slug": "crossbreed",
     "privacy": "public",
     "sdkVersion": "32.0.0",
     "platforms": [
@@ -24,11 +24,6 @@
     ],
     "ios": {
       "supportsTablet": true
-    },
-    "notification":{
-      "icon": "./asssets/images/splash.png",
-      "color": "purple",
-      "androidMode":"default"
     }
   }
 }
