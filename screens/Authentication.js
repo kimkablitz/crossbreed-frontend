@@ -19,7 +19,7 @@ export default class AUTHENTICATION extends Component {
 
   googleSignIn = async () => {
     try {
-      console.log("I am a monkey")
+      // console.log("I am a monkey")
       this.setState({ authenticating: true });
       const result = await Expo.Google.logInAsync({
         iosClientId: "778512270288-qf47t5td929rgm78g61nm6o7hvfecllr.apps.googleusercontent.com",
@@ -28,7 +28,7 @@ export default class AUTHENTICATION extends Component {
       })
       console.log("Result type = ", result.type)
       if (result.type === "success") {
-        console.log("Purple Bear")
+        // console.log("Purple Bear")
         this.goToHome(result);
       } else {
         this.setState({ authenticating: false });

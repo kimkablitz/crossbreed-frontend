@@ -1,15 +1,38 @@
+// import axios from "axios";
+
+// const baseURL = "http://localhost:3001/"
+
+// export default {
+//     testRoute: () => {
+//         return axios.get(baseURL);
+//     },
+//     login: (userObj) => {
+//         return axios.post("https://uw-playground-api.herokuapp.com/auth/login", userObj);
+//     },
+//     signUp: (userObj) => {
+//         return axios.post("https://uw-playground-api.herokuapp.com/auth/signup", userObj)
+//     }
+// }
 import axios from "axios";
 
-const baseURL = "http://localhost:3001/"
-
 export default {
-    testRoute: () => {
-        return axios.get(baseURL);
-    },
+    
     login: (userObj) => {
-        return axios.post("https://uw-playground-api.herokuapp.com/auth/login", userObj);
+        return axios.post("https://uw-playground-api.herokuapp.com/auth/login", userObj)
     },
-    signUp: (userObj) => {
+    logout: () => {
+        return axios.post("https://uw-playground-api.herokuapp.com/auth/logout")
+    },
+    getUser: () => {
+        return axios.get("https://uw-playground-api.herokuapp.com/auth/user")
+    },
+    registerUser: (userObj) => {
         return axios.post("https://uw-playground-api.herokuapp.com/auth/signup", userObj)
+    },
+    saveBook: (bookObj, userId) => {
+        return axios.post("https://uw-playground-api.herokuapp.com/api/book/" + userId, bookObj)
+    },
+    getUserBooks: (userId) => {
+        return axios.get("https://uw-playground-api.herokuapp.com/api/book/" + userId)
     }
 }
