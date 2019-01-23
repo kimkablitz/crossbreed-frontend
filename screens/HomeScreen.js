@@ -7,6 +7,7 @@ import {
   Text,
   TouchableOpacity,
   View,
+  AsyncStorage
 } from 'react-native';
 import axios from "axios";
 import SearchBar from '../components/SearchBar';
@@ -220,15 +221,27 @@ export default class HomeScreen extends React.Component {
   //   .catch(err => console.log(err));
   // }
   componentDidMount(){
-    const userInfo = this.props.navigation.getParam("user");
+    (async () => {
+      try {
+        // Temporary method of passing pets to game lobby, in future, user info should contain pets
+        await AsyncStorage.setItem('pets', JSON.stringify(this.state.stalls));
+        const value = await AsyncStorage.getItem('user');
+        if (value !== null) {
+          // We have data!!
+          console.log('userInfo: ' + (value));
+        }
+       } catch (error) {
+         // Error retrieving data
+         console.log(error);
+       }
+    })()
     this.props.navigation.setParams( { pets: this.state.stalls });
-    console.log(userInfo);
+    //console.log( "userInfo: " + userInfo);
   }
 
   handleOnPress = (index) => {
     const navigateAction = NavigationActions.navigate({
       routeName: 'PetScreen',
-    
       params: { pet: this.state.stalls[index] },
     });
     

@@ -8,33 +8,7 @@ import RaceDisplay from "../components/Match3Game/RaceDisplay";
 import MyModal from "../components/Modal";
 import API from "../utils/API";
 
-const exampleImg = "https://facebook.github.io/react-native/docs/assets/favicon.png ";
 let modalMessage = "";
-const examplePet = {
-	name: "Red",
-	baseImage: "testPet.svg",
-	baseColor: {
-			red: 255,
-			blue: 0,
-			green: 0,
-			transparency: 1 
-	},
-	outlineColor: {
-			red: 0,
-			blue: 0,
-			green: 0,
-			transparency: 1
-	},
-	gameColor: {
-			primary: "red",
-			secondary: "red"
-	},
-	isFavorite: false,
-	level: 1,
-	experiencePoints: 0,
-	parents: [],
-	dna: {}, 
-};
 
 export default class Match3Screen extends Component {
 	state = {
@@ -45,7 +19,7 @@ export default class Match3Screen extends Component {
 		petInfo: {}
 	};
 
-	componentDidMount(){
+	componentWillMount(){
 		const difficultyLevel = this.props.navigation.getParam("difficultyLevel");
 		const petInfo = this.props.navigation.getParam("petInfo");
 		BackHandler.addEventListener("hardwareBackPress", this.showAlert);
@@ -142,7 +116,7 @@ export default class Match3Screen extends Component {
 			  <Right style={{ flex: 1 }}/>
         	</Header>	
 			<Content padder scrollEnabled={false} contentContainerStyle={{ flexGrow: 1, justifyContent: "flex-start", alignItems: "center" }}>
-				<RaceDisplay playerScore={ this.state.playerScore } enemyScore={ this.state.enemyScore } playerImg={ exampleImg } enemyImg={ exampleImg }/>
+				<RaceDisplay playerScore={ this.state.playerScore } enemyScore={ this.state.enemyScore } petInfo={ this.state.petInfo } />
 				<GameBoard gameEnded={ this.state.gameEnded } difficulty={ this.state.difficultyLevel } pet={ this.state.petInfo } playerScore={ this.state.playerScore } enemyScore={ this.state.enemyScore } updateScore={ this.updateScore }/>
 				<MyModal visible={ this.state.gameEnded }>
 					<Grid style={{ backgroundColor: "rgba(0,0,0,0.8)", justifyContent: "center", alignItems: "center"}}>

@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import { Container, Header, Body, Title, Content, Left, Right, Button, Text, Icon } from "native-base";
+import { AsyncStorage } from "react-native";
+import { Container, Header, Body, Title, Content, Button, Text } from "native-base";
 import { Grid, Row, Col } from "react-native-easy-grid";
 import { NavigationActions } from "react-navigation";
 import RecipeCard from "../components/RecipeCard";
@@ -14,194 +15,29 @@ class GameLobbyScreen extends Component {
         }
     }
 
-    componentDidMount(){
-        const pets = [
-            {
-                name: "Red",
-                baseColor: {
-                    red: 255,
-                    blue: 0,
-                    green: 0,
-                    transparency: 1 
-                },
-                outlineColor: {
-                    red: 0,
-                    blue: 0,
-                    green: 0,
-                    transparency: 1
-                },
-                gameColor: {
-                    primary: "red",
-                    secondary: "red"
-                },
-                isFavorite: false,
-                parents: ["The Wild"],
-                level: 1,
-                experiencePoints: 42
-            },
-            {
-                name: "Blue",
-                baseColor: {
-                    red: 0,
-                    blue: 255,
-                    green: 0,
-                    transparency: 1 
-                },
-                outlineColor: {
-                    red: 0,
-                    blue: 0,
-                    green: 0,
-                    transparency: 1
-                },
-                gameColor: {
-                    primary: "blue",
-                    secondary: "blue"
-                },
-                isFavorite: false,
-                parents: ["Bob", "Mary"],
-                level: 2,
-                experiencePoints: 42
-            },
-            {
-                name: "Green",
-                baseColor: {
-                    red: 0,
-                    blue: 0,
-                    green: 255,
-                    transparency: 1 
-                },
-                outlineColor: {
-                    red: 0,
-                    blue: 0,
-                    green: 0,
-                    transparency: 1
-                },
-                gameColor: {
-                    primary: "green",
-                    secondary: "green"
-                },
-                isFavorite: false,
-                parents: ["Frank", "Sue"],
-                level: 3,
-                experiencePoints: 42
-            },
-            {
-                name: "Magenta",
-                baseColor: {
-                    red: 255,
-                    blue: 255,
-                    green: 0,
-                    transparency: 1 
-                },
-                outlineColor: {
-                    red: 0,
-                    blue: 0,
-                    green: 0,
-                    transparency: 1
-                },
-                gameColor: {
-                    primary: "magenta",
-                    secondary: "magenta"
-                },
-                isFavorite: false,
-                parents: ["Matilda", "Madison"],
-                level: 6,
-                experiencePoints: 42
-            },
-            {
-                name: "Cyan",
-                baseColor: {
-                    red: 0,
-                    blue: 255,
-                    green: 255,
-                    transparency: 1 
-                },
-                outlineColor: {
-                    red: 0,
-                    blue: 0,
-                    green: 0,
-                    transparency: 1
-                },
-                gameColor: {
-                    primary: "cyan",
-                    secondary: "cyan"
-                },
-                isFavorite: false,
-                parents: ["Goldie", "Blackie"],
-                level: 10,
-                experiencePoints: 42
-            },
-            {
-                name: "Yellow",
-                baseColor: {
-                    red: 255,
-                    blue: 0,
-                    green: 255,
-                    transparency: 1 
-                },
-                outlineColor: {
-                    red: 0,
-                    blue: 0,
-                    green: 0,
-                    transparency: 1
-                },
-                gameColor: {
-                    primary: "yellow",
-                    secondary: "yellow"
-                },
-                isFavorite: false,
-                parents: ["The Wild"],
-                level: 15,
-                experiencePoints: 42
-            },
-            {
-                name: "White",
-                baseColor: {
-                    red: 255,
-                    blue: 255,
-                    green: 255,
-                    transparency: 1 
-                },
-                outlineColor: {
-                    red: 0,
-                    blue: 0,
-                    green: 0,
-                    transparency: 1
-                },
-                gameColor: {
-                    primary: "white",
-                    secondary: "white"
-                },
-                isFavorite: false,
-                parents: ["The Wild"],
-                level: 20,
-                experiencePoints: 42
-            },
-            {
-                name: "Black",
-                baseColor: {
-                    red: 0,
-                    blue: 0,
-                    green: 0,
-                    transparency: 1 
-                },
-                outlineColor: {
-                    red: 255,
-                    blue: 255,
-                    green: 255,
-                    transparency: 1
-                },
-                gameColor: {
-                    primary: "black",
-                    secondary: "black"
-                },
-                isFavorite: false,
-                parents: ["The Wild"],
-                level: 1,
-                experiencePoints: 42
-            }
-        ]
-        this.setState({ userPets: pets, selectedPet: pets[0] });
+    componentWillMount(){
+        (async () => {
+            try {
+              const user = await AsyncStorage.getItem('user');
+              const pets = await AsyncStorage.getItem('pets');
+              if (user !== null && pets !== null) {
+                // We have data!!
+                let userInfo = JSON.parse(user);
+                let userPets = JSON.parse(pets);
+                console.log('userInfo: ' + userInfo);
+                console.log('pets: ' + userPets);
+                this.setState({ userPets: userPets, selectedPet: this.props.navigation.getParam("pet", userPets[0]) });
+              }
+             } catch (error) {
+               // Error retrieving data
+             }
+        })()  
+    }
+
+    componentWillReceiveProps(nextProps){
+        if(nextProps.navigation.state.params.pet){
+            this.setState({ selectedPet: nextProps.navigation.getParam("pet", this.state.userPets[0])});
+        }
     }
 
     setDifficulty = (difficultyLevel) => {
