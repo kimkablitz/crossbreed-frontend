@@ -15,7 +15,6 @@ export default PetScreen = (props) => {
   const { red, blue, green, transparency } = baseColor;
 
   toGameLobby = (pet) => {
-    console.log(pet);
     const navigateToGameLobby = NavigationActions.navigate({
         routeName: "GameLobby",
         params: { pet: pet }

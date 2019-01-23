@@ -29,7 +29,7 @@ export default class Match3Screen extends Component {
 	updateScore = (newScore) => {
 		const [ name, value ] = newScore;
 		if(!this.state.gameEnded){
-    	this.setState({ [name] : value }, () => {
+    		this.setState({ [name] : value }, () => {
 				if(value >= 100){
 					this.endGame(name);
 				}
