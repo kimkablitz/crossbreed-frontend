@@ -9,8 +9,8 @@ import {
   View,
 } from 'react-native';
 import axios from "axios";
-import SearchBar from '../components/SearchBar';
-import RecipeCard from '../components/RecipeCard'
+import SearchBar from '../../components/SearchBar';
+import RecipeCard from '../../components/RecipeCard'
 export default class HomeScreen extends React.Component {
   static navigationOptions = {
     header: null,

@@ -32,10 +32,9 @@ export default class SignUp extends Component {
     handleLoginRedirect = (userObj) => {
         const navigateAction = NavigationActions.navigate({
           routeName: "Home",
-          params: {data: userObj}
+          params: { user: userObj }
         });
         this.props.navigation.dispatch(navigateAction);
-        // this.props.navigation.goBack();
       };
 
   render() {

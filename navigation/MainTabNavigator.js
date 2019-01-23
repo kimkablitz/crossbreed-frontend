@@ -87,4 +87,4 @@ export default createBottomTabNavigator({
     activeTintColor: "white"
   }
 }
-);
+)
