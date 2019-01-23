@@ -17,6 +17,7 @@ export default class GameLobbyScreen extends Component {
 
     componentWillMount(){
         // First time this screen loads, grab all the locally stored user/pet data
+        // Need to add in API call to generate/grab random enemy 
         (async () => {
             try {
               const user = await AsyncStorage.getItem('user');
