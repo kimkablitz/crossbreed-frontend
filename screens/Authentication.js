@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
-import { Platform, StatusBar, StyleSheet, View, AsyncStorage } from 'react-native';
+import { Platform, StyleSheet, View, AsyncStorage } from 'react-native';
 import { Container, Content, Form, Item, Input, Label, Text, Button} from 'native-base';
-import { AppLoading, Asset, Font, Icon } from 'expo';
 import { NavigationActions } from "react-navigation";
 import * as Expo from 'expo';
 import API from "../utils/API";
@@ -39,9 +38,11 @@ export default class AUTHENTICATION extends Component {
   }
 
   localSignIn = () => {
-    API.login(this.state)
-    .then(res => this.goToHome(res.data))
-    .catch(err => console.log(err));
+    this.setState({ authenticating: true }, () => {
+      API.login(this.state)
+      .then(res => this.goToHome(res.data))
+      .catch(err => this.setState({ authenticating: false }, () => console.log(err)));
+    })
   }
 
   googleAPI = (googleId) => {

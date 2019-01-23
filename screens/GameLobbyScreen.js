@@ -5,7 +5,7 @@ import { Grid, Row, Col } from "react-native-easy-grid";
 import { NavigationActions } from "react-navigation";
 import RecipeCard from "../components/RecipeCard";
 
-class GameLobbyScreen extends Component {
+export default class GameLobbyScreen extends Component {
     constructor(props){
         super(props);
         this.state = {
@@ -16,6 +16,7 @@ class GameLobbyScreen extends Component {
     }
 
     componentWillMount(){
+        // First time this screen loads, grab all the locally stored user/pet data
         (async () => {
             try {
               const user = await AsyncStorage.getItem('user');
@@ -35,6 +36,7 @@ class GameLobbyScreen extends Component {
     }
 
     componentWillReceiveProps(nextProps){
+        // IF the screen receives a new pet param, then set the selectedPet state to the new pet
         if(nextProps.navigation.state.params.pet){
             this.setState({ selectedPet: nextProps.navigation.getParam("pet", this.state.userPets[0])});
         }
@@ -49,6 +51,7 @@ class GameLobbyScreen extends Component {
     }
 
     startGame = () => {
+        // Navigates to the actual game page, passing the difficulty and selectedPet as params
         const navigateToGame = NavigationActions.navigate({
             routeName: "Match3Game",
             params: { difficultyLevel: this.state.difficulty, petInfo: this.state.selectedPet }
@@ -111,4 +114,3 @@ class GameLobbyScreen extends Component {
     }
 }
 
-export default GameLobbyScreen;
