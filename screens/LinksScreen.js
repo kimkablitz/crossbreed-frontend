@@ -1,7 +1,11 @@
 import React from 'react';
+import axios from "axios";
 import { View, ScrollView, StyleSheet } from 'react-native';
-import RecipeCard from '../components/RecipeCard';
-import { Col, Row, Grid } from "react-native-easy-grid";
+import PetCard from '../components/PetCard';
+import TinyPetCard from '../components/TinyPetCard';
+import { Col, Row, Grid } from 'react-native-easy-grid';
+import { Button, Text } from 'native-base';
+import { NavigationActions } from 'react-navigation';
 
 export default class LinksScreen extends React.Component {
   static navigationOptions = {
@@ -9,7 +13,9 @@ export default class LinksScreen extends React.Component {
   };
 
   state = {
+    // holds up to 2 pets to be bred
     tobreed: [],
+    // holds all users pets not in tobreed array
     pets: [
       {
         name: "Red",
@@ -198,17 +204,38 @@ export default class LinksScreen extends React.Component {
     ]
   }
 
-  petOnPress = (index) => {
-    if (this.state.tobreed.length < 2) {
-      const newbreeder = this.state.pets[index];
-      const newpets = this.state.pets.filter((pet, i) => {
-        if (i !== index) {
-          return pet
+  componentWillReceiveProps = (nextProps) => {
+    let breedThis = nextProps.navigation.getParam('pet');
+    // let otherPets = 
+    if (breedThis) {
+      this.setState( () => {
+        return {
+          tobreed: [breedThis]
         }
       })
-      this.setState((state) => { 
+    }
+  }
+
+  petOnPress = (index) => {
+    if (this.state.tobreed.length < 2) {
+      this.setState(state => { 
+        // get chosen pet
+        const newbreeder = state.pets[index];
+        // make new array of pets, minus chosen pet
+        const newpets = state.pets.filter((pet, i) => {
+          if (i !== index) {
+            return pet
+          }
+        });
+        // get current tobreed pet, if any
+        // this doesn't work without slice, 
+        // because React does weird things
+        let breeders = state.tobreed.slice(0);
+        // add new pet to breed to the array
+        breeders.push(newbreeder);
+        // return the new arrays to set the new state
         return { 
-          tobreed: state.tobreed.push(newbreeder),
+          tobreed: breeders,
           pets: newpets
         } 
       });
@@ -217,35 +244,51 @@ export default class LinksScreen extends React.Component {
 
   breederOnPress = (index) => {
     const removebreeder = this.state.tobreed[index];
-      const breedpets = this.state.tobreed.filter((pet, i) => {
-        if (i !== index) {
-          return pet
-        }
-      })
-      this.setState((state) => { 
-        return { 
-          tobreed: breedpets,
-          pets: state.pets.push(removebreeder)
-        } 
-      });
+    const breedpets = this.state.tobreed.filter((pet, i) => {
+      if (i !== index) {
+        return pet
+      }
+    })
+    const allpets = this.state.pets.slice(0);
+    allpets.push(removebreeder);
+    this.setState(() => { 
+      return { 
+        tobreed: breedpets,
+        pets: allpets
+      } 
+    });
+  }
+
+  handleBreedPets = () => {
+
   }
 
   render() {
     return (
       <View style={styles.container}>
-        <Row>
-        {this.state.tobreed.map( (breeder, index) => {
-          return <Col key={breeder.name} style={{width: 150, height: 200}} >
-            <RecipeCard key={index} data={breeder} press={() => {this.breederOnPress(index)}} />
-          </Col>
-        })}
-        </Row>
+        <Grid>
+          <Row style={{flexWrap: "wrap", justifyContent: 'space-evenly', height: 175}}>
+          {this.state.tobreed.map( (breeder, index) => {
+            return <Col key={breeder.name} style={{width: 150, height: 200}} >
+              <PetCard key={index} data={breeder} press={() => {this.breederOnPress(index)}} 
+              />
+            </Col>
+          })}
+          </Row>
+          <Row style={{justifyContent: 'center'}}>
+            <Button danger rounded style={{ margin: 10}}
+              onPress={ () => this.handleBreedPets() }
+            > 
+              <Text>Breed</Text> 
+            </Button>
+          </Row>
+        </Grid>
         <ScrollView style={styles.container}>
           <Grid>
             <Row style={{flexWrap: "wrap", justifyContent: 'space-evenly'}} > 
               {this.state.pets.map( (pet, index) => {
-                return <Col key={pet.name} style={{width: 150, height: 200}} >
-                <RecipeCard key={index} data={pet} press={() => {this.petOnPress(index)}} />
+                return <Col key={pet.name} style={{width: 100, height: 140}} >
+                <TinyPetCard key={index} data={pet} press={() => {this.petOnPress(index)}} />
               </Col>
               })}
             </Row>

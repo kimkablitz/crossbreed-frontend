@@ -9,7 +9,7 @@ import {
   View,
 } from 'react-native';
 import axios from "axios";
-import RecipeCard from '../components/RecipeCard';
+import RecipeCard from '../components/PetCard';
 import { Col, Row, Grid } from "react-native-easy-grid";
 import { NavigationActions } from 'react-navigation';
 import { Content, Header, Body, Title } from 'native-base';
@@ -218,10 +218,11 @@ export default class HomeScreen extends React.Component {
   //   })
   //   .catch(err => console.log(err));
   // }
-  componentDidMount(){
-    const userInfo = this.props.navigation.getParam("user");
-    console.log(userInfo);
-  }
+
+  // componentDidMount(){
+  //   const userInfo = this.props.navigation.getParam("user");
+  //   console.log(userInfo);
+  // }
 
   handleOnPress = (index) => {
     const navigateAction = NavigationActions.navigate({
