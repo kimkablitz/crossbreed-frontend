@@ -3,7 +3,7 @@ import { AsyncStorage, ScrollView, View } from "react-native";
 import { Container, Header, Body, Title, Content, Button, Text } from "native-base";
 import { Grid, Row, Col } from "react-native-easy-grid";
 import { NavigationActions } from "react-navigation";
-import RecipeCard from "../components/RecipeCard";
+import PetCard from "../components/PetCard";
 
 export default class GameLobbyScreen extends Component {
     constructor(props){
@@ -106,7 +106,7 @@ export default class GameLobbyScreen extends Component {
                               {this.state.userPets.map( (stall, index) => {
                                 const borderColor = this.state.selectedPet.name === stall.name ? "grey" : "white"
                                 return (<Col key={stall.name} style={{width: 150, borderWidth: 5, borderColor: borderColor }} >
-                                  <RecipeCard key={index} data={stall} press={() => this.setPet(stall) } />
+                                  <PetCard key={index} data={stall} press={() => this.setPet(stall) } />
                                 </Col>)
                               })}
                             </Row>
