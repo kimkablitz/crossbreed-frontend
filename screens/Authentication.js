@@ -46,8 +46,12 @@ export default class AUTHENTICATION extends Component {
   }
 
   googleAPI = (googleId) => {
+    googleSignIn(googleId)
+      .then(res => this.goToHome(res.data))
+      .catch(err => this.setState({authenticating: false}, () => console.log(err)))
     // Need to make API call to back end after google sign in to retrieve user's Mongo _id and pet data
     // Then call goToHome with the returned data
+    console.log("pop" + googleId)
   }
 
   signUp = () => {
