@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Button, Image, View } from "react-native"; 
+import { Button, Image, View, AsyncStorage } from "react-native"; 
 import { Container, Header, Content, Form, Item, Input, Label, Text, Thumbnail } from 'native-base';
 import { NavigationActions } from "react-navigation";
 import API from "../utils/API";
@@ -21,6 +21,7 @@ export default class SignUp extends Component {
 
         API.signUp(newUser)
             .then(res => {
+                console.log(res.data);
                 console.log("SUCCESSFUL SIGNUP")
                 this.handleLoginRedirect(res.data)
             })
@@ -29,13 +30,17 @@ export default class SignUp extends Component {
             })
     }
 
-    handleLoginRedirect = (userObj) => {
-        const navigateAction = NavigationActions.navigate({
+    handleLoginRedirect = async (userObj) => {
+      try {
+        // Storing user data in react-native's AsyncStorage
+        await AsyncStorage.setItem('user', JSON.stringify(userObj) );
+        const navigateHome = NavigationActions.navigate({
           routeName: "Home",
-          params: {data: userObj}
         });
-        this.props.navigation.dispatch(navigateAction);
-        // this.props.navigation.goBack();
+        this.props.navigation.dispatch(navigateHome);
+      } catch (error) {
+        console.log(error);
+      }
       };
 
   render() {

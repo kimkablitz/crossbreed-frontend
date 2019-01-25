@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Alert } from "react-native";
+import { Alert, BackHandler } from "react-native";
 import { Container, Header, Body, Title, Left, Right, Button, Icon, Content, H1, Text } from "native-base";
 import { Grid, Row, Col } from "react-native-easy-grid";
 import { NavigationActions, StackActions } from 'react-navigation';
@@ -8,33 +8,7 @@ import RaceDisplay from "../components/Match3Game/RaceDisplay";
 import MyModal from "../components/Modal";
 import API from "../utils/API";
 
-const exampleImg = "https://facebook.github.io/react-native/docs/assets/favicon.png ";
 let modalMessage = "";
-const examplePet = {
-	name: "Red",
-	baseImage: "testPet.svg",
-	baseColor: {
-			red: 255,
-			blue: 0,
-			green: 0,
-			transparency: 1 
-	},
-	outlineColor: {
-			red: 0,
-			blue: 0,
-			green: 0,
-			transparency: 1
-	},
-	gameColor: {
-			primary: "red",
-			secondary: "red"
-	},
-	isFavorite: false,
-	level: 1,
-	experiencePoints: 0,
-	parents: [],
-	dna: {}, 
-};
 
 export default class Match3Screen extends Component {
 	state = {
@@ -45,17 +19,17 @@ export default class Match3Screen extends Component {
 		petInfo: {}
 	};
 
-	componentDidMount(){
+	componentWillMount(){
 		const difficultyLevel = this.props.navigation.getParam("difficultyLevel");
-		// TODO: add GET request to get Pet info
-		this.setState({ petInfo: examplePet, difficultyLevel: difficultyLevel });
-		// TODO: add GET request to get random enemy 
+		const petInfo = this.props.navigation.getParam("petInfo");
+		BackHandler.addEventListener("hardwareBackPress", this.showAlert);
+		this.setState({ petInfo: petInfo, difficultyLevel: difficultyLevel });
 	}
 
 	updateScore = (newScore) => {
 		const [ name, value ] = newScore;
 		if(!this.state.gameEnded){
-    	this.setState({ [name] : value }, () => {
+    		this.setState({ [name] : value }, () => {
 				if(value >= 100){
 					this.endGame(name);
 				}
@@ -110,6 +84,7 @@ export default class Match3Screen extends Component {
 				{ text: "Return to lobby", onPress: () => this.navigate("GameLobby") }
 			]
 		)
+		return true;
 	}
 
 	navigate = (routeName) => {
@@ -129,19 +104,19 @@ export default class Match3Screen extends Component {
     return (
 		<Container>
         	<Header>
-        	  <Left>
+        	  <Left style={{ flex: 1 }}>
         	    <Button transparent onPress={ this.showAlert }>
         	      <Icon name='arrow-back' />
         	      <Text> To Lobby </Text>
         	    </Button>
         	  </Left>
-        	  <Body>
+        	  <Body style={{ flex: 1 }}>
         	    <Title>Match 3 Race</Title>
         	  </Body>
-        	  <Right />
+			  <Right style={{ flex: 1 }}/>
         	</Header>	
 			<Content padder scrollEnabled={false} contentContainerStyle={{ flexGrow: 1, justifyContent: "flex-start", alignItems: "center" }}>
-				<RaceDisplay playerScore={ this.state.playerScore } enemyScore={ this.state.enemyScore } playerImg={ exampleImg } enemyImg={ exampleImg }/>
+				<RaceDisplay playerScore={ this.state.playerScore } enemyScore={ this.state.enemyScore } petInfo={ this.state.petInfo } />
 				<GameBoard gameEnded={ this.state.gameEnded } difficulty={ this.state.difficultyLevel } pet={ this.state.petInfo } playerScore={ this.state.playerScore } enemyScore={ this.state.enemyScore } updateScore={ this.updateScore }/>
 				<MyModal visible={ this.state.gameEnded }>
 					<Grid style={{ backgroundColor: "rgba(0,0,0,0.8)", justifyContent: "center", alignItems: "center"}}>
