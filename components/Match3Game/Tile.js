@@ -155,12 +155,12 @@ class Tile extends Component{
     render(){
         return (
             <GestureRecognizer 
-                config={{ velocityThreshold: 0.3, directionalOffsetThreshold: 1000, gestureIsClickThreshold: 10 }}
+                config={{ velocityThreshold: 0.1, directionalOffsetThreshold: 80, gestureIsClickThreshold: 10 }}
                 onSwipe={(direction) => this.props.swipe(direction, {x: this.props.xIndex, y: this.props.yIndex})}
             >
                 <Col style={{ width: 70, alignItems: "center", justifyContent: "center" }}>
                     <Animated.View style={{ opacity: this.state.fadeOutAnimation, 
-                        transform: [{rotate: this.state.rotateAnimation}, {translateY: this.state.yShiftAnimation}, {translateX: this.state.xShiftAnimation}] 
+                        transform: [ {translateY: this.state.yShiftAnimation}, {translateX: this.state.xShiftAnimation}] 
                     }}>
                         <Ionicons name={ this.updateIcon() } size={ 40 } color={ this.state.color !== "" ? this.state.color : "transparent"}/>
                     </Animated.View>

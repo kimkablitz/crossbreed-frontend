@@ -5,7 +5,7 @@ import MainTabNavigator from './MainTabNavigator';
 
 export default createAppContainer(createSwitchNavigator({
   Auth: AuthenticationNavigator,
-  Main: MainTabNavigator,
+  Main: MainTabNavigator
 },
 {
   initialRouteName: "Auth"
