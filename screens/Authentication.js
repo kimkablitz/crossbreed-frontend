@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
-import { Platform, StatusBar, StyleSheet, View, AsyncStorage } from 'react-native';
+import { Platform, StyleSheet, View, AsyncStorage } from 'react-native';
 import { Container, Content, Form, Item, Input, Label, Text, Button} from 'native-base';
-import { AppLoading, Asset, Font, Icon } from 'expo';
 import { NavigationActions } from "react-navigation";
 import * as Expo from 'expo';
 import API from "../utils/API";
@@ -26,8 +25,8 @@ export default class AUTHENTICATION extends Component {
         scopes: ["profile", "email"]
       })
       if (result.type === "success") {
-        //this.googleAPI(result.user.id)
-        this.goToHome(result);
+        this.googleAPI(result.user);
+        //this.goToHome(result);
       } else {
         this.setState({ authenticating: false });
         console.log("cancelled")
@@ -39,14 +38,19 @@ export default class AUTHENTICATION extends Component {
   }
 
   localSignIn = () => {
-    API.login(this.state)
-    .then(res => this.goToHome(res.data))
-    .catch(err => console.log(err));
+    this.setState({ authenticating: true }, () => {
+      API.login({ username: this.state.username, password: this.state.password })
+      .then(res => this.goToHome(res.data))
+      .catch(err => this.setState({ authenticating: false }, () => console.log(err)));
+    })
   }
 
-  googleAPI = (googleId) => {
+  googleAPI = (googleUserInfo) => {
     // Need to make API call to back end after google sign in to retrieve user's Mongo _id and pet data
+    API.googleLogin(googleUserInfo)
     // Then call goToHome with the returned data
+    .then(res => this.goToHome(res.data))
+    .catch(err => this.setState({ authenticating: false }, ()=> console.log(err)));
   }
 
   signUp = () => {
@@ -59,7 +63,7 @@ export default class AUTHENTICATION extends Component {
   goToHome = async (result) => {
       try {
         // Storing user data in react-native's AsyncStorage
-        await AsyncStorage.setItem('user', JSON.stringify(result.user) );
+        await AsyncStorage.setItem('user', JSON.stringify(result) );
         const navigateHome = NavigationActions.navigate({
           routeName: "Home",
         });

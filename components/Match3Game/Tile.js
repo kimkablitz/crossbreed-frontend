@@ -155,7 +155,7 @@ class Tile extends Component{
     render(){
         return (
             <GestureRecognizer 
-                config={{ velocityThreshold: 0.3, directionalOffsetThreshold: 1000, gestureIsClickThreshold: 10 }}
+                config={{ velocityThreshold: 0.1, directionalOffsetThreshold: 80, gestureIsClickThreshold: 10 }}
                 onSwipe={(direction) => this.props.swipe(direction, {x: this.props.xIndex, y: this.props.yIndex})}
             >
                 <Col style={{ width: 70, alignItems: "center", justifyContent: "center" }}>

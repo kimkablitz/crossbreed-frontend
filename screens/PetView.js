@@ -1,12 +1,10 @@
 import React from 'react';
-import {Linking} from 'react-native';
 
-import { Image, StyleSheet, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { Svg } from 'expo';
-import { Content, Card, CardItem, Thumbnail, Text, Button, Icon, Left, Body } from 'native-base';
+import { Content, Card, CardItem, Text, Button, Body } from 'native-base';
 import { Col, Row, Grid } from "react-native-easy-grid";
-import { NavigationActions } from 'react-navigation';
-import { width, height } from "../constants/Layout"
+import { NavigationActions, StackActions } from 'react-navigation';
 const { Circle } = Svg;
 
 export default PetScreen = (props) => {
@@ -15,11 +13,16 @@ export default PetScreen = (props) => {
   const { red, blue, green, transparency } = baseColor;
 
   toGameLobby = (pet) => {
-    console.log(pet);
     const navigateToGameLobby = NavigationActions.navigate({
         routeName: "GameLobby",
         params: { pet: pet }
     });
+    // Adds 3 seconds to Android devices
+    // const reset = StackActions.reset({
+    //   index: 0,
+    //   actions: [NavigationActions.navigate({ routeName: 'Home' })],
+    // });
+    // props.navigation.dispatch(reset);
     props.navigation.dispatch(navigateToGameLobby);
   }
 
@@ -28,6 +31,12 @@ export default PetScreen = (props) => {
         routeName: "Breed",
         params: { pet: pet }
     });
+    // Adds 3 seconds to Android devices
+    // const reset = StackActions.reset({
+    //   index: 0,
+    //   actions: [NavigationActions.navigate({ routeName: 'Home' })],
+    // });
+    // props.navigation.dispatch(reset);
     props.navigation.dispatch(navigateToGameLobby);
   }
 

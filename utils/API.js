@@ -2,37 +2,17 @@
 
 // const baseURL = "http://localhost:3001/"
 
-// export default {
-//     testRoute: () => {
-//         return axios.get(baseURL);
-//     },
-//     login: (userObj) => {
-//         return axios.post("https://uw-playground-api.herokuapp.com/auth/login", userObj);
-//     },
-//     signUp: (userObj) => {
-//         return axios.post("https://uw-playground-api.herokuapp.com/auth/signup", userObj)
-//     }
-// }
-import axios from "axios";
+const baseURL = "https://crossbreed-backend.herokuapp.com"
 
 export default {
     
     login: (userObj) => {
-        return axios.post("https://crossbreed-backend.herokuapp.com/auth/login", userObj)
+        return axios.post(`${baseURL}/auth/login`, userObj);
     },
-    logout: () => {
-        return axios.post("https://crossbreed-backend.herokuapp.com/auth/logout")
+    signUp: (userObj) => {
+        return axios.post(`${baseURL}/auth/signup`, userObj);
     },
-    getUser: () => {
-        return axios.get("https://crossbreed-backend.herokuapp.com/auth/user")
-    },
-    registerUser: (userObj) => {
-        return axios.post("https://crossbreed-backend.herokuapp.com/auth/signup", userObj)
-    },
-    saveBook: (bookObj, userId) => {
-        return axios.post("https://crossbreed-backend.herokuapp.com/api/book/" + userId, bookObj)
-    },
-    getUserBooks: (userId) => {
-        return axios.get("https://crossbreed-backend.herokuapp.com/api/book/" + userId)
+    googleLogin: (googleUserObj) => {
+        return axios.post(`${baseURL}/auth/login/google`, googleUserObj);
     }
 }

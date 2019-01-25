@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
-import { AsyncStorage } from "react-native";
+import { AsyncStorage, ScrollView, View } from "react-native";
 import { Container, Header, Body, Title, Content, Button, Text } from "native-base";
 import { Grid, Row, Col } from "react-native-easy-grid";
 import { NavigationActions } from "react-navigation";
-import RecipeCard from "../components/RecipeCard";
+import PetCard from "../components/PetCard";
 
-class GameLobbyScreen extends Component {
+export default class GameLobbyScreen extends Component {
     constructor(props){
         super(props);
         this.state = {
@@ -16,6 +16,8 @@ class GameLobbyScreen extends Component {
     }
 
     componentWillMount(){
+        // First time this screen loads, grab all the locally stored user/pet data
+        // Need to add in API call to generate/grab random enemy 
         (async () => {
             try {
               const user = await AsyncStorage.getItem('user');
@@ -35,6 +37,7 @@ class GameLobbyScreen extends Component {
     }
 
     componentWillReceiveProps(nextProps){
+        // IF the screen receives a new pet param, then set the selectedPet state to the new pet
         if(nextProps.navigation.state.params.pet){
             this.setState({ selectedPet: nextProps.navigation.getParam("pet", this.state.userPets[0])});
         }
@@ -49,6 +52,7 @@ class GameLobbyScreen extends Component {
     }
 
     startGame = () => {
+        // Navigates to the actual game page, passing the difficulty and selectedPet as params
         const navigateToGame = NavigationActions.navigate({
             routeName: "Match3Game",
             params: { difficultyLevel: this.state.difficulty, petInfo: this.state.selectedPet }
@@ -64,17 +68,17 @@ class GameLobbyScreen extends Component {
         	          <Title style={{ alignSelf: "center" }}>Game Lobby</Title>
         	        </Body>
         	    </Header>
-                <Content>
-                    <Grid style={{ alignItems: "center" }}>
-                        <Row size={ 1 }>
-                            <Button rounded info style={{ margin: 10 }} 
+                <View style={{ flex: 1 }}>
+                    <Grid style={{ alignItems: "center", flex: 1 }}>
+                        <Row size={ 2 }>
+                            <Button rounded info style={{ margin: 10, alignSelf: "center" }} 
                                 onPress={ () => this.startGame() }
                             >
                                 <Text>Start Game</Text>
                             </Button>
                         </Row>
                         <Row size={ 1 }>
-                            <Text style={{ marginVertical: 10 }}> Choose a difficulty level: </Text>
+                            <Text style={{ marginTop: 20 }}> Choose a difficulty level: </Text>
                         </Row>
                         <Row size={ 1 } >
                             <Button success bordered={ this.state.difficulty === "easy" ? false : true } rounded style={{ margin: 10}}
@@ -93,22 +97,24 @@ class GameLobbyScreen extends Component {
                                 <Text>Hard</Text> 
                             </Button>
                         </Row>
-                        <Row size={ 2 }>
-                            <Text style={{ marginVertical: 10}}> Choose a Pet: </Text>
-                        </Row>
-                        <Row style={{ flexWrap: "wrap", justifyContent: 'space-evenly' }} > 
-                          {this.state.userPets.map( (stall, index) => {
-                            const borderColor = this.state.selectedPet.name === stall.name ? "grey" : "white"
-                            return (<Col key={stall.name} style={{width: 150, borderWidth: 5, borderColor: borderColor }} >
-                              <RecipeCard key={index} data={stall} press={() => this.setPet(stall) } />
-                            </Col>)
-                          })}
+                        <Row size={ 1 }>
+                            <Text style={{ marginTop: 20 }}> Choose a Pet: </Text>
                         </Row>
                     </Grid>
-                </Content>
+                        <ScrollView style={{ flex: 1 }}>
+                            <Row style={{ flexWrap: "wrap", justifyContent: 'space-evenly' }} > 
+                              {this.state.userPets.map( (stall, index) => {
+                                const borderColor = this.state.selectedPet.name === stall.name ? "grey" : "white"
+                                return (<Col key={stall.name} style={{width: 150, borderWidth: 5, borderColor: borderColor }} >
+                                  <PetCard key={index} data={stall} press={() => this.setPet(stall) } />
+                                </Col>)
+                              })}
+                            </Row>
+                        </ScrollView>
+                    
+                </View>
             </Container>
         )
     }
 }
 
-export default GameLobbyScreen;
