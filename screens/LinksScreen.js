@@ -128,7 +128,7 @@ export default class LinksScreen extends React.Component {
         <Grid>
           <Row style={{flexWrap: "wrap", justifyContent: 'space-evenly', height: 175}}>
           {this.state.tobreed.map( (breeder, index) => {
-            return <Col key={breeder.name} style={{width: 150, height: 200}} >
+            return <Col key={breeder._id} style={{width: 150, height: 200}} >
               <PetCard key={index} data={breeder} press={() => {this.breederOnPress(index)}} 
               />
             </Col>
@@ -146,7 +146,7 @@ export default class LinksScreen extends React.Component {
           <Grid>
             <Row style={{flexWrap: "wrap", justifyContent: 'space-evenly'}} > 
               {this.state.pets.map( (pet, index) => {
-                return <Col key={pet.name} style={{width: 100, height: 140}} >
+                return <Col key={pet._id} style={{width: 100, height: 140}} >
                 <TinyPetCard key={index} data={pet} press={() => {this.petOnPress(index)}} />
               </Col>
               })}
