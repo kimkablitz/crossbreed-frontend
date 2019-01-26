@@ -3,11 +3,31 @@ import axios from "axios";
 const baseURL = "https://crossbreed-backend.herokuapp.com"
 
 export default {
-    testRoute: () => {
-        return axios.get(baseURL);
-    },
+    
     login: (userObj) => {
-        return axios.post(`${baseURL}/auth/login`, userObj);
+        return axios.post("https://crossbreed-backend.herokuapp.com/auth/login", userObj)
+    },
+    logout: () => {
+        return axios.post("https://crossbreed-backend.herokuapp.com/auth/logout")
+    },
+    getUser: () => {
+        return axios.get("https://crossbreed-backend.herokuapp.com/auth/user")
+    },
+    // registerUser: (userObj) => {
+    //     return axios.post("https://crossbreed-backend.herokuapp.com/auth/signup", userObj)
+    // },
+    savePet: (petObj, userId) => {
+        return axios.post("https://crossbreed-backend.herokuapp.com/api/pet/" + userId, petObj)
+    },
+    getUserPets: (userId) => {
+        return axios.get("https://crossbreed-backend.herokuapp.com/api/pet/" + userId)
+    },
+    saveEgg: (eggObj, userId) => {
+        return axios.post("https://crossbreed-backend.herokuapp.com/api/egg/" + userId, eggObj)
+    },
+    getUserEggs: (userId) => {
+        return axios.get("https://crossbreed-backend.herokuapp.com/api/egg/" + userId)
+        // return axios.post(`${baseURL}/auth/login`, userObj);
     },
     signUp: (userObj) => {
         return axios.post(`${baseURL}/auth/signup`, userObj);
