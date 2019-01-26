@@ -80,7 +80,7 @@ export default PetScreen = (props) => {
               <Text style={{alignSelf: "center"}}>Level: {level}</Text>
               {level > 1 && <Text style={{alignSelf: "center"}}>Primary Game Color: {gameColor.primary}</Text>}
               {level > 9 && <Text style={{alignSelf: "center"}}>Secondary Game Color: {gameColor.secondary}</Text>}
-              <Text style={{alignSelf: "center"}}> { parents.length > 1 ? `Parents: ${parents[0]}, ${parents[1]}` : `Parents: ${parents[0]}` }</Text>
+              {parents && <Text style={{alignSelf: "center"}}> { parents.length > 1 ? `Parents: ${parents[0]}, ${parents[1]}` : `Parents: THE WILD` }</Text>}
             </Body>
           </CardItem>
         </Card>
