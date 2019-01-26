@@ -81,13 +81,14 @@ export default class AUTHENTICATION extends Component {
         <Text style={styles.centerSelf}>Loading Stable...</Text>
       </View>
       : <Container>
-          {Platform.OS === "ios"
+          {/* {Platform.OS === "ios"
             ? <View style={styles.container}> 
                 <Button style={styles.centerSelf} onPress={ () => this.googleSignIn() }>
                   <Text>Sign in with Google</Text>
                 </Button>
-              </View>
-            : <Content padder contentContainerStyle={ styles.formContainer }>
+              </View> */}
+            {/* : */}
+             <Content padder contentContainerStyle={ styles.formContainer }>
                 <Form>
                   <Item floatingLabel>
                     <Label>Username</Label>
@@ -105,7 +106,7 @@ export default class AUTHENTICATION extends Component {
                   </Button>
                 </Form>
               </Content>
-          }
+          {/* } */}
         </Container>
       }
     )

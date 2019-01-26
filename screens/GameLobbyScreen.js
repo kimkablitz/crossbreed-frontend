@@ -21,14 +21,11 @@ export default class GameLobbyScreen extends Component {
         (async () => {
             try {
               const user = await AsyncStorage.getItem('user');
-              const pets = await AsyncStorage.getItem('pets');
-              if (user !== null && pets !== null) {
+              if (user !== null) {
                 // We have data!!
                 let userInfo = JSON.parse(user);
-                let userPets = JSON.parse(pets);
                 console.log('userInfo: ' + userInfo);
-                console.log('pets: ' + userPets);
-                this.setState({ userPets: userPets, selectedPet: this.props.navigation.getParam("pet", userPets[0]) });
+                this.setState({ userPets: userInfo.pets, selectedPet: this.props.navigation.getParam("pet", userInfo.pets[0]) });
               }
              } catch (error) {
                // Error retrieving data

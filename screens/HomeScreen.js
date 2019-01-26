@@ -21,200 +21,7 @@ export default class HomeScreen extends React.Component {
 
   state = {
     // this will eventually hold all the users's pets and eggs
-    stalls: [
-      {
-        _id: 1,  
-        name: "Red",
-          baseColor: {
-              red: 255,
-              blue: 0,
-              green: 0,
-              transparency: 1 
-          },
-          outlineColor: {
-              red: 0,
-              blue: 0,
-              green: 0,
-              transparency: 1
-          },
-          gameColor: {
-              primary: "red",
-              secondary: "red"
-          },
-          isFavorite: false,
-          parents: ["The Wild"],
-          level: 1,
-          experiencePoints: 42
-      },
-      {
-        _id: 2, 
-        name: "Blue",
-          baseColor: {
-              red: 0,
-              blue: 255,
-              green: 0,
-              transparency: 1 
-          },
-          outlineColor: {
-              red: 0,
-              blue: 0,
-              green: 0,
-              transparency: 1
-          },
-          gameColor: {
-              primary: "blue",
-              secondary: "blue"
-          },
-          isFavorite: false,
-          parents: ["Bob", "Mary"],
-          level: 2,
-          experiencePoints: 42
-      },
-      {
-        _id: 3, 
-        name: "Green",
-          baseColor: {
-              red: 0,
-              blue: 0,
-              green: 255,
-              transparency: 1 
-          },
-          outlineColor: {
-              red: 0,
-              blue: 0,
-              green: 0,
-              transparency: 1
-          },
-          gameColor: {
-              primary: "green",
-              secondary: "green"
-          },
-          isFavorite: false,
-          parents: ["Frank", "Sue"],
-          level: 3,
-          experiencePoints: 42
-      },
-      {
-        _id: 4,   
-        name: "Magenta",
-          baseColor: {
-              red: 255,
-              blue: 255,
-              green: 0,
-              transparency: 1 
-          },
-          outlineColor: {
-              red: 0,
-              blue: 0,
-              green: 0,
-              transparency: 1
-          },
-          gameColor: {
-              primary: "magenta",
-              secondary: "magenta"
-          },
-          isFavorite: false,
-          parents: ["Matilda", "Madison"],
-          level: 6,
-          experiencePoints: 42
-      },
-      {
-        _id: 5,   
-        name: "Cyan",
-          baseColor: {
-              red: 0,
-              blue: 255,
-              green: 255,
-              transparency: 1 
-          },
-          outlineColor: {
-              red: 0,
-              blue: 0,
-              green: 0,
-              transparency: 1
-          },
-          gameColor: {
-              primary: "cyan",
-              secondary: "cyan"
-          },
-          isFavorite: false,
-          parents: ["Goldie", "Blackie"],
-          level: 10,
-          experiencePoints: 42
-      },
-      {
-        _id: 6,  
-        name: "Yellow",
-          baseColor: {
-              red: 255,
-              blue: 0,
-              green: 255,
-              transparency: 1 
-          },
-          outlineColor: {
-              red: 0,
-              blue: 0,
-              green: 0,
-              transparency: 1
-          },
-          gameColor: {
-              primary: "yellow",
-              secondary: "yellow"
-          },
-          isFavorite: false,
-          parents: ["The Wild"],
-          level: 15,
-          experiencePoints: 42
-      },
-      {
-        _id: 7,  
-        name: "White",
-          baseColor: {
-              red: 255,
-              blue: 255,
-              green: 255,
-              transparency: 1 
-          },
-          outlineColor: {
-              red: 0,
-              blue: 0,
-              green: 0,
-              transparency: 1
-          },
-          gameColor: {
-              primary: "white",
-              secondary: "white"
-          },
-          isFavorite: false,
-          parents: ["The Wild"],
-          level: 20,
-          experiencePoints: 42
-      },
-      {
-          _id: 8,  
-          name: "Black",
-          baseColor: {
-              red: 0,
-              blue: 0,
-              green: 0,
-              transparency: 1 
-          },
-          outlineColor: {
-              red: 255,
-              blue: 255,
-              green: 255,
-              transparency: 1
-          },
-          gameColor: {
-              primary: "black",
-              secondary: "black"
-          },
-          isFavorite: false,
-          parents: ["The Wild"],
-          level: 1,
-          experiencePoints: 42
-      }
-  ]
+    stalls: []
   }
 
   // getPets = (event) => {
@@ -227,22 +34,24 @@ export default class HomeScreen extends React.Component {
   //   })
   //   .catch(err => console.log(err));
   // }
-  componentDidMount(){
+  componentWillMount(){
     (async () => {
       try {
         // Temporary method of passing pets to game lobby, in future, user info should contain pets
-        await AsyncStorage.setItem('pets', JSON.stringify(this.state.stalls));
+        // await AsyncStorage.setItem('pets', JSON.stringify(this.state.stalls));
         const value = await AsyncStorage.getItem('user');
+        const userInfo = JSON.parse(value);
         if (value !== null) {
           // We have data!!
-          console.log('userInfo: ' + (value));
+          console.log('User: ' + userInfo);
+          console.log("user pets: " + userInfo.pets)
+          this.setState({ stalls: userInfo.pets });
         }
        } catch (error) {
          // Error retrieving data
          console.log(error);
        }
     })()
-    this.props.navigation.setParams( { pets: this.state.stalls });
     //console.log( "userInfo: " + userInfo);
   }
 
@@ -267,11 +76,13 @@ export default class HomeScreen extends React.Component {
           <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
             <Grid>
               <Row style={{flexWrap: "wrap", justifyContent: 'space-evenly'}} > 
-                {this.state.stalls.map( (stall, index) => {
-                return <Col key={stall.name} style={{width: 150, height: 200}} >
-                  <RecipeCard key={index} data={stall} press={() => {this.handleOnPress(index)}} />
+                {this.state.stalls ? this.state.stalls.map( (stall, index) => {
+                return <Col key={stall._id} style={{width: 150, height: 200}} >
+                  <RecipeCard key={stall._id} data={stall} press={() => {this.handleOnPress(index)}} />
                 </Col>
-                })}
+                })
+              : <Text> Loading Stable</Text>
+              }
               </Row>
             </Grid>
           </ScrollView>
