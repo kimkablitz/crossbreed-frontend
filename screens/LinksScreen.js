@@ -25,20 +25,15 @@ export default class LinksScreen extends React.Component {
       try {
         console.log("HIt there!")
         const user = await AsyncStorage.getItem('user');
-        const pets = await AsyncStorage.getItem('pets');
-        console.log(user);
-        console.log(pets)
-        if (user !== null && pets !== null) {
+        if (user !== null) {
           // We have data!!
           let userInfo = JSON.parse(user);
-          let userPets = JSON.parse(pets);
           console.log('userInfo: ' + userInfo);
-          console.log('pets: ' + userPets);
           const petParam = this.props.navigation.getParam("pet");
           if(petParam){
-            var otherPetsArray = this.filterPets( petParam, userPets );
+            var otherPetsArray = this.filterPets( petParam, userInfo.pets );
           }
-          this.setState({ pets: otherPetsArray ? otherPetsArray : userPets, tobreed: petParam ? [petParam] : [] });
+          this.setState({ pets: otherPetsArray ? otherPetsArray : userInfo.pets, tobreed: petParam ? [petParam] : [] });
         }
        } catch (error) {
          // Error retrieving data
@@ -58,8 +53,9 @@ export default class LinksScreen extends React.Component {
 
   componentWillReceiveProps = (nextProps) => {
     (async () => {
-      const pets = await AsyncStorage.getItem("pets");
-      const petsArray = JSON.parse(pets);
+      const user = await AsyncStorage.getItem("user");
+      const userInfo = JSON.parse(user);
+      const petsArray = userInfo.pets
       let breedThis = nextProps.navigation.getParam('pet');
       // let otherPets = 
       if (breedThis) {
