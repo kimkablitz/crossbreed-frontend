@@ -7,7 +7,7 @@ import LinksScreen from '../screens/LinksScreen';
 import PetScreen from '../screens/PetView';
 import Match3Screen from '../screens/Match3Screen';
 import GameLobbyScreen from "../screens/GameLobbyScreen";
-import AccountScreen from '../screens/AccountScreen';
+import AccountScreen from '../screens/Settings/AccountScreen';
 
 
 const HomeStack = createStackNavigator(

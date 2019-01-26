@@ -25,8 +25,8 @@ export default class AUTHENTICATION extends Component {
         scopes: ["profile", "email"]
       })
       if (result.type === "success") {
-        //this.googleAPI(result.user.id)
-        this.goToHome(result);
+        this.googleAPI(result.user);
+        //this.goToHome(result);
       } else {
         this.setState({ authenticating: false });
         console.log("cancelled")
@@ -39,19 +39,18 @@ export default class AUTHENTICATION extends Component {
 
   localSignIn = () => {
     this.setState({ authenticating: true }, () => {
-      API.login(this.state)
+      API.login({ username: this.state.username, password: this.state.password })
       .then(res => this.goToHome(res.data))
       .catch(err => this.setState({ authenticating: false }, () => console.log(err)));
     })
   }
 
-  googleAPI = (googleId) => {
-    googleSignIn(googleId)
-      .then(res => this.goToHome(res.data))
-      .catch(err => this.setState({authenticating: false}, () => console.log(err)))
+  googleAPI = (googleUserInfo) => {
     // Need to make API call to back end after google sign in to retrieve user's Mongo _id and pet data
+    API.googleLogin(googleUserInfo)
     // Then call goToHome with the returned data
-    console.log("pop" + googleId)
+    .then(res => this.goToHome(res.data))
+    .catch(err => this.setState({ authenticating: false }, ()=> console.log(err)));
   }
 
   signUp = () => {
@@ -64,7 +63,7 @@ export default class AUTHENTICATION extends Component {
   goToHome = async (result) => {
       try {
         // Storing user data in react-native's AsyncStorage
-        await AsyncStorage.setItem('user', JSON.stringify(result.user) );
+        await AsyncStorage.setItem('user', JSON.stringify(result) );
         const navigateHome = NavigationActions.navigate({
           routeName: "Home",
         });

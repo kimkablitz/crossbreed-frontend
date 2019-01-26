@@ -91,3 +91,6 @@ const handleResponse = response => {
     throw new Error('Error');
   }
 };
+
+//api/users/:userId/pets/:petId
+//api/pets/:petId

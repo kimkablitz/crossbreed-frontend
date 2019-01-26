@@ -10,8 +10,7 @@ import {
   AsyncStorage
 } from 'react-native';
 import axios from "axios";
-import SearchBar from '../components/SearchBar';
-import RecipeCard from '../components/RecipeCard'
+import RecipeCard from '../components/PetCard';
 import { Col, Row, Grid } from "react-native-easy-grid";
 import { NavigationActions } from 'react-navigation';
 import { Content, Header, Body, Title } from 'native-base';
@@ -24,7 +23,8 @@ export default class HomeScreen extends React.Component {
     // this will eventually hold all the users's pets and eggs
     stalls: [
       {
-          name: "Red",
+        _id: 1,  
+        name: "Red",
           baseColor: {
               red: 255,
               blue: 0,
@@ -47,7 +47,8 @@ export default class HomeScreen extends React.Component {
           experiencePoints: 42
       },
       {
-          name: "Blue",
+        _id: 2, 
+        name: "Blue",
           baseColor: {
               red: 0,
               blue: 255,
@@ -70,7 +71,8 @@ export default class HomeScreen extends React.Component {
           experiencePoints: 42
       },
       {
-          name: "Green",
+        _id: 3, 
+        name: "Green",
           baseColor: {
               red: 0,
               blue: 0,
@@ -93,7 +95,8 @@ export default class HomeScreen extends React.Component {
           experiencePoints: 42
       },
       {
-          name: "Magenta",
+        _id: 4,   
+        name: "Magenta",
           baseColor: {
               red: 255,
               blue: 255,
@@ -116,7 +119,8 @@ export default class HomeScreen extends React.Component {
           experiencePoints: 42
       },
       {
-          name: "Cyan",
+        _id: 5,   
+        name: "Cyan",
           baseColor: {
               red: 0,
               blue: 255,
@@ -139,7 +143,8 @@ export default class HomeScreen extends React.Component {
           experiencePoints: 42
       },
       {
-          name: "Yellow",
+        _id: 6,  
+        name: "Yellow",
           baseColor: {
               red: 255,
               blue: 0,
@@ -162,7 +167,8 @@ export default class HomeScreen extends React.Component {
           experiencePoints: 42
       },
       {
-          name: "White",
+        _id: 7,  
+        name: "White",
           baseColor: {
               red: 255,
               blue: 255,
@@ -185,6 +191,7 @@ export default class HomeScreen extends React.Component {
           experiencePoints: 42
       },
       {
+          _id: 8,  
           name: "Black",
           baseColor: {
               red: 0,
@@ -248,7 +255,6 @@ export default class HomeScreen extends React.Component {
     this.props.navigation.dispatch(navigateAction);
   }
 
-
   render() {
     return (
       <Content>
@@ -261,12 +267,11 @@ export default class HomeScreen extends React.Component {
           <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
             <Grid>
               <Row style={{flexWrap: "wrap", justifyContent: 'space-evenly'}} > 
-                {this.state.stalls.map( (stall, index) => 
-                
-                <Col key={stall.name} style={{width: 150, height: 200}} >
+                {this.state.stalls.map( (stall, index) => {
+                return <Col key={stall.name} style={{width: 150, height: 200}} >
                   <RecipeCard key={index} data={stall} press={() => {this.handleOnPress(index)}} />
                 </Col>
-                )}
+                })}
               </Row>
             </Grid>
           </ScrollView>
