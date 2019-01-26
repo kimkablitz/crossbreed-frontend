@@ -111,7 +111,15 @@ export default class LinksScreen extends React.Component {
   }
 
   handleBreedPets = () => {
-
+    axios
+    .post("/api/eggs", {
+      firstParent: this.state.tobreed[0]._id,
+      secondParent: this.state.tobreed[1]._id
+    })
+    .then(({ data: { results } }) => {
+      console.log(results)
+    })
+    .catch(err => console.log(err));
   }
 
   render() {
