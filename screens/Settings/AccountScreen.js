@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Image, StyleSheet, View, FlatList } from 'react-native';
+import { Image, StyleSheet, View, FlatList, AsyncStorage } from 'react-native';
 import { Container, Header, Body, Title, Content, Button, Text } from "native-base";
 import API from "../../utils/API";
 import style from './style';
@@ -26,13 +26,19 @@ export default class AccountScreen extends React.Component {
   logout = () => {
     API.logout()
     .then( () =>{
-      const navigateHome = NavigationActions.navigate({
-        routeName: "Auth",
-      });
-      this.props.navigation.dispatch(navigateHome);
+      this.clearAsyncStorage().then(() => {
+        const navigateHome = NavigationActions.navigate({
+          routeName: "Auth",
+        });
+        this.props.navigation.dispatch(navigateHome);
+      })
     }
     )
-    .catch(err => this.setState({signedIn: false}))
+    .catch(err => console.log(err));
+  }
+
+  clearAsyncStorage = () => {
+    return AsyncStorage.removeItem("user");
   }
 
   render() {

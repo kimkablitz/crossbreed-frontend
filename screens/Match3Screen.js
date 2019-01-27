@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Alert, BackHandler, AsyncStorage } from "react-native";
-import { Container, Header, Body, Title, Left, Right, Button, Icon, Content, H1, Text } from "native-base";
+import { Container, Header, Body, Title, Left, Right, Button, Icon, Content, H3, Text } from "native-base";
 import { Grid, Row, Col } from "react-native-easy-grid";
 import { NavigationActions, StackActions } from 'react-navigation';
 import GameBoard from '../components/Match3Game/GameBoard';
@@ -62,11 +62,9 @@ export default class Match3Screen extends Component {
 		if(name === "playerScore"){
 			winBonusXP = 300;
 			totalXP = baseXP + winBonusXP;
-			modalMessage = `You Won! \n ${this.state.petInfo.name} earned ${totalXP} XP!`;
 		}
 		else{
 			totalXP = baseXP;
-			modalMessage = `You Lost! \n ${this.state.petInfo.name} earned ${totalXP} XP!`
 		}
 		this.updateLevel(this.state.petInfo, totalXP);
 	}
@@ -88,11 +86,22 @@ export default class Match3Screen extends Component {
 				console.log(res.data);
 				console.log(user.pets);
 				AsyncStorage.setItem("user", JSON.stringify(user)).then( () => {
+					this.modalMessage(level, gainedXP, res.data.level);
 					this.setState({ gameEnded: true });
 				});
 			}).done();
 		})
 		.catch(err => console.log(err));
+	}
+
+	modalMessage = (currentLevel, gainedXP, newLevel) => {
+		const petName = this.state.petInfo.name
+		modalMessage = this.state.playerScore > this.state.enemyScore 
+			? `${petName} won! \n It has earned ${gainedXP} XP!`
+			: `${petName} lost! \n It still earned ${gainedXP} XP!`;
+		if(currentLevel < newLevel){
+			modalMessage += `\n It is now at level ${newLevel}!`;
+		}
 	}
 
 	showAlert = () => {
@@ -141,7 +150,7 @@ export default class Match3Screen extends Component {
 				<MyModal visible={ this.state.gameEnded }>
 					<Grid style={{ backgroundColor: "rgba(0,0,0,0.8)", justifyContent: "center", alignItems: "center"}}>
 						<Row size={ 3 }>
-							<H1 style={{ alignSelf: "center", color: "white", textAlign: "center" }}> { modalMessage }</H1>
+							<H3 style={{ alignSelf: "center", color: "white", textAlign: "center" }}> { modalMessage }</H3>
 						</Row>
 						<Row size={ 1 }>
 							<Button success rounded style={{ alignSelf: "center", margin: 5 }}
