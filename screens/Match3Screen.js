@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Alert, BackHandler } from "react-native";
+import { Alert, BackHandler, AsyncStorage } from "react-native";
 import { Container, Header, Body, Title, Left, Right, Button, Icon, Content, H1, Text } from "native-base";
 import { Grid, Row, Col } from "react-native-easy-grid";
 import { NavigationActions, StackActions } from 'react-navigation';
@@ -69,14 +69,29 @@ export default class Match3Screen extends Component {
 			modalMessage = `You Lost! \n ${this.state.petInfo.name} earned ${totalXP} XP!`
 		}
 		this.updateLevel(this.state.petInfo, totalXP);
-		this.setState({ gameEnded: true });
 	}
 
 	updateLevel = (petInfo, gainedXP) => {
 		const { _id, level, experiencePoints } = petInfo;
 		const levelObj = { currentLevel: level, currentXP: experiencePoints, gainedXP: gainedXP };
 		API.updateLevelAndXP( _id, levelObj)
-		.then(res => console.log(res.data))
+		.then(res => {
+			AsyncStorage.getItem("user").then( user => {
+				user = JSON.parse(user);
+				user.pets = user.pets.map( pet => {
+					if(pet._id === res.data._id){
+						console.log("changing data");
+						return res.data;
+					}
+					return pet;
+				});
+				console.log(res.data);
+				console.log(user.pets);
+				AsyncStorage.setItem("user", JSON.stringify(user)).then( () => {
+					this.setState({ gameEnded: true });
+				});
+			}).done();
+		})
 		.catch(err => console.log(err));
 	}
 
