@@ -1,60 +1,109 @@
 import React from 'react';
 import { Platform } from 'react-native';
 import { createStackNavigator, createBottomTabNavigator } from 'react-navigation';
-
 import TabBarIcon from '../components/TabBarIcon';
 import HomeScreen from '../screens/HomeScreen';
 import LinksScreen from '../screens/LinksScreen';
-import SettingsScreen from '../screens/SettingsScreen';
+import PetScreen from '../screens/PetView';
+import Match3Screen from '../screens/Match3Screen';
+import GameLobbyScreen from "../screens/GameLobbyScreen";
+import AccountScreen from '../screens/Settings/AccountScreen';
 
-const HomeStack = createStackNavigator({
-  Home: HomeScreen,
-});
+
+const HomeStack = createStackNavigator(
+{ 
+  Home: HomeScreen, 
+  PetScreen: PetScreen },
+{ initialRouteName: 'Home' }
+);
 
 HomeStack.navigationOptions = {
-  tabBarLabel: 'Home',
   tabBarIcon: ({ focused }) => (
     <TabBarIcon
       focused={focused}
       name={
         Platform.OS === 'ios'
-          ? `ios-information-circle${focused ? '' : '-outline'}`
-          : 'md-information-circle'
+          ? `ios-home`
+          : 'md-home'
       }
     />
   ),
 };
 
-const LinksStack = createStackNavigator({
-  Links: LinksScreen,
+const BreedStack = createStackNavigator({
+  Breed: LinksScreen,
 });
 
-LinksStack.navigationOptions = {
-  tabBarLabel: 'Links',
+BreedStack.navigationOptions = {
   tabBarIcon: ({ focused }) => (
     <TabBarIcon
       focused={focused}
-      name={Platform.OS === 'ios' ? 'ios-link' : 'md-link'}
+      name='md-git-network'
     />
   ),
 };
 
-const SettingsStack = createStackNavigator({
-  Settings: SettingsScreen,
+
+const Match3Stack = createStackNavigator({
+  GameLobby: GameLobbyScreen,
+  Match3Game: {
+    screen: Match3Screen,
+    navigationOptions: {
+      gesturesEnabled: false
+    }
+  }
+},{
+  headerMode: "none",
+  initialRouteName: "GameLobby",
 });
 
-SettingsStack.navigationOptions = {
-  tabBarLabel: 'Settings',
+Match3Stack.navigationOptions = ({ navigation }) => {
+  let tabBarVisible = true;
+  if (navigation.state.index > 0) {
+    tabBarVisible = false;
+  }
+
+  return {
+    tabBarVisible,
+    tabBarIcon: ({ focused }) => (
+      <TabBarIcon
+        focused={focused}
+        name='logo-game-controller-b'
+      />
+    ),
+  };
+};
+const AccountStack = createStackNavigator({
+  Account: AccountScreen,
+});
+AccountStack.navigationOptions = {
   tabBarIcon: ({ focused }) => (
     <TabBarIcon
       focused={focused}
-      name={Platform.OS === 'ios' ? 'ios-options' : 'md-options'}
+      name={
+        Platform.OS === 'ios'
+          ? `ios-contact`
+          : 'md-contact'
+      }
     />
   ),
 };
+
 
 export default createBottomTabNavigator({
   HomeStack,
-  LinksStack,
-  SettingsStack,
-});
+  BreedStack,
+  Match3Stack,
+  AccountStack
+},
+{
+  swipeEnabled: true,
+  tabBarOptions: {
+    showLabel: false,
+    style: { height: "10%" },
+    activeBackgroundColor: "black",
+    inactiveBackgroundColor: "black",
+    activeTintColor: "white"
+  }
+}
+)

@@ -7,52 +7,88 @@ import {
   Text,
   TouchableOpacity,
   View,
+  AsyncStorage
 } from 'react-native';
 import axios from "axios";
-import SearchBar from '../components/SearchBar';
-import RecipeCard from '../components/RecipeCard'
+import RecipeCard from '../components/PetCard';
+import { Col, Row, Grid } from "react-native-easy-grid";
+import { NavigationActions } from 'react-navigation';
+import { Content, Header, Body, Title } from 'native-base';
 export default class HomeScreen extends React.Component {
   static navigationOptions = {
     header: null,
   };
 
   state = {
-    recipeSearch: "",
-    recipes: []
+    // this will eventually hold all the users's pets and eggs
+    stalls: []
   }
 
-  searchRecipe = (event) => {
-    event.preventDefault();
-    axios
-    .get("http://www.recipepuppy.com/api/", { params: {q: this.state.recipeSearch }})
-    .then(({ data: { results } }) => {
-      console.log(results)
-      this.setState({recipes: results})
-    })
-    .catch(err => console.log(err));
+  // getPets = (event) => {
+  //   event.preventDefault();
+  //   axios
+  //   .get("localhost:3000/")
+  //   .then(({ data: { results } }) => {
+  //     console.log(results)
+  //     this.setState({stalls: results})
+  //   })
+  //   .catch(err => console.log(err));
+  // }
+  componentWillMount(){
+    (async () => {
+      try {
+        // Temporary method of passing pets to game lobby, in future, user info should contain pets
+        // await AsyncStorage.setItem('pets', JSON.stringify(this.state.stalls));
+        const value = await AsyncStorage.getItem('user');
+        const userInfo = JSON.parse(value);
+        if (value !== null) {
+          // We have data!!
+          console.log('User: ' + userInfo);
+          console.log("user pets: " + userInfo.pets)
+          this.setState({ stalls: userInfo.pets });
+        }
+       } catch (error) {
+         // Error retrieving data
+         console.log(error);
+       }
+    })()
+    //console.log( "userInfo: " + userInfo);
+  }
+
+  handleOnPress = (index) => {
+    const navigateAction = NavigationActions.navigate({
+      routeName: 'PetScreen',
+      params: { pet: this.state.stalls[index] },
+    });
     
+    this.props.navigation.dispatch(navigateAction);
   }
-  
-  handleInputChange = (search) => {
-    this.setState({recipeSearch: search})
-  }
-
 
   render() {
     return (
-      <View style={styles.container}>
-        <SearchBar handleInputChange={this.handleInputChange} 
-          search={this.searchRecipe}
-        />
-        <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
-         {this.state.recipes.map(recipe => 
-         
-         <RecipeCard key={recipe.title} data={recipe} />
-         )}
+      <Content>
+        <Header> 
+          <Body>
+            <Title style={{alignSelf: 'center'}}>Stable</Title>
+          </Body>
+        </Header>
+        <View style={styles.container}>
+          <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
+            <Grid>
+              <Row style={{flexWrap: "wrap", justifyContent: 'space-evenly'}} > 
+                {this.state.stalls ? this.state.stalls.map( (stall, index) => {
+                return <Col key={stall._id} style={{width: 150, height: 200}} >
+                  <RecipeCard key={stall._id} data={stall} press={() => {this.handleOnPress(index)}} />
+                </Col>
+                })
+              : <Text> Loading Stable</Text>
+              }
+              </Row>
+            </Grid>
+          </ScrollView>
 
-        </ScrollView>
-
-      </View>
+        </View>
+      </Content>
     );
   }
 
@@ -124,7 +160,7 @@ const styles = StyleSheet.create({
       },
     }),
     alignItems: 'center',
-    backgroundColor: '#fbfbfb',
+    backgroundColor: '#000000',
     paddingVertical: 20,
   },
   tabBarInfoText: {
