@@ -146,7 +146,7 @@ export default class GameBoard extends Component {
                 break;
         }
         if(this.state.tilesSwipeable){
-        this.switchTiles(firstTileCoordinates, secondTileCoordinates, directionSwiped, secondTileDirection);
+            this.switchTiles(firstTileCoordinates, secondTileCoordinates, directionSwiped, secondTileDirection);
         }
     } 
 
@@ -181,13 +181,13 @@ export default class GameBoard extends Component {
         // The basic number by which enemy score increases is higher for hard mode
         switch(difficulty){
             case "easy":
-                baseNumber = 2;
-                break;
-            case "normal":
                 baseNumber = 3;
                 break;
-            case "hard":
+            case "normal":
                 baseNumber = 4;
+                break;
+            case "hard":
+                baseNumber = 5;
                 break;
             default:
                 break;
@@ -270,6 +270,9 @@ export default class GameBoard extends Component {
             // Only increase the score if the game has started
             if(this.state.displayBoard){
                 if(deletedColor === this.props.pet.gameColor.primary){
+                    score+=3;
+                }
+                if(deletedColor === this.props.pet.gameColor.secondary){
                     score+=2;
                 }
                 else{
