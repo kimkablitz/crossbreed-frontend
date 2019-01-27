@@ -33,7 +33,7 @@ export default TinyPetCard = (props) => {
                 </View>
               </Body>
           </CardItem>
-            <Text style={{alignSelf: 'center', marginBottom: 5}}>{name}</Text>
+            <Text style={{alignSelf: 'center', textAlign: 'center', marginBottom: 5}}>{name}</Text>
         </Card>
       </Content>
   );
