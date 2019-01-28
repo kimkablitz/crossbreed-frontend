@@ -4,7 +4,7 @@ import { Image, StyleSheet, View } from 'react-native';
 import { Svg } from 'expo';
 import { Content, Header, Card, CardItem, Text, Body } from 'native-base';
 const { Circle, Path, G } = Svg;
-import SlimePet from './SlimePet';
+import SlimePet from '../SlimePet';
 
 export default PetCard = (props) => {
   const { name, baseColor, outlineColor } = props.data;

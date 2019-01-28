@@ -4,12 +4,12 @@ import { View, ScrollView, StyleSheet, AsyncStorage } from 'react-native';
 import PetCard from '../components/Stable/PetCard';
 import TinyPetCard from '../components/Stable/TinyPetCard';
 import { Col, Row, Grid } from 'react-native-easy-grid';
-import { Button, Text } from 'native-base';
+import { Header, Body, Title, Button, Text, Content } from 'native-base';
 import { NavigationActions } from 'react-navigation';
 
 export default class BreedScreen extends React.Component {
   static navigationOptions = {
-    title: 'Breed',
+    header: null,
   };
 
   state = {
@@ -122,36 +122,43 @@ export default class BreedScreen extends React.Component {
 
   render() {
     return (
-      <View style={styles.container}>
-        <Grid>
-          <Row style={{flexWrap: "wrap", justifyContent: 'space-evenly', height: 175}}>
-          {this.state.tobreed.map( (breeder, index) => {
-            return <Col key={breeder._id} style={{width: 150, height: 200}} >
-              <PetCard key={index} data={breeder} press={() => {this.breederOnPress(index)}} 
-              />
-            </Col>
-          })}
-          </Row>
-          <Row style={{justifyContent: 'center'}}>
-            <Button danger rounded style={{ margin: 10}}
-              onPress={ () => this.handleBreedPets() }
-            > 
-              <Text>Breed</Text> 
-            </Button>
-          </Row>
-        </Grid>
-        <ScrollView style={styles.container}>
+      <Content>
+        <Header> 
+          <Body>
+            <Title style={{alignSelf: 'center'}}>Breed Pets</Title>
+          </Body>
+        </Header>
+        <View style={styles.container}>
           <Grid>
-            <Row style={{flexWrap: "wrap", justifyContent: 'space-evenly'}} > 
-              {this.state.pets.map( (pet, index) => {
-                return <Col key={pet._id} style={{width: 100, height: 140}} >
-                <TinyPetCard key={index} data={pet} press={() => {this.petOnPress(index)}} />
+            <Row style={{flexWrap: "wrap", justifyContent: 'space-evenly', height: 175}}>
+            {this.state.tobreed.map( (breeder, index) => {
+              return <Col key={breeder._id} style={{width: 150, height: 200}} >
+                <PetCard key={index} data={breeder} press={() => {this.breederOnPress(index)}} 
+                />
               </Col>
-              })}
+            })}
+            </Row>
+            <Row style={{justifyContent: 'center'}}>
+              <Button danger rounded style={{ margin: 10}}
+                onPress={ () => this.handleBreedPets() }
+              > 
+                <Text>Breed</Text> 
+              </Button>
             </Row>
           </Grid>
-        </ScrollView>
-      </View>
+          <ScrollView style={styles.container}>
+            <Grid>
+              <Row style={{flexWrap: "wrap", justifyContent: 'space-evenly'}} > 
+                {this.state.pets.map( (pet, index) => {
+                  return <Col key={pet._id} style={{width: 100, height: 140}} >
+                  <TinyPetCard key={index} data={pet} press={() => {this.petOnPress(index)}} />
+                </Col>
+                })}
+              </Row>
+            </Grid>
+          </ScrollView>
+        </View>
+      </Content>
     );
   }
 }
