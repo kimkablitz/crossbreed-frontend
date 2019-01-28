@@ -3,7 +3,7 @@ import { Platform } from 'react-native';
 import { createStackNavigator, createBottomTabNavigator } from 'react-navigation';
 import TabBarIcon from '../components/TabBarIcon';
 import HomeScreen from '../screens/HomeScreen';
-import LinksScreen from '../screens/LinksScreen';
+import BreedScreen from '../screens/BreedScreen';
 import PetScreen from '../screens/PetView';
 import Match3Screen from '../screens/Match3Screen';
 import GameLobbyScreen from "../screens/GameLobbyScreen";
@@ -31,7 +31,7 @@ HomeStack.navigationOptions = {
 };
 
 const BreedStack = createStackNavigator({
-  Breed: LinksScreen,
+  Breed: BreedScreen,
 });
 
 BreedStack.navigationOptions = {

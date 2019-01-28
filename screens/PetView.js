@@ -6,16 +6,17 @@ import { Content, Card, CardItem, Text, Button, Body } from 'native-base';
 import { Col, Row, Grid } from "react-native-easy-grid";
 import { NavigationActions, StackActions } from 'react-navigation';
 const { Circle } = Svg;
+import SlimePet from "../components/SlimePet";
 
 export default PetScreen = (props) => {
   const param = props.navigation.getParam('pet');
-  const {name, baseColor, outlineColor, gameColor, isFavorite, parents, level, experiencePoints } = param;
-  const { red, blue, green, transparency } = baseColor;
+  const { name, baseColor, outlineColor, gameColor, isFavorite, parents, level, experiencePoints } = param;
+  /*   const { red, blue, green, transparency } = baseColor; */
 
   toGameLobby = (pet) => {
     const navigateToGameLobby = NavigationActions.navigate({
-        routeName: "GameLobby",
-        params: { pet: pet }
+      routeName: "GameLobby",
+      params: { pet: pet }
     });
     // Adds 3 seconds to Android devices
     // const reset = StackActions.reset({
@@ -28,8 +29,8 @@ export default PetScreen = (props) => {
 
   toBreedPage = (pet) => {
     const navigateToGameLobby = NavigationActions.navigate({
-        routeName: "Breed",
-        params: { pet: pet }
+      routeName: "Breed",
+      params: { pet: pet }
     });
     // Adds 3 seconds to Android devices
     // const reset = StackActions.reset({
@@ -41,50 +42,43 @@ export default PetScreen = (props) => {
   }
 
   return (
-      <Content style={styles.centeredContent}>
-        <Card style={styles.centeredContent}>
-          <CardItem>
-              <Body>
-                <View style={styles.svgContainer}>
-                  <Svg
-                      height="200"
-                      width="200"
-                  >
-                      <Circle
-                          cx="100"
-                          cy="100"
-                          r="95"
-                          fill={`rgba(${red}, ${green},  ${blue}, ${transparency})`}
-                          strokeWidth="3"
-                          stroke={`rgba(${outlineColor.red}, ${outlineColor.green},  ${outlineColor.blue}, ${outlineColor.transparency})`}
-                      />
-                  </Svg>
-                </View>
-              </Body>
-          </CardItem>
-          <CardItem>
-            <Body>
-              <Row size={ 1 } >
-                <Button success rounded style={{ margin: 10}}
-                    onPress={ () => this.toGameLobby(param) }
-                > 
-                    <Text>Play</Text> 
-                </Button>
-                <Button danger rounded style={{ margin: 10}}
-                    onPress={ () => this.toBreedPage(param) }
-                > 
-                    <Text>Breed</Text> 
-                </Button>
-              </Row>
-              <Text style={{alignSelf: "center"}}>Name: {name}</Text>
-              <Text style={{alignSelf: "center"}}>Level: {level}</Text>
-              {level > 1 && <Text style={{alignSelf: "center"}}>Primary Game Color: {gameColor.primary}</Text>}
-              {level > 9 && <Text style={{alignSelf: "center"}}>Secondary Game Color: {gameColor.secondary}</Text>}
-              {parents && <Text style={{alignSelf: "center"}}> { parents.length > 1 ? `Parents: ${parents[0]}, ${parents[1]}` : `Parents: THE WILD` }</Text>}
-            </Body>
-          </CardItem>
-        </Card>
-      </Content>
+    <Content style={styles.centeredContent}>
+      <Card style={styles.centeredContent}>
+        <CardItem>
+          <Body>
+            <View style={styles.svgContainer}>
+              <SlimePet baseColor={baseColor} outlineColor={outlineColor} height="200" width="200" scale="1.65" />
+            </View>
+          </Body>
+        </CardItem>
+        <CardItem>
+          <Body>
+            <Row size={1}>
+              <Button success rounded style={{ margin: 10 }}
+                onPress={() => this.toGameLobby(param)}
+              >
+                <Text>Play</Text>
+              </Button>
+              <Button warning rounded style={{ margin: 10 }}
+                onPress={() => this.toBreedPage(param)}
+              >
+                <Text>Breed</Text>
+              </Button>
+              <Button danger rounded style={{ margin: 10 }}
+                onPress={() => this.releasePet(pet)}
+              >
+                <Text>Release</Text>
+              </Button>
+            </Row>
+            <Text style={{ alignSelf: "center" }}>Name: {name}</Text>
+            <Text style={{ alignSelf: "center" }}>Level: {level}</Text>
+            {level > 1 && <Text style={{ alignSelf: "center" }}>Primary Game Color: {gameColor.primary}</Text>}
+            {level > 9 && <Text style={{ alignSelf: "center" }}>Secondary Game Color: {gameColor.secondary}</Text>}
+            {parents && <Text style={{ alignSelf: "center" }}> {parents.length > 1 ? `Parents: ${parents[0]}, ${parents[1]}` : `Parents: THE WILD`}</Text>}
+          </Body>
+        </CardItem>
+      </Card>
+    </Content>
   );
 }
 

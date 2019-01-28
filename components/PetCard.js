@@ -3,11 +3,19 @@ import React from 'react';
 import { Image, StyleSheet, View } from 'react-native';
 import { Svg } from 'expo';
 import { Content, Header, Card, CardItem, Text, Body } from 'native-base';
+<<<<<<< HEAD
 const { Circle, G, Path, Defs } = Svg;
 
 export default PetCard = (props) => {
   const { name, baseColor, outlineColor } = props.data;
   const { red, blue, green, transparency } = baseColor;
+=======
+const { Circle, Path, G } = Svg;
+import SlimePet from './SlimePet';
+
+export default PetCard = (props) => {
+  const { name, baseColor, outlineColor } = props.data;
+>>>>>>> 8b595e7902affc0dfd7c94fb501015b204444e66
   return (
     <Content>
       <Card style={{ flex: 1 }}>
@@ -17,6 +25,7 @@ export default PetCard = (props) => {
         >
           <Body>
             <View style={{ alignSelf: 'center' }}>
+<<<<<<< HEAD
               <Svg
                 height="100"
                 width="100">
@@ -57,6 +66,9 @@ export default PetCard = (props) => {
                           stroke={`rgba(${outlineColor.red}, ${outlineColor.green},  ${outlineColor.blue}, ${outlineColor.transparency})`}
                       /> */}
               </Svg>
+=======
+             <SlimePet baseColor={baseColor} outlineColor={outlineColor} height="100" width="100" scale="0.80"/>
+>>>>>>> 8b595e7902affc0dfd7c94fb501015b204444e66
             </View>
           </Body>
         </CardItem>
@@ -66,6 +78,10 @@ export default PetCard = (props) => {
           </Body>
         </CardItem>
       </Card>
+<<<<<<< HEAD
     </Content >
+=======
+    </Content>
+>>>>>>> 8b595e7902affc0dfd7c94fb501015b204444e66
   );
 }

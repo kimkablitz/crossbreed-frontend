@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const baseURL = "http://192.168.86.28:3001";// "https://crossbreed-backend.herokuapp.com"
+const baseURL = "https://crossbreed-backend.herokuapp.com"
 
 export default {
     
@@ -22,11 +22,14 @@ export default {
     getUserPets: (userId) => {
         return axios.get(`${baseURL}/api/pet/` + userId)
     },
+    breedPets: (parentsObj) => {
+        return axios.post(`${baseURL}/api/eggs/`, parentsObj)
+    },
     saveEgg: (eggObj, userId) => {
-        return axios.post(`${baseURL}/api/egg/` + userId, eggObj)
+        return axios.post(`${baseURL}/api/eggs/` + userId, eggObj)
     },
     getUserEggs: (userId) => {
-        return axios.get(`${baseURL}/api/egg/` + userId)
+        return axios.get(`${baseURL}/api/eggs/` + userId)
         // return axios.post(`${baseURL}/auth/login`, userObj);
     },
     signUp: (userObj) => {
@@ -34,5 +37,11 @@ export default {
     },
     googleLogin: (googleUserObj) => {
         return axios.post(`${baseURL}/auth/login/google`, googleUserObj);
+    },
+    updateUsername: (userId, newUsername) => {
+        return axios.put(`${baseURL}/api/users/${userId}`, newUsername);
+    },
+    updateLevelAndXP: (petId, levelObj) => {
+        return axios.put(`${baseURL}/api/pets/${petId}`, levelObj);
     }
 }
