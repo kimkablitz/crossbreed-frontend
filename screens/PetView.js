@@ -1,17 +1,18 @@
 import React from 'react';
 
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, View, TextInput } from 'react-native';
 import { Svg } from 'expo';
-import { Content, Card, CardItem, Text, Button, Body } from 'native-base';
+import { Content, Card, CardItem, Text, Button, Body, Icon } from 'native-base';
 import { Col, Row, Grid } from "react-native-easy-grid";
-import { NavigationActions, StackActions } from 'react-navigation';
+import { NavigationActions } from 'react-navigation';
 const { Circle } = Svg;
 import SlimePet from "../components/SlimePet";
 
 export default PetScreen = (props) => {
   const param = props.navigation.getParam('pet');
-  const { name, baseColor, outlineColor, gameColor, isFavorite, parents, level, experiencePoints } = param;
+  const { _id, name, baseColor, outlineColor, gameColor, isFavorite, parents, level, experiencePoints } = param;
   /*   const { red, blue, green, transparency } = baseColor; */
+  // id, name, baseColor, outlineColor, gameColor, level, experiencePoints
 
   toGameLobby = (pet) => {
     const navigateToGameLobby = NavigationActions.navigate({

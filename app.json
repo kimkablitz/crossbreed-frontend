@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "crossbreed",
-    "slug": "https://exp.host/@kimmykablitz/crossbreed",
+    "slug": "crossbreed",
     "privacy": "public",
     "sdkVersion": "32.0.0",
     "platforms": [

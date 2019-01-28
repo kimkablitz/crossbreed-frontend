@@ -3,7 +3,7 @@ import { AsyncStorage, ScrollView, View } from "react-native";
 import { Container, Header, Body, Title, Content, Button, Text } from "native-base";
 import { Grid, Row, Col } from "react-native-easy-grid";
 import { NavigationActions } from "react-navigation";
-import PetCard from "../components/PetCard";
+import PetCard from "../components/Stable/PetCard";
 import API from "../utils/API";
 
 export default class GameLobbyScreen extends Component {
@@ -25,7 +25,6 @@ export default class GameLobbyScreen extends Component {
               if (user !== null) {
                 // We have data!!
                 let userInfo = JSON.parse(user);
-                console.log('userInfo: ' + userInfo.displayName);
                 this.setState({ userPets: userInfo.pets, selectedPet: this.props.navigation.getParam("pet", userInfo.pets[0]) });
               }
              } catch (error) {
