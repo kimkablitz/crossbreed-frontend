@@ -5,6 +5,7 @@ import TabBarIcon from '../components/TabBarIcon';
 import HomeScreen from '../screens/HomeScreen';
 import BreedScreen from '../screens/BreedScreen';
 import PetScreen from '../screens/PetView';
+import EggScreen from '../screens/EggView';
 import Match3Screen from '../screens/Match3Screen';
 import GameLobbyScreen from "../screens/GameLobbyScreen";
 import AccountScreen from '../screens/Settings/AccountScreen';
@@ -13,7 +14,8 @@ import AccountScreen from '../screens/Settings/AccountScreen';
 const HomeStack = createStackNavigator(
 { 
   Home: HomeScreen, 
-  PetScreen: PetScreen },
+  PetScreen: PetScreen,
+  EggScreen: EggScreen },
 { initialRouteName: 'Home' }
 );
 
