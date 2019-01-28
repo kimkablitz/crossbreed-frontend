@@ -42,6 +42,7 @@ export default PetScreen = (props) => {
   }
 
   return (
+<<<<<<< HEAD
     <Content style={styles.centeredContent}>
       <Card style={styles.centeredContent}>
         <CardItem>
@@ -74,6 +75,57 @@ export default PetScreen = (props) => {
         </CardItem>
       </Card>
     </Content>
+=======
+      <Content style={styles.centeredContent}>
+        <Card style={styles.centeredContent}>
+          <CardItem>
+              <Body>
+                <View style={styles.svgContainer}>
+                  <Svg
+                      height="200"
+                      width="200"
+                  >
+                      <Circle
+                          cx="100"
+                          cy="100"
+                          r="95"
+                          fill={`rgba(${red}, ${green},  ${blue}, ${transparency})`}
+                          strokeWidth="3"
+                          stroke={`rgba(${outlineColor.red}, ${outlineColor.green},  ${outlineColor.blue}, ${outlineColor.transparency})`}
+                      />
+                  </Svg>
+                </View>
+              </Body>
+          </CardItem>
+          <CardItem>
+            <Body>
+              <Row size={ 1 }>
+                <Button success rounded style={{ margin: 10}}
+                    onPress={ () => this.toGameLobby(param) }
+                > 
+                    <Text>Play</Text> 
+                </Button>
+                <Button warning rounded style={{ margin: 10}}
+                    onPress={ () => this.toBreedPage(param) }
+                > 
+                    <Text>Breed</Text> 
+                </Button>
+                <Button danger rounded style={{ margin: 10}}
+                    onPress={ () => this.releasePet(pet) }
+                > 
+                    <Text>Release</Text> 
+                </Button>
+              </Row>
+              <Text style={{alignSelf: "center"}}>Name: {name}</Text>
+              <Text style={{alignSelf: "center"}}>Level: {level}</Text>
+              {level > 1 && <Text style={{alignSelf: "center"}}>Primary Game Color: {gameColor.primary}</Text>}
+              {level > 9 && <Text style={{alignSelf: "center"}}>Secondary Game Color: {gameColor.secondary}</Text>}
+              {parents && <Text style={{alignSelf: "center"}}> { parents.length > 1 ? `Parents: ${parents[0]}, ${parents[1]}` : `Parents: THE WILD` }</Text>}
+            </Body>
+          </CardItem>
+        </Card>
+      </Content>
+>>>>>>> 2923ebdac703d54dc63378e92f14afb19a81025b
   );
 }
 
