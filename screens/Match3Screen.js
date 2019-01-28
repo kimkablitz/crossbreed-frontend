@@ -16,14 +16,37 @@ export default class Match3Screen extends Component {
 		enemyScore: 0,
 		gameEnded: false,
 		difficultyLevel: "",
-		petInfo: {}
+		petInfo: {},
+		enemyInfo: {}
 	};
 
 	componentWillMount(){
 		const difficultyLevel = this.props.navigation.getParam("difficultyLevel");
 		const petInfo = this.props.navigation.getParam("petInfo");
+		const enemyInfo = this.randomEnemy();
 		BackHandler.addEventListener("hardwareBackPress", this.showAlert);
-		this.setState({ petInfo: petInfo, difficultyLevel: difficultyLevel });
+		this.setState({ petInfo: petInfo, difficultyLevel: difficultyLevel, enemyInfo: enemyInfo });
+	}
+
+	randomColor = () => {
+		return Math.floor(Math.random() * 256);
+	}
+
+	randomEnemy = () => {
+		return enemySlime = {
+			outlineColor: {
+			  blue: this.randomColor(),
+			  green: this.randomColor(),
+			  red: this.randomColor(),
+			  transparency: 1
+			},
+			baseColor: {
+			  blue: this.randomColor(),
+			  green: this.randomColor(),
+			  red: this.randomColor(),
+			  transparency: 1
+			}
+		  }
 	}
 
 	updateScore = (newScore) => {
@@ -139,10 +162,14 @@ export default class Match3Screen extends Component {
         	  <Body style={{ flex: 1 }}>
         	    <Title>Match 3 Race</Title>
         	  </Body>
-			  <Right style={{ flex: 1 }}/>
+			  <Right style={{ flex: 1 }}>
+			  	<Button transparent onPress={ this.showAlert }>
+					<Icon name='help-circle-outline'/>
+				</Button>
+			  </Right>
         	</Header>	
 			<Content padder scrollEnabled={false} contentContainerStyle={{ flexGrow: 1, justifyContent: "flex-start", alignItems: "center" }}>
-				<RaceDisplay playerScore={ this.state.playerScore } enemyScore={ this.state.enemyScore } petInfo={ this.state.petInfo } />
+				<RaceDisplay playerScore={ this.state.playerScore } enemyScore={ this.state.enemyScore } petInfo={ this.state.petInfo } enemyInfo={ this.state.enemyInfo } />
 				<GameBoard gameEnded={ this.state.gameEnded } difficulty={ this.state.difficultyLevel } pet={ this.state.petInfo } playerScore={ this.state.playerScore } enemyScore={ this.state.enemyScore } updateScore={ this.updateScore }/>
 				<MyModal visible={ this.state.gameEnded }>
 					<Grid style={{ backgroundColor: "rgba(0,0,0,0.8)", justifyContent: "center", alignItems: "center"}}>
