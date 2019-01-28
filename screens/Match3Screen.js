@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import { Alert, BackHandler, AsyncStorage } from "react-native";
-import { Container, Header, Body, Title, Left, Right, Button, Icon, Content, H3, Text } from "native-base";
+import { Alert, BackHandler, AsyncStorage, StyleSheet } from "react-native";
+import { Container, Header, Body, Title, Left, Right, Button, Icon, Content, H2, H3, Text } from "native-base";
 import { Grid, Row, Col } from "react-native-easy-grid";
 import { NavigationActions, StackActions } from 'react-navigation';
 import GameBoard from '../components/Match3Game/GameBoard';
@@ -199,13 +199,29 @@ export default class Match3Screen extends Component {
 					</Grid>
 				</MyModal>
 				<MyModal visible={ this.state.helpModalVisible }>
-					<Grid style={{ backgroundColor: "rgba(0,0,0,0.8)", justifyContent: "center", alignItems: "center"}}>
-						<Row size={ 2 } >
-							<H3 style={{ alignSelf: "center", color: "white", textAlign: "center" }}>
-								This is the help modal
-							</H3>
-						</Row>
+					<Grid style={{ backgroundColor: "rgba(0,0,0,0.9)", justifyContent: "center", alignItems: "center"}}>
 						<Row size={ 1 } >
+							<H2 style={{ alignSelf: "center", color: "white", textAlign: "center" }}>
+								Help your pet in the race!
+							</H2>
+						</Row>
+						<Row size={ 3 } style={{ justifyContent: "flex-start" }}>
+							<Col>
+								<H3 style={styles.helpText}>
+									Swipe in the direction you want to switch the tile. 
+								</H3>
+								<H3 style={styles.helpText}>
+									Match three consecutive tiles to boost your pet! 
+								</H3>
+								<H3 style={styles.helpText}>
+									The opponent will move each time you swipe, so plan your moves carefully!
+								</H3>
+								<Text style={styles.helpText}>
+									Hint: Look out for the color(s) that give your pet a bigger boost!
+								</Text>
+							</Col>
+						</Row>
+						<Row size={ 1 }>
 							<Button onPress={ () => this.setState({ helpModalVisible: false }) }>
 								<Text>Close</Text>
 							</Button>
@@ -217,3 +233,11 @@ export default class Match3Screen extends Component {
     )
   }
 }
+
+const styles = StyleSheet.create({
+	helpText: {
+		color: "white",
+		textAlign: "center",
+		margin: 20
+	}
+});
