@@ -7,7 +7,7 @@ import { Col, Row, Grid } from 'react-native-easy-grid';
 import { Button, Text } from 'native-base';
 import { NavigationActions } from 'react-navigation';
 
-export default class LinksScreen extends React.Component {
+export default class BreedScreen extends React.Component {
   static navigationOptions = {
     title: 'Breed',
   };
