@@ -1,5 +1,5 @@
 import React from 'react';
-import axios from "axios";
+import API from "../utils/API";
 import { View, ScrollView, StyleSheet, AsyncStorage } from 'react-native';
 import PetCard from '../components/PetCard';
 import TinyPetCard from '../components/TinyPetCard';
@@ -7,7 +7,7 @@ import { Col, Row, Grid } from 'react-native-easy-grid';
 import { Button, Text } from 'native-base';
 import { NavigationActions } from 'react-navigation';
 
-export default class LinksScreen extends React.Component {
+export default class BreedScreen extends React.Component {
   static navigationOptions = {
     title: 'Breed',
   };
@@ -20,15 +20,13 @@ export default class LinksScreen extends React.Component {
   }
 
   componentWillMount(){
-    
+    // get data from AsyncStorage for continuity between screens
     (async () => {
       try {
-        console.log("HIt there!")
         const user = await AsyncStorage.getItem('user');
         if (user !== null) {
           // We have data!!
           let userInfo = JSON.parse(user);
-          console.log('userInfo: ' + userInfo);
           const petParam = this.props.navigation.getParam("pet");
           if(petParam){
             var otherPetsArray = this.filterPets( petParam, userInfo.pets );
@@ -111,7 +109,15 @@ export default class LinksScreen extends React.Component {
   }
 
   handleBreedPets = () => {
-
+    API.breedPets({
+      firstParent: this.state.tobreed[0]._id,
+      secondParent: this.state.tobreed[1]._id
+    })
+    .then((res) => {
+      console.log(res.data);
+      console.log(res.data.parents[0], res.data.parents[0]);
+    })
+    .catch(err => console.log(err));
   }
 
   render() {
