@@ -29,7 +29,7 @@ class MyModal extends Component {
                     transparent={ true }
                     visible={ this.state.modalVisible }
                     onRequestClose={() => {
-                        Alert.alert('Modal has been closed.')
+                        this.setState({ modalVisible: false});
                     }}
                 > 
                 { this.props.children }

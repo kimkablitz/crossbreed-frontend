@@ -6,8 +6,8 @@ function RaceDisplay(props){
     return (
       <Grid style={{ marginBottom: 10 }}>
         <Col>
-            <RaceTrack score={ props.playerScore } petInfo={ props.petInfo}/>
-            <RaceTrack score={ props.enemyScore } petInfo={ props.petInfo} />
+            <RaceTrack score={ props.playerScore } petInfo={ props.petInfo }/>
+            <RaceTrack score={ props.enemyScore } petInfo={ props.enemyInfo } />
         </Col>
       </Grid>
     )

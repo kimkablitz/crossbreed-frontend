@@ -21,8 +21,6 @@ export default class SignUp extends Component {
 
         API.signUp(newUser)
             .then(res => {
-                console.log(res.data);
-                console.log("SUCCESSFUL SIGNUP")
                 this.handleLoginRedirect(res.data)
             })
             .catch(err => {

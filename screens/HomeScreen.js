@@ -39,26 +39,37 @@ export default class HomeScreen extends React.Component {
   //   .catch(err => console.log(err));
   // }
   componentWillMount(){
-    (async () => {
-      try {
-        // Temporary method of passing pets to game lobby, in future, user info should contain pets
-        // await AsyncStorage.setItem('pets', JSON.stringify(this.state.stalls));
-        const value = await AsyncStorage.getItem('user');
+    this.grabAsynStorage();
+  }
+
+  componentDidMount(){
+    const willFocus = this.props.navigation.addListener(
+      'willFocus',
+      () => {
+        this.setState({stalls: []}, this.grabAsynStorage);
+      }
+    );
+  }
+
+  grabAsynStorage = async () => {
+    try {
+      // Temporary method of passing pets to game lobby, in future, user info should contain pets
+      // await AsyncStorage.setItem('pets', JSON.stringify(this.state.stalls));
+      const value = await AsyncStorage.getItem('user');
+      if (value !== null) {
+        // We have data!!
         const userInfo = JSON.parse(value);
-        if (value !== null) {
-          // We have data!!
-          console.log(userInfo);
-          console.log(userInfo.pets)
-          this.setState({ 
-            stalls: userInfo.pets,
-            eggs: userInfo.eggs
-          });
-        }
-       } catch (error) {
-         // Error retrieving data
-         console.log(error);
-       }
-    })()
+        console.log(userInfo);
+        console.log(userInfo.pets)
+        this.setState({ 
+          stalls: userInfo.pets,
+          eggs: userInfo.eggs
+        });
+      }
+    } catch (error) {
+        // Error retrieving data
+        console.log(error);
+    }
   }
 
   petOnPress = (index) => {
