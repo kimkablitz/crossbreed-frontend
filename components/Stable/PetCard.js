@@ -13,6 +13,7 @@ export default PetCard = (props) => {
         <Card style={{flex: 1}}>
           <CardItem
             button={true}
+            // changed background color to make the white outline visible
             style={{backgroundColor: '#fde'}}
             onPress={props.press}
           >

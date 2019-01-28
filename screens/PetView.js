@@ -1,16 +1,17 @@
 import React from 'react';
 
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, View, TextInput } from 'react-native';
 import { Svg } from 'expo';
-import { Content, Card, CardItem, Text, Button, Body } from 'native-base';
+import { Content, Card, CardItem, Text, Button, Body, Icon } from 'native-base';
 import { Col, Row, Grid } from "react-native-easy-grid";
-import { NavigationActions, StackActions } from 'react-navigation';
+import { NavigationActions } from 'react-navigation';
 const { Circle } = Svg;
 
 export default PetScreen = (props) => {
   const param = props.navigation.getParam('pet');
   const {name, baseColor, outlineColor, gameColor, isFavorite, parents, level, experiencePoints } = param;
   const { red, blue, green, transparency } = baseColor;
+  const editing = false;
 
   toGameLobby = (pet) => {
     const navigateToGameLobby = NavigationActions.navigate({
@@ -81,7 +82,14 @@ export default PetScreen = (props) => {
                     <Text>Release</Text> 
                 </Button>
               </Row>
-              <Text style={{alignSelf: "center"}}>Name: {name}</Text>
+              <View style={{flex: 1, flexDirection: 'row', justifyContent: 'center', alignSelf: 'stretch', backgroundColor: 'pink'}}>
+                <Button icon rounded dark small style={{ marginRight: 10}}
+                  // onPress={ () => }
+                >
+                  <Icon name='list' />
+                </Button>
+                <Text >Name: {name}</Text>
+              </View>
               <Text style={{alignSelf: "center"}}>Level: {level}</Text>
               {level > 1 && <Text style={{alignSelf: "center"}}>Primary Game Color: {gameColor.primary}</Text>}
               {level > 9 && <Text style={{alignSelf: "center"}}>Secondary Game Color: {gameColor.secondary}</Text>}

@@ -4,7 +4,6 @@ import {
   Platform,
   ScrollView,
   StyleSheet,
-  Text,
   TouchableOpacity,
   View,
   AsyncStorage
@@ -14,7 +13,7 @@ import PetCard from '../components/Stable/PetCard';
 import EggCard from '../components/Stable/EggCard';
 import { Col, Row, Grid } from "react-native-easy-grid";
 import { NavigationActions } from 'react-navigation';
-import { Content, Container, Header, Body, Button, Title } from 'native-base';
+import { Content, Container, Header, Body, Button, Title, Text } from 'native-base';
 
 export default class HomeScreen extends React.Component {
   static navigationOptions = {
@@ -95,12 +94,12 @@ export default class HomeScreen extends React.Component {
         <View style={styles.container}>
           <Grid>
             <Row style={{flex: 1, flexDirection: 'row', justifyContent: 'space-evenly'}} >
-              <Button primary bordered={ this.state.view === "pets" ? false : true } rounded style={{ margin: 10}}
+              <Button info bordered={ this.state.view === "pets" ? false : true } rounded style={{ flex: 1, margin: 10}}
                   onPress={ () => this.setView("pets") }
               > 
                   <Text>Pets</Text> 
               </Button>
-              <Button success bordered={ this.state.view === "eggs" ? false : true } rounded style={{ margin: 10}}
+              <Button success bordered={ this.state.view === "eggs" ? false : true } rounded style={{ flex: 1, margin: 10}}
                   onPress={ () => this.setView("eggs") }
               > 
                   <Text>Eggs</Text> 

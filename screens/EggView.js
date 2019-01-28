@@ -35,14 +35,14 @@ export default EggScreen = (props) => {
           </CardItem>
           <CardItem>
             <Body>
-              <Row size={ 1 }>
-                <Button success rounded style={{ margin: 10 }}
-                    onPress={ () => this.toGameLobby(param) }
+              <Row style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-evenly', alignItems: 'center' }}>
+                <Button success rounded style={{ flex: 1, margin: 10 }}
+                    onPress={ () => this.hatchEgg(egg) }
                 > 
                     <Text>Hatch</Text> 
                 </Button>
-                <Button danger rounded style={{ margin: 10}}
-                    onPress={ () => this.releaseegg(egg) }
+                <Button danger rounded style={{ flex: 1, margin: 10}}
+                    onPress={ () => this.releaseEgg(egg) }
                 > 
                     <Text>Release</Text> 
                 </Button>
