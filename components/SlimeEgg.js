@@ -82,7 +82,8 @@ export default SlimeEgg = (props) => {
                 <Circle
                     fill={`rgba(${spotsColor.red}, ${spotsColor.green},  ${spotsColor.blue}, ${spotsColor.transparency})`}
                     cx="44.668" cy="91.447" r="3.459" />
-            </G>
+                </G>
+                
         </Svg>
     );
 
