@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "crossbreed",
-    "slug": "crossbreed",
+    "slug": "https://exp.host/@kimmykablitz/crossbreed",
     "privacy": "public",
     "sdkVersion": "32.0.0",
     "platforms": [
@@ -23,7 +23,11 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.kimmykablitz.crossbreed"
+    },
+    "android": {
+      "package": "com.kimmykablitz.crossbreed"
     }
   }
 }
