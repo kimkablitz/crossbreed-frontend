@@ -17,19 +17,19 @@ export default TinyPetCard = (props) => {
           >
               <Body>
                 <View style={{alignSelf: 'center'}} >
-                  <Svg
-                      height="50"
-                      width="50"
-                  >
-                      <Circle
-                          cx="25"
-                          cy="25"
-                          r="22"
+                <Svg
+                height="100"
+                width="100">
+
+                  <Circle
+                          cx="50"
+                          cy="50"
+                          r="45"
                           fill={`rgba(${red}, ${green},  ${blue}, ${transparency})`}
-                          strokeWidth="2"
+                          strokeWidth="3"
                           stroke={`rgba(${outlineColor.red}, ${outlineColor.green},  ${outlineColor.blue}, ${outlineColor.transparency})`}
-                      />
-                  </Svg>
+                      /> 
+              </Svg>
                 </View>
               </Body>
           </CardItem>
