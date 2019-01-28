@@ -78,13 +78,10 @@ export default class Match3Screen extends Component {
 				user = JSON.parse(user);
 				user.pets = user.pets.map( pet => {
 					if(pet._id === res.data._id){
-						console.log("changing data");
 						return res.data;
 					}
 					return pet;
 				});
-				console.log(res.data);
-				console.log(user.pets);
 				AsyncStorage.setItem("user", JSON.stringify(user)).then( () => {
 					this.modalMessage(level, gainedXP, res.data.level);
 					this.setState({ gameEnded: true });

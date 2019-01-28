@@ -36,7 +36,6 @@ export default class HomeScreen extends React.Component {
   // }
   componentWillMount(){
     this.grabAsynStorage();
-    //console.log( "userInfo: " + userInfo);
   }
 
   componentDidMount(){

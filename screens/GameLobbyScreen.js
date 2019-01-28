@@ -25,7 +25,6 @@ export default class GameLobbyScreen extends Component {
               if (user !== null) {
                 // We have data!!
                 let userInfo = JSON.parse(user);
-                console.log('userInfo: ' + userInfo.displayName);
                 this.setState({ userPets: userInfo.pets, selectedPet: this.props.navigation.getParam("pet", userInfo.pets[0]) });
               }
              } catch (error) {

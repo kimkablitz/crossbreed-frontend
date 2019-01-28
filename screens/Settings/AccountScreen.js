@@ -42,7 +42,6 @@ export default class AccountScreen extends React.Component {
   }
 
   render() {
-    console.log("hey")
     return (
       <View style={style.listContainer}>
         <Button block danger onPress={() => this.logout()} >
