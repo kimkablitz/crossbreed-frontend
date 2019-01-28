@@ -10,18 +10,23 @@ import {
   AsyncStorage
 } from 'react-native';
 import axios from "axios";
-import RecipeCard from '../components/PetCard';
+import PetCard from '../components/Stable/PetCard';
+import EggCard from '../components/Stable/EggCard';
 import { Col, Row, Grid } from "react-native-easy-grid";
 import { NavigationActions } from 'react-navigation';
-import { Content, Header, Body, Title } from 'native-base';
+import { Content, Container, Header, Body, Button, Title } from 'native-base';
+
 export default class HomeScreen extends React.Component {
   static navigationOptions = {
     header: null,
   };
 
   state = {
-    // this will eventually hold all the users's pets and eggs
-    stalls: []
+    view: "pets",
+    // this will hold all the users's pets
+    stalls: [],
+    // this will hold all the user's eggs
+    eggs: []
   }
 
   // getPets = (event) => {
@@ -45,23 +50,38 @@ export default class HomeScreen extends React.Component {
           // We have data!!
           console.log(userInfo);
           console.log(userInfo.pets)
-          this.setState({ stalls: userInfo.pets });
+          this.setState({ 
+            stalls: userInfo.pets,
+            eggs: userInfo.eggs
+          });
         }
        } catch (error) {
          // Error retrieving data
          console.log(error);
        }
     })()
-    //console.log( "userInfo: " + userInfo);
   }
 
-  handleOnPress = (index) => {
+  petOnPress = (index) => {
     const navigateAction = NavigationActions.navigate({
       routeName: 'PetScreen',
       params: { pet: this.state.stalls[index] },
     });
     
     this.props.navigation.dispatch(navigateAction);
+  }
+
+  eggOnPress = (index) => {
+    const navigateAction = NavigationActions.navigate({
+      routeName: 'EggScreen',
+      params: { egg: this.state.eggs[index] },
+    });
+    
+    this.props.navigation.dispatch(navigateAction);
+  }
+
+  setView = (view) => {
+    this.setState({ view: view });
   }
 
   render() {
@@ -73,14 +93,33 @@ export default class HomeScreen extends React.Component {
           </Body>
         </Header>
         <View style={styles.container}>
+          <Grid>
+            <Row style={{flex: 1, flexDirection: 'row', justifyContent: 'space-evenly'}} >
+              <Button primary bordered={ this.state.view === "pets" ? false : true } rounded style={{ margin: 10}}
+                  onPress={ () => this.setView("pets") }
+              > 
+                  <Text>Pets</Text> 
+              </Button>
+              <Button success bordered={ this.state.view === "eggs" ? false : true } rounded style={{ margin: 10}}
+                  onPress={ () => this.setView("eggs") }
+              > 
+                  <Text>Eggs</Text> 
+              </Button>
+            </Row>
+          </Grid>
           <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
             <Grid>
               <Row style={{flexWrap: "wrap", justifyContent: 'space-evenly'}} > 
-                {this.state.stalls ? this.state.stalls.map( (stall, index) => {
+                {this.state.stalls ? (this.state.view === "pets" ? this.state.stalls.map( (stall, index) => {
                 return <Col key={stall._id} style={{width: 150, height: 200}} >
-                  <RecipeCard key={stall._id} data={stall} press={() => {this.handleOnPress(index)}} />
+                  <PetCard key={stall._id} data={stall} press={() => {this.petOnPress(index)}} />
                 </Col>
-                })
+                }) : this.state.eggs.map((egg, index) => {
+                  console.log();
+                  return <Col key={egg._id} style={{width: 150, height: 200}} > 
+                    <EggCard key={egg._id} data={egg} press={() => {this.eggOnPress(index)}} />
+                  </Col>
+                }) )
               : <Text> Loading Stable</Text>
               }
               </Row>
@@ -99,87 +138,5 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
-  },
-  developmentModeText: {
-    marginBottom: 20,
-    color: 'rgba(0,0,0,0.4)',
-    fontSize: 14,
-    lineHeight: 19,
-    textAlign: 'center',
-  },
-  contentContainer: {
-    paddingTop: 30,
-  },
-  welcomeContainer: {
-    alignItems: 'center',
-    marginTop: 10,
-    marginBottom: 20,
-  },
-  welcomeImage: {
-    width: 100,
-    height: 80,
-    resizeMode: 'contain',
-    marginTop: 3,
-    marginLeft: -10,
-  },
-  getStartedContainer: {
-    alignItems: 'center',
-    marginHorizontal: 50,
-  },
-  homeScreenFilename: {
-    marginVertical: 7,
-  },
-  codeHighlightText: {
-    color: 'rgba(96,100,109, 0.8)',
-  },
-  codeHighlightContainer: {
-    backgroundColor: 'rgba(0,0,0,0.05)',
-    borderRadius: 3,
-    paddingHorizontal: 4,
-  },
-  getStartedText: {
-    fontSize: 17,
-    color: 'rgba(96,100,109, 1)',
-    lineHeight: 24,
-    textAlign: 'center',
-  },
-  tabBarInfoContainer: {
-    position: 'absolute',
-    bottom: 0,
-    left: 0,
-    right: 0,
-    ...Platform.select({
-      ios: {
-        shadowColor: 'black',
-        shadowOffset: { height: -3 },
-        shadowOpacity: 0.1,
-        shadowRadius: 3,
-      },
-      android: {
-        elevation: 20,
-      },
-    }),
-    alignItems: 'center',
-    backgroundColor: '#000000',
-    paddingVertical: 20,
-  },
-  tabBarInfoText: {
-    fontSize: 17,
-    color: 'rgba(96,100,109, 1)',
-    textAlign: 'center',
-  },
-  navigationFilename: {
-    marginTop: 5,
-  },
-  helpContainer: {
-    marginTop: 15,
-    alignItems: 'center',
-  },
-  helpLink: {
-    paddingVertical: 15,
-  },
-  helpLinkText: {
-    fontSize: 14,
-    color: '#2e78b7',
   },
 });

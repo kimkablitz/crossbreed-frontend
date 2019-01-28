@@ -1,8 +1,8 @@
 import React from 'react';
 import API from "../utils/API";
 import { View, ScrollView, StyleSheet, AsyncStorage } from 'react-native';
-import PetCard from '../components/PetCard';
-import TinyPetCard from '../components/TinyPetCard';
+import PetCard from '../components/Stable/PetCard';
+import TinyPetCard from '../components/Stable/TinyPetCard';
 import { Col, Row, Grid } from 'react-native-easy-grid';
 import { Button, Text } from 'native-base';
 import { NavigationActions } from 'react-navigation';
