@@ -35,24 +35,32 @@ export default class HomeScreen extends React.Component {
   //   .catch(err => console.log(err));
   // }
   componentWillMount(){
-    (async () => {
+    this.grabAsynStorage();
+  }
+
+  componentDidMount(){
+    const willFocus = this.props.navigation.addListener(
+      'willFocus',
+      () => {
+        this.setState({stalls: []}, this.grabAsynStorage);
+      }
+    );
+  }
+
+  grabAsynStorage = async () => {
       try {
         // Temporary method of passing pets to game lobby, in future, user info should contain pets
         // await AsyncStorage.setItem('pets', JSON.stringify(this.state.stalls));
         const value = await AsyncStorage.getItem('user');
-        const userInfo = JSON.parse(value);
         if (value !== null) {
           // We have data!!
-          console.log(userInfo);
-          console.log(userInfo.pets)
+          const userInfo = JSON.parse(value);
           this.setState({ stalls: userInfo.pets });
         }
        } catch (error) {
          // Error retrieving data
          console.log(error);
        }
-    })()
-    //console.log( "userInfo: " + userInfo);
   }
 
   handleOnPress = (index) => {

@@ -19,7 +19,7 @@ export default class GameBoard extends Component {
                 ['', '', '', '', ''],
                 ['', '', '', '', '']
             ],
-            firstClick: {},
+            tilesSwipeable: true,
             fadeAnimation: new Animated.Value(0)
         }
     }
@@ -30,7 +30,7 @@ export default class GameBoard extends Component {
     }
 
     componentDidUpdate(prevProps){
-        // 
+        // If the game is restarted, generated a different board
         if(prevProps.gameEnded === true && this.props.gameEnded === false){
             this.setState({ displayBoard: false }, () => {
                 this.generateRandomBoard();
@@ -52,6 +52,7 @@ export default class GameBoard extends Component {
                 tile.xIndex = xIndex;
                 tile.yIndex = yIndex;
                 tile.key = "" + xIndex + yIndex;
+                // Initializing the switched and dropped properties which are used for animations during the game
                 tile.switched = "";
                 tile.dropped = false;
                 // Push new tile in newRow array
@@ -92,6 +93,7 @@ export default class GameBoard extends Component {
         }));
     }
 
+    // Fade in animation for when a board is initially displayed
     fadeInBoard = () => {
         Animated.timing(
             this.state.fadeAnimation,
@@ -102,66 +104,61 @@ export default class GameBoard extends Component {
         ).start();
     }
 
-    handleSwipes = (direction, firstTile) => {
-        let secondTile = _.clone(firstTile);
-        switch(direction){
+    // Handles the swiping recognition on the gameboard
+    handleSwipes = (directionSwiped, firstTileCoordinates) => {
+        // Initiallizing the secondTile object and switch direction;
+        let secondTileCoordinates = _.clone(firstTileCoordinates);
+        let secondTileDirection = "";
+        switch(directionSwiped){
             case "SWIPE_UP":
-                if(firstTile.x !== 0){
-                    secondTile.x = (firstTile.x - 1);
-                    direction = "up";
+                // Only allow tiles to swap if the swiped tile is not in the first row
+                if(firstTileCoordinates.x !== 0){
+                    secondTileCoordinates.x = (firstTileCoordinates.x - 1);
+                    directionSwiped = "up";
+                    secondTileDirection = "down";
                 }
                 break;
             case "SWIPE_DOWN":
-                if(firstTile.x < (this.state.tile.length -1)){
-                    secondTile.x = (firstTile.x + 1);
-                    direction = "down";
+                // Only allow tiles to swap if the swiped tile is not in the last row
+                if(firstTileCoordinates.x < (this.state.tile.length -1)){
+                    secondTileCoordinates.x = (firstTileCoordinates.x + 1);
+                    directionSwiped = "down";
+                    secondTileDirection = "up";
                 }
                 break;
             case "SWIPE_LEFT":
-                if(firstTile.y !== 0){
-                    secondTile.y = (firstTile.y -1);
-                    direction = "left";
+                // Only allow tiles to swap if the swiped tile is not in the first column
+                if(firstTileCoordinates.y !== 0){
+                    secondTileCoordinates.y = (firstTileCoordinates.y -1);
+                    directionSwiped = "left";
+                    secondTileDirection = "right";
                 }
                 break;
             case "SWIPE_RIGHT":
-                if(firstTile.y < (this.state.tile[0].length - 1)){
-                    secondTile.y = (firstTile.y + 1);
-                    direction = "right";
+                // Only allow tiles to swap if the swiped tile is not in the last column
+                if(firstTileCoordinates.y < (this.state.tile[0].length - 1)){
+                    secondTileCoordinates.y = (firstTileCoordinates.y + 1);
+                    directionSwiped = "right";
+                    secondTileDirection = "left";
                 }
                 break;
             default:
                 break;
         }
-        this.switchTiles(firstTile, secondTile, direction);
+        if(this.state.tilesSwipeable){
+            this.switchTiles(firstTileCoordinates, secondTileCoordinates, directionSwiped, secondTileDirection);
+        }
     } 
 
     // Switch the color of two tiles
-    switchTiles = (firstClick, secondClick, firstDirection) => {
+    switchTiles = (firstTileCoordinates, secondTileCoordinates, firstDirection, secondDirection) => {
         const tiles = this.state.tile;
-        let secondDirection = "";
-        switch(firstDirection){
-            case "up":
-                secondDirection = "down";
-                break;
-            case "down":
-                secondDirection = "up";
-                break;
-            case "left":
-                secondDirection = "right";
-                break;
-            case "right":
-                secondDirection = "left";
-                break;
-            default:
-                break;
-        }
         // Switch the color of the two tiles using the coordinates grabbed at the click event
         // Lovely straighforward way to switch elements in an array using ES6!
-        [ tiles[firstClick.x][firstClick.y].color, tiles[secondClick.x][secondClick.y].color, tiles[firstClick.x][firstClick.y].switched, tiles[secondClick.x][secondClick.y].switched ] = [tiles[secondClick.x][secondClick.y].color, tiles[firstClick.x][firstClick.y].color, firstDirection, secondDirection]
-        // Set tile state to new array after switch and clear firstClick state to player can click again
-        this.setState({tile: tiles, firstClick: {}}, () => {
-            // let enemyScore = this.props.enemyScore;
-            // enemyScore+=3;
+        [ tiles[firstTileCoordinates.x][firstTileCoordinates.y].color, tiles[secondTileCoordinates.x][secondTileCoordinates.y].color, tiles[firstTileCoordinates.x][firstTileCoordinates.y].switched, tiles[secondTileCoordinates.x][secondTileCoordinates.y].switched ] = [tiles[secondTileCoordinates.x][secondTileCoordinates.y].color, tiles[firstTileCoordinates.x][firstTileCoordinates.y].color, firstDirection, secondDirection]
+        // Set tile state to new array after switch and clear firstTileCoordinates state to player can click again
+        this.setState({tile: tiles}, () => {
+            // Update enemy score
             this.props.updateScore([name = "enemyScore", value = this.randomEnemyScore( this.props.difficulty )]);
             // After new tiles are set, check the board for matches of 3 or more
             this.state.displayBoard ? 
@@ -176,32 +173,42 @@ export default class GameBoard extends Component {
         });
     }
 
+    // Generates a random enemy score depending on the difficulty setting of the game
     randomEnemyScore = (difficulty) => {
         const randomNumber = Math.floor(Math.random() * 100);
         let enemyScore = this.props.enemyScore;
         let baseNumber;
+        // The basic number by which enemy score increases is higher for hard mode
         switch(difficulty){
             case "easy":
-                baseNumber = 2;
+                baseNumber = 3;
                 break;
-            case "hard":
+            case "normal":
                 baseNumber = 4;
                 break;
+            case "hard":
+                baseNumber = 5;
+                break;
             default:
-                baseNumber = 3;
+                break;
         }
+        // There is a 25% chance enemy score only increases by baseNumber;
         if(randomNumber < 25){
             return enemyScore += baseNumber;
         }
+        // There is a 25% chance enemy score increases by baseNumber + 1;
         else if(randomNumber < 50){
             return enemyScore += (baseNumber + 1);
         }
+        // There is a 25% chance enemy score increases by baseNumber + 2;
         else if (randomNumber < 75){
             return enemyScore += (baseNumber + 2);
         }
+        // There is a 15% chance enemy score increases by baseNumber + 3;
         else if(randomNumber < 90){
             return enemyScore += (baseNumber + 3);
         }
+        // There is a 10% chance enemy score increases by baseNumber + 4;
         else{
             return enemyScore += (baseNumber + 4);
         }
@@ -243,7 +250,7 @@ export default class GameBoard extends Component {
         // If there are tiles to delete, run deleteTiles function
         // This is run before the game start to make sure that the first board presented to the player does not have any matches!!
         if(tilesToDelete.length > 0){
-            this.deleteTiles(tilesToDelete);
+            this.setState({ tilesSwipeable: false }, () => this.deleteTiles(tilesToDelete));
         }
         // If there are no tiles that match, then game is started and board will become visible to player
         else if(tilesToDelete.length === 0){
@@ -263,6 +270,9 @@ export default class GameBoard extends Component {
             // Only increase the score if the game has started
             if(this.state.displayBoard){
                 if(deletedColor === this.props.pet.gameColor.primary){
+                    score+=3;
+                }
+                if(deletedColor === this.props.pet.gameColor.secondary){
                     score+=2;
                 }
                 else{
@@ -344,7 +354,7 @@ export default class GameBoard extends Component {
                 }
             });
         });
-        this.setState({tile: tiles}, () => {
+        this.setState({tile: tiles, tilesSwipeable: true}, () => {
             this.state.displayBoard ? 
             setTimeout(
                 function(){
