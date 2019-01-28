@@ -17,7 +17,8 @@ export default class Match3Screen extends Component {
 		gameEnded: false,
 		difficultyLevel: "",
 		petInfo: {},
-		enemyInfo: {}
+		enemyInfo: {},
+		helpModalVisible: false
 	};
 
 	componentWillMount(){
@@ -61,7 +62,7 @@ export default class Match3Screen extends Component {
 	}
 	
 	startGame = (difficultyLevel) => {
-		let newState = { gameEnded: false, playerScore: 0, enemyScore: 0 };
+		let newState = { gameEnded: false, playerScore: 0, enemyScore: 0, enemyInfo: this.randomEnemy() };
 		if(difficultyLevel){
 			newState.difficultyLevel = difficultyLevel;
 		}
@@ -163,7 +164,7 @@ export default class Match3Screen extends Component {
         	    <Title>Match 3 Race</Title>
         	  </Body>
 			  <Right style={{ flex: 1 }}>
-			  	<Button transparent onPress={ this.showAlert }>
+			  	<Button transparent onPress={ () => this.setState({ helpModalVisible: true }) }>
 					<Icon name='help-circle-outline'/>
 				</Button>
 			  </Right>
@@ -197,8 +198,21 @@ export default class Match3Screen extends Component {
 						</Row>
 					</Grid>
 				</MyModal>
+				<MyModal visible={ this.state.helpModalVisible }>
+					<Grid style={{ backgroundColor: "rgba(0,0,0,0.8)", justifyContent: "center", alignItems: "center"}}>
+						<Row size={ 2 } >
+							<H3 style={{ alignSelf: "center", color: "white", textAlign: "center" }}>
+								This is the help modal
+							</H3>
+						</Row>
+						<Row size={ 1 } >
+							<Button onPress={ () => this.setState({ helpModalVisible: false }) }>
+								<Text>Close</Text>
+							</Button>
+						</Row>
+					</Grid>
+				</MyModal>
 			</Content>
-			
 		</Container>
     )
   }
