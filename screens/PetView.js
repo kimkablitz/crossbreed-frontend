@@ -10,8 +10,9 @@ import SlimePet from "../components/SlimePet";
 
 export default PetScreen = (props) => {
   const param = props.navigation.getParam('pet');
-  const { name, baseColor, outlineColor, gameColor, isFavorite, parents, level, experiencePoints } = param;
+  const { _id, name, baseColor, outlineColor, gameColor, isFavorite, parents, level, experiencePoints } = param;
   /*   const { red, blue, green, transparency } = baseColor; */
+  // id, name, baseColor, outlineColor, gameColor, level, experiencePoints
 
   toGameLobby = (pet) => {
     const navigateToGameLobby = NavigationActions.navigate({

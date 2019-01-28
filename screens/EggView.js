@@ -48,7 +48,7 @@ export default EggScreen = (props) => {
                 </Button>
               </Row>
               <Text style={{alignSelf: "center"}}>Created: {createdOn}</Text>
-              {parents && <Text style={{alignSelf: "center"}}> { parents.length > 1 ? `Parents: ${parents[0]}, ${parents[1]}` : `Parents: THE WILD` }</Text>}
+              {parents && <Text style={{alignSelf: "center"}}> { parents.length > 1 ? `Parents: ${parents[0].name}, ${parents[1].name}` : `Parents: THE WILD` }</Text>}
             </Body>
           </CardItem>
         </Card>
