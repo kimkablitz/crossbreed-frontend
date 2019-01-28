@@ -43,8 +43,8 @@ export default class HomeScreen extends React.Component {
         const userInfo = JSON.parse(value);
         if (value !== null) {
           // We have data!!
-          console.log('User: ' + userInfo);
-          console.log("user pets: " + userInfo.pets)
+          console.log(userInfo);
+          console.log(userInfo.pets)
           this.setState({ stalls: userInfo.pets });
         }
        } catch (error) {

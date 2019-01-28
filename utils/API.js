@@ -22,11 +22,14 @@ export default {
     getUserPets: (userId) => {
         return axios.get("https://crossbreed-backend.herokuapp.com/api/pet/" + userId)
     },
+    breedPets: (parentsObj) => {
+        return axios.post("https://crossbreed-backend.herokuapp.com/api/eggs/", parentsObj)
+    },
     saveEgg: (eggObj, userId) => {
-        return axios.post("https://crossbreed-backend.herokuapp.com/api/egg/" + userId, eggObj)
+        return axios.post("https://crossbreed-backend.herokuapp.com/api/eggs/" + userId, eggObj)
     },
     getUserEggs: (userId) => {
-        return axios.get("https://crossbreed-backend.herokuapp.com/api/egg/" + userId)
+        return axios.get("https://crossbreed-backend.herokuapp.com/api/eggs/" + userId)
         // return axios.post(`${baseURL}/auth/login`, userObj);
     },
     signUp: (userObj) => {
@@ -34,5 +37,11 @@ export default {
     },
     googleLogin: (googleUserObj) => {
         return axios.post(`${baseURL}/auth/login/google`, googleUserObj);
+    },
+    updateUsername: (userId, newUsername) => {
+        return axios.put(`${baseURL}/api/users/${userId}`, newUsername);
+    },
+    updateLevelAndXP: (petId, levelObj) => {
+        return axios.put(`${baseURL}/api/pets/${petId}`, levelObj);
     }
 }

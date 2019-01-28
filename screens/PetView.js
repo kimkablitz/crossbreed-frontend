@@ -64,16 +64,21 @@ export default PetScreen = (props) => {
           </CardItem>
           <CardItem>
             <Body>
-              <Row size={ 1 } >
+              <Row size={ 1 }>
                 <Button success rounded style={{ margin: 10}}
                     onPress={ () => this.toGameLobby(param) }
                 > 
                     <Text>Play</Text> 
                 </Button>
-                <Button danger rounded style={{ margin: 10}}
+                <Button warning rounded style={{ margin: 10}}
                     onPress={ () => this.toBreedPage(param) }
                 > 
                     <Text>Breed</Text> 
+                </Button>
+                <Button danger rounded style={{ margin: 10}}
+                    onPress={ () => this.releasePet(pet) }
+                > 
+                    <Text>Release</Text> 
                 </Button>
               </Row>
               <Text style={{alignSelf: "center"}}>Name: {name}</Text>

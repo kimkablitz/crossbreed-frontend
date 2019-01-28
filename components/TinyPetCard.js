@@ -1,8 +1,8 @@
 import React from 'react';
 
-import { Image, StyleSheet, View } from 'react-native';
+import { View } from 'react-native';
 import { Svg } from 'expo';
-import { Content, Header, Card, CardItem, Text, Body } from 'native-base';
+import { Content, Card, CardItem, Text, Body } from 'native-base';
 const { Circle } = Svg;
 
 export default TinyPetCard = (props) => {
@@ -33,7 +33,7 @@ export default TinyPetCard = (props) => {
                 </View>
               </Body>
           </CardItem>
-            <Text style={{alignSelf: 'center', marginBottom: 5}}>{name}</Text>
+            <Text style={{alignSelf: 'center', textAlign: 'center', marginBottom: 5}}>{name}</Text>
         </Card>
       </Content>
   );

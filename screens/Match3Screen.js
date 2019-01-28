@@ -62,17 +62,22 @@ export default class Match3Screen extends Component {
 		if(name === "playerScore"){
 			winBonusXP = 300;
 			totalXP = baseXP + winBonusXP;
-			modalMessage = `You Won! \n ${this.state.petInfo.name} earned ${totalXP} XP!`
+			modalMessage = `You Won! \n ${this.state.petInfo.name} earned ${totalXP} XP!`;
 		}
 		else{
 			totalXP = baseXP;
 			modalMessage = `You Lost! \n ${this.state.petInfo.name} earned ${totalXP} XP!`
 		}
+		this.updateLevel(this.state.petInfo, totalXP);
 		this.setState({ gameEnded: true });
 	}
 
-	updateLevel = (petId, levelObj) => {
-		
+	updateLevel = (petInfo, gainedXP) => {
+		const { _id, level, experiencePoints } = petInfo;
+		const levelObj = { currentLevel: level, currentXP: experiencePoints, gainedXP: gainedXP };
+		API.updateLevelAndXP( _id, levelObj)
+		.then(res => console.log(res.data))
+		.catch(err => console.log(err));
 	}
 
 	showAlert = () => {
