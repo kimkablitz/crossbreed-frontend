@@ -6,6 +6,7 @@ import { Content, Card, CardItem, Text, Button, Body } from 'native-base';
 import { Col, Row, Grid } from "react-native-easy-grid";
 import { NavigationActions, StackActions } from 'react-navigation';
 const { Circle } = Svg;
+import SlimeEgg from "../components/SlimeEgg";
 
 export default EggScreen = (props) => {
   const param = props.navigation.getParam('egg');
@@ -17,19 +18,7 @@ export default EggScreen = (props) => {
           <CardItem>
               <Body>
                 <View style={styles.svgContainer}>
-                  <Svg
-                      height="200"
-                      width="200"
-                  >
-                      <Circle
-                          cx="100"
-                          cy="100"
-                          r="95"
-                          fill="aqua"
-                          strokeWidth="3"
-                          stroke="pink"
-                      />
-                  </Svg>
+                  <SlimeEgg height="205" width="200" scale="1.6"/>
                 </View>
               </Body>
           </CardItem>

@@ -6,6 +6,7 @@ import { Content, Header, Card, CardItem, Text, Body } from 'native-base';
 const { Circle, Path, G } = Svg;
 import SlimePet from '../SlimePet';
 
+
 export default PetCard = (props) => {
   const { name, baseColor, outlineColor } = props.data;
   return (
@@ -17,7 +18,7 @@ export default PetCard = (props) => {
         >
           <Body>
             <View style={{ alignSelf: 'center' }}>
-             <SlimePet baseColor={baseColor} outlineColor={outlineColor} height="100" width="100" scale="0.80"/>
+              <SlimePet baseColor={baseColor} outlineColor={outlineColor} height="100" width="100" scale="0.80" /> 
             </View>
           </Body>
         </CardItem>
