@@ -1,15 +1,15 @@
 import React from 'react';
-import axios from "axios";
+import API from "../utils/API";
 import { View, ScrollView, StyleSheet, AsyncStorage } from 'react-native';
-import PetCard from '../components/PetCard';
-import TinyPetCard from '../components/TinyPetCard';
+import PetCard from '../components/Stable/PetCard';
+import TinyPetCard from '../components/Stable/TinyPetCard';
 import { Col, Row, Grid } from 'react-native-easy-grid';
-import { Button, Text } from 'native-base';
+import { Header, Body, Title, Button, Text, Content } from 'native-base';
 import { NavigationActions } from 'react-navigation';
 
-export default class LinksScreen extends React.Component {
+export default class BreedScreen extends React.Component {
   static navigationOptions = {
-    title: 'Breed',
+    header: null,
   };
 
   state = {
@@ -20,25 +20,18 @@ export default class LinksScreen extends React.Component {
   }
 
   componentWillMount(){
-    
+    // get data from AsyncStorage for continuity between screens
     (async () => {
       try {
-        console.log("HIt there!")
         const user = await AsyncStorage.getItem('user');
-        const pets = await AsyncStorage.getItem('pets');
-        console.log(user);
-        console.log(pets)
-        if (user !== null && pets !== null) {
+        if (user !== null) {
           // We have data!!
           let userInfo = JSON.parse(user);
-          let userPets = JSON.parse(pets);
-          console.log('userInfo: ' + userInfo);
-          console.log('pets: ' + userPets);
           const petParam = this.props.navigation.getParam("pet");
           if(petParam){
-            var otherPetsArray = this.filterPets( petParam, userPets );
+            var otherPetsArray = this.filterPets( petParam, userInfo.pets );
           }
-          this.setState({ pets: otherPetsArray ? otherPetsArray : userPets, tobreed: petParam ? [petParam] : [] });
+          this.setState({ pets: otherPetsArray ? otherPetsArray : userInfo.pets, tobreed: petParam ? [petParam] : [] });
         }
        } catch (error) {
          // Error retrieving data
@@ -58,8 +51,9 @@ export default class LinksScreen extends React.Component {
 
   componentWillReceiveProps = (nextProps) => {
     (async () => {
-      const pets = await AsyncStorage.getItem("pets");
-      const petsArray = JSON.parse(pets);
+      const user = await AsyncStorage.getItem("user");
+      const userInfo = JSON.parse(user);
+      const petsArray = userInfo.pets
       let breedThis = nextProps.navigation.getParam('pet');
       // let otherPets = 
       if (breedThis) {
@@ -115,41 +109,56 @@ export default class LinksScreen extends React.Component {
   }
 
   handleBreedPets = () => {
-
+    API.breedPets({
+      firstParent: this.state.tobreed[0]._id,
+      secondParent: this.state.tobreed[1]._id
+    })
+    .then((res) => {
+      console.log(res.data);
+      console.log(res.data.parents[0], res.data.parents[0]);
+    })
+    .catch(err => console.log(err));
   }
 
   render() {
     return (
-      <View style={styles.container}>
-        <Grid>
-          <Row style={{flexWrap: "wrap", justifyContent: 'space-evenly', height: 175}}>
-          {this.state.tobreed.map( (breeder, index) => {
-            return <Col key={breeder.name} style={{width: 150, height: 200}} >
-              <PetCard key={index} data={breeder} press={() => {this.breederOnPress(index)}} 
-              />
-            </Col>
-          })}
-          </Row>
-          <Row style={{justifyContent: 'center'}}>
-            <Button danger rounded style={{ margin: 10}}
-              onPress={ () => this.handleBreedPets() }
-            > 
-              <Text>Breed</Text> 
-            </Button>
-          </Row>
-        </Grid>
-        <ScrollView style={styles.container}>
+      <Content>
+        <Header> 
+          <Body>
+            <Title style={{alignSelf: 'center'}}>Breed Pets</Title>
+          </Body>
+        </Header>
+        <View style={styles.container}>
           <Grid>
-            <Row style={{flexWrap: "wrap", justifyContent: 'space-evenly'}} > 
-              {this.state.pets.map( (pet, index) => {
-                return <Col key={pet.name} style={{width: 100, height: 140}} >
-                <TinyPetCard key={index} data={pet} press={() => {this.petOnPress(index)}} />
+            <Row style={{flexWrap: "wrap", justifyContent: 'space-evenly', height: 175}}>
+            {this.state.tobreed.map( (breeder, index) => {
+              return <Col key={breeder._id} style={{width: 150, height: 200}} >
+                <PetCard key={index} data={breeder} press={() => {this.breederOnPress(index)}} 
+                />
               </Col>
-              })}
+            })}
+            </Row>
+            <Row style={{justifyContent: 'center'}}>
+              <Button danger rounded style={{ margin: 10}}
+                onPress={ () => this.handleBreedPets() }
+              > 
+                <Text>Breed</Text> 
+              </Button>
             </Row>
           </Grid>
-        </ScrollView>
-      </View>
+          <ScrollView style={styles.container}>
+            <Grid>
+              <Row style={{flexWrap: "wrap", justifyContent: 'space-evenly'}} > 
+                {this.state.pets.map( (pet, index) => {
+                  return <Col key={pet._id} style={{width: 100, height: 140}} >
+                  <TinyPetCard key={index} data={pet} press={() => {this.petOnPress(index)}} />
+                </Col>
+                })}
+              </Row>
+            </Grid>
+          </ScrollView>
+        </View>
+      </Content>
     );
   }
 }

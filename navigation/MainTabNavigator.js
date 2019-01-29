@@ -1,18 +1,21 @@
 import React from 'react';
 import { Platform } from 'react-native';
 import { createStackNavigator, createBottomTabNavigator } from 'react-navigation';
-
 import TabBarIcon from '../components/TabBarIcon';
 import HomeScreen from '../screens/HomeScreen';
-import LinksScreen from '../screens/LinksScreen';
+import BreedScreen from '../screens/BreedScreen';
 import PetScreen from '../screens/PetView';
+import EggScreen from '../screens/EggView';
 import Match3Screen from '../screens/Match3Screen';
 import GameLobbyScreen from "../screens/GameLobbyScreen";
+import AccountScreen from '../screens/Settings/AccountScreen';
+
 
 const HomeStack = createStackNavigator(
 { 
   Home: HomeScreen, 
-  PetScreen: PetScreen },
+  PetScreen: PetScreen,
+  EggScreen: EggScreen },
 { initialRouteName: 'Home' }
 );
 
@@ -30,7 +33,7 @@ HomeStack.navigationOptions = {
 };
 
 const BreedStack = createStackNavigator({
-  Breed: LinksScreen,
+  Breed: BreedScreen,
 });
 
 BreedStack.navigationOptions = {
@@ -41,6 +44,7 @@ BreedStack.navigationOptions = {
     />
   ),
 };
+
 
 const Match3Stack = createStackNavigator({
   GameLobby: GameLobbyScreen,
@@ -71,11 +75,28 @@ Match3Stack.navigationOptions = ({ navigation }) => {
     ),
   };
 };
+const AccountStack = createStackNavigator({
+  Account: AccountScreen,
+});
+AccountStack.navigationOptions = {
+  tabBarIcon: ({ focused }) => (
+    <TabBarIcon
+      focused={focused}
+      name={
+        Platform.OS === 'ios'
+          ? `ios-contact`
+          : 'md-contact'
+      }
+    />
+  ),
+};
+
 
 export default createBottomTabNavigator({
   HomeStack,
   BreedStack,
-  Match3Stack
+  Match3Stack,
+  AccountStack
 },
 {
   swipeEnabled: true,

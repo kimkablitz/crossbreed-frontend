@@ -3,7 +3,8 @@ import { AsyncStorage, ScrollView, View } from "react-native";
 import { Container, Header, Body, Title, Content, Button, Text } from "native-base";
 import { Grid, Row, Col } from "react-native-easy-grid";
 import { NavigationActions } from "react-navigation";
-import PetCard from "../components/PetCard";
+import PetCard from "../components/Stable/PetCard";
+import API from "../utils/API";
 
 export default class GameLobbyScreen extends Component {
     constructor(props){
@@ -21,14 +22,10 @@ export default class GameLobbyScreen extends Component {
         (async () => {
             try {
               const user = await AsyncStorage.getItem('user');
-              const pets = await AsyncStorage.getItem('pets');
-              if (user !== null && pets !== null) {
+              if (user !== null) {
                 // We have data!!
                 let userInfo = JSON.parse(user);
-                let userPets = JSON.parse(pets);
-                console.log('userInfo: ' + userInfo);
-                console.log('pets: ' + userPets);
-                this.setState({ userPets: userPets, selectedPet: this.props.navigation.getParam("pet", userPets[0]) });
+                this.setState({ userPets: userInfo.pets, selectedPet: this.props.navigation.getParam("pet", userInfo.pets[0]) });
               }
              } catch (error) {
                // Error retrieving data
@@ -104,8 +101,8 @@ export default class GameLobbyScreen extends Component {
                         <ScrollView style={{ flex: 1 }}>
                             <Row style={{ flexWrap: "wrap", justifyContent: 'space-evenly' }} > 
                               {this.state.userPets.map( (stall, index) => {
-                                const borderColor = this.state.selectedPet.name === stall.name ? "grey" : "white"
-                                return (<Col key={stall.name} style={{width: 150, borderWidth: 5, borderColor: borderColor }} >
+                                const borderColor = this.state.selectedPet._id === stall._id ? "grey" : "white"
+                                return (<Col key={stall._id} style={{width: 150, borderWidth: 5, borderColor: borderColor }} >
                                   <PetCard key={index} data={stall} press={() => this.setPet(stall) } />
                                 </Col>)
                               })}
