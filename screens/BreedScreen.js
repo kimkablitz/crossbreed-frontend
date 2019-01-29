@@ -12,6 +12,10 @@ export default class BreedScreen extends React.Component {
     header: null,
   };
 
+  constructor(props){
+    super(props);
+  }
+
   state = {
     // holds up to 2 pets to be bred
     tobreed: [],
@@ -114,8 +118,17 @@ export default class BreedScreen extends React.Component {
       secondParent: this.state.tobreed[1]._id
     })
     .then((res) => {
-      console.log(res.data);
-      console.log(res.data.parents[0], res.data.parents[0]);
+      AsyncStorage.getItem("user").then( user => {
+        user = JSON.parse(user);
+        user.eggs.push({ _id: res.data._id, createdOn: res.data.createdOn });
+        AsyncStorage.setItem("user", JSON.stringify(user)).then( () => {
+          const navigate = NavigationActions.navigate({
+            routeName: "EggScreen",
+            params: {egg: res.data._id}
+          });
+          this.props.navigation.dispatch(navigate);
+        })
+      })
     })
     .catch(err => console.log(err));
   }
