@@ -24,31 +24,50 @@ export default class EggScreen extends React.Component {
     const id = this.props.navigation.getParam('egg');
     console.log(id)
     // const { _id, createdOn, isFrozen, isStarter, parents } = param;
-    const selectedEggId = JSON.stringify(id)
-    console.log("hereis the ID" + selectedEggId);
-    API.getEgg(selectedEggId).then(res => {
-      console.log(selectedEggId);
-      console.log(res.data);
-      var thisEgg = res.data
-      this.setState({
-        egg: thisEgg
-      })
-    }).catch(err => {
-      console.log(err);
-    });
-  }
+    this.setState({ egg: { _id: id }});
+    // releaseEgg = (id) => {
+  
+    //   // event.preventDefault();
+    //   API.deleteEgg(id).then(res => {
+    //     console.log("im testing" + res.data);
+
+    //   })
+      // axios.delete("https://crossbreed-backend.herokuapp.com/api/eggs" + "_" +id )
+      // console.log("here!")
+        //  console.log(eggId)
+        // .then(res => {
+        //   console.log(res);
+        //   console.log("im testing" + res.data);
+        // })
+    }
+
+
+
+    // API.getEgg(id).then(res => {
+    //   console.log(selectedEggId);
+    //   console.log(res.data);
+    //   var thisEgg = res.data
+    //   this.setState({
+    //     egg: thisEgg
+    //   })
+    // }).catch(err => {
+    //   console.log(err);
+    // });
+  //}
 
 
   releaseEgg = (egg) => {
+    console.log("egg id: " + egg);
     // event.preventDefault();
-    // API.deleteEgg(selectedEggId)
-    axios.delete("https://crossbreed-backend.herokuapp.com/api/eggs" + egg)
+    API.deleteEgg(egg)
+   //axios.delete("https://crossbreed-backend.herokuapp.com/api/eggs" + egg)
     // console.log("here!")
       //  console.log(eggId)
       .then(res => {
         console.log(res);
         console.log("im testing" + res.data);
       })
+      .catch(err => console.log(err))
   }
 
   goHome = () => {
@@ -68,7 +87,7 @@ export default class EggScreen extends React.Component {
           onPress: () => console.log('Cancel Pressed'),
           style: 'cancel',
         },
-        { text: 'OK', onPress: () => this.releaseEgg(selectedEggId) },
+        { text: 'Remove egg', onPress: () => this.releaseEgg(this.state.egg._id) },
       ],
       { cancelable: false },
     )
@@ -99,7 +118,6 @@ export default class EggScreen extends React.Component {
                   <Text>Hatch</Text>
                 </Button>
                 <Button danger rounded style={{ flex: 1, margin: 10 }}
-                  onPress={() => this.releaseEgg(selectedEggId)}
                   onPress={this.showConfirm}
                 >
                   <Text>Release</Text>
@@ -123,21 +141,21 @@ export default class EggScreen extends React.Component {
 
 
 const styles = StyleSheet.create({
-  nameText: {
-    marginBottom: 20,
-    color: 'rgba(0,0,0,1)',
-    fontSize: 14,
-    lineHeight: 19,
-    textAlign: 'center',
-  },
-  centeredContent: {
-    alignContent: 'center',
-    flex: 1,
-  },
-  svgContainer: {
-    flex: 1,
-    alignItems: 'center',
-    alignSelf: 'center',
-    justifyContent: 'center',
-  }
+    nameText: {
+        marginBottom: 20,
+        color: 'rgba(0,0,0,1)',
+        fontSize: 14,
+        lineHeight: 19,
+        textAlign: 'center',
+    },
+    centeredContent: {
+        alignContent: 'center',
+        flex: 1,
+    },
+    svgContainer: {
+        flex: 1,
+        alignItems: 'center',
+        alignSelf: 'center',
+        justifyContent: 'center',
+    }
 });

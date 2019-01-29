@@ -33,9 +33,6 @@ export default class PetScreen extends React.Component {
         }).catch(err => {
             console.log(err);
         });
-        // const { _id, name, baseColor, outlineColor, gameColor, isFavorite, parents, level, experiencePoints } = param;
-        /*   const { red, blue, green, transparency } = baseColor; */
-        // id, name, baseColor, outlineColor, gameColor, level, experiencePoints
     }
 
     toGameLobby = (pet) => {
