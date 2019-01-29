@@ -1,9 +1,10 @@
 import React, { Component } from 'react'
-import { Platform, StyleSheet, View, AsyncStorage, Alert } from 'react-native';
+import { Platform, StyleSheet, View, AsyncStorage } from 'react-native';
 import { Container, Content, Form, Item, Input, Label, Text, Button} from 'native-base';
 import { NavigationActions } from "react-navigation";
 import * as Expo from 'expo';
 import API from "../utils/API";
+import Alerts from "../utils/Alerts";
 
 export default class AUTHENTICATION extends Component {
   constructor(props) {
@@ -39,26 +40,14 @@ export default class AUTHENTICATION extends Component {
 
   localSignIn = () => {
     if(this.state.username === "" || this.state.password === ""){
-      return Alert.alert(
-        "Error",
-        "Please fill in all fields",
-        [
-          { text: "Close", style: "cancel"}
-        ]
-      )
+      return Alerts.emptyFieldError();
     }
     this.setState({ authenticating: true }, () => {
       API.login({ username: this.state.username, password: this.state.password })
       .then(res => this.goToHome(res.data))
       .catch(err => {
         this.setState({ authenticating: false }, () => {
-          Alert.alert(
-            "Unable to login",
-            `${err.response.data.message}`,
-            [
-              { text: "Close", style: 'cancel' }
-            ]
-          )
+          return Alerts.loginError(err.response.data.message);
         })
       })
     })

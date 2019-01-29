@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
-import { Button, Image, View, AsyncStorage } from "react-native"; 
-import { Container, Header, Content, Form, Item, Input, Label, Text, Thumbnail } from 'native-base';
+import { View, AsyncStorage } from "react-native"; 
+import { Container, Header, Content, Form, Item, Input, Label, Button, Text } from 'native-base';
 import { NavigationActions } from "react-navigation";
 import API from "../utils/API";
+import Alerts from "../utils/Alerts";
 
 export default class SignUp extends Component {
 
@@ -13,6 +14,9 @@ export default class SignUp extends Component {
     }
 
     signUp = () => {
+      if(this.state.username === "" || this.state.password === "" || this.state.displayName === ""){
+        return Alerts.emptyFieldError();
+      }
         // deconstruct state object
         const { username, password, displayName } = this.state;
 
@@ -44,22 +48,24 @@ export default class SignUp extends Component {
   render() {
     return (
       <Container>
-        <Content padder contentContainerStyle={{ flex: 1 , justifyContent: "center" }}>
+        <Content padder contentContainerStyle={{ flex: 1 }}>
           <Form>
             <Item floatingLabel>
               <Label>Username</Label>
               <Input name='username' onChangeText={(value) => this.setState({username: value})} />
             </Item>
-            <Item floatingLabel last>
+            <Item floatingLabel>
               <Label>Password</Label>
               <Input secureTextEntry={true} onChangeText={(value) => this.setState({password: value})}/>
             </Item>
-            <Item floatingLabel last>
+            <Item floatingLabel>
               <Label>Display Name</Label>
               <Input name="displayName" onChangeText={(value) => this.setState({displayName: value})}/>
             </Item>
             <View style={{ marginVertical: 20 }}>
-               <Button onPress={this.signUp} title="Sign Up" /> 
+               <Button block onPress={this.signUp}> 
+                <Text>Sign Up</Text>
+               </Button>
             </View>
           </Form> 
         </Content>
