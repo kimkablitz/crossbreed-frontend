@@ -75,7 +75,7 @@ export default class HomeScreen extends React.Component {
   petOnPress = (index) => {
     const navigateAction = NavigationActions.navigate({
       routeName: 'PetScreen',
-      params: { pet: this.state.stalls[index] },
+      params: { pet: this.state.stalls[index]._id },
     });
     
     this.props.navigation.dispatch(navigateAction);
@@ -105,12 +105,12 @@ export default class HomeScreen extends React.Component {
         <View style={styles.container}>
           <Grid>
             <Row style={{flex: 1, flexDirection: 'row', justifyContent: 'space-evenly'}} >
-              <Button info bordered={ this.state.view === "pets" ? false : true } rounded style={{ flex: 1, margin: 10}}
+              <Button info bordered={ this.state.view === "pets" ? false : true } rounded style={{ flex: 1, margin: 10, justifyContent: "center"}}
                   onPress={ () => this.setView("pets") }
               > 
                   <Text>Pets</Text> 
               </Button>
-              <Button success bordered={ this.state.view === "eggs" ? false : true } rounded style={{ flex: 1, margin: 10}}
+              <Button success bordered={ this.state.view === "eggs" ? false : true } rounded style={{ flex: 1, margin: 10, justifyContent: "center"}}
                   onPress={ () => this.setView("eggs") }
               > 
                   <Text>Eggs</Text> 
@@ -124,13 +124,15 @@ export default class HomeScreen extends React.Component {
                 return <Col key={stall._id} style={{width: 150, height: 200}} >
                   <PetCard key={stall._id} data={stall} press={() => {this.petOnPress(index)}} />
                 </Col>
-                }) : this.state.eggs.map((egg, index) => {
+                }) : this.state.eggs.length > 0 ? (this.state.eggs.map((egg, index) => {
                   console.log();
                   return <Col key={egg._id} style={{width: 150, height: 200}} > 
                     <EggCard key={egg._id} data={egg} press={() => {this.eggOnPress(index)}} />
                   </Col>
-                }) )
-              : <Text> Loading Stable</Text>
+                }) ) 
+                : <Text> No Eggs Here </Text>
+                )
+              : <Text> Loading Stable </Text>
               }
               </Row>
             </Grid>

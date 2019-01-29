@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const baseURL = "https://crossbreed-backend.herokuapp.com"
+const baseURL = "http://10.0.0.110:3001" //"https://crossbreed-backend.herokuapp.com"
 
 export default {
     
@@ -12,6 +12,9 @@ export default {
     },
     getUser: () => {
         return axios.get(`${baseURL}/auth/user`)
+    },
+    getPet: (petId) => {
+        return axios.get(`${baseURL}/api/pets/` + petId)
     },
     // registerUser: (userObj) => {
     //     return axios.post("https://crossbreed-backend.herokuapp.com/auth/signup", userObj)
