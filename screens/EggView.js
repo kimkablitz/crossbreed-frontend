@@ -1,17 +1,44 @@
-import React from 'react';
+import React, { Component } from 'react';
 
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, View, Alert } from 'react-native';
 import { Svg } from 'expo';
 import { Content, Card, CardItem, Text, Button, Body } from 'native-base';
 import { Col, Row, Grid } from "react-native-easy-grid";
 import { NavigationActions, StackActions } from 'react-navigation';
 const { Circle } = Svg;
 import SlimeEgg from "../components/SlimeEgg";
+import API from "../utils/API";
 
-export default EggScreen = (props) => {
+
+export default  EggScreen = (props) => {
   const param = props.navigation.getParam('egg');
   const { _id, createdOn, isFrozen, isStarter, parents } = param;
+  showConfirm = () => {
+		Alert.alert(
+			"Are you sure you want to remove this egg",
+			"Removing egg is permanent ad cannot be reversed!"
+			[
+				{ text: "Cancel", style: 'cancel' },
+				{ text: "Return to lobby", onPress: () => this.navigate("Home") }
+			]
+		)
+		return true;
+	}
+  releaseEgg = (eggId) => {
+    API.deleteEgg(eggId)
+    console.log("here!", eggId)
+    .then(res => this.goHome(res.data))
+    .catch(err => console.log(err))
+  }
 
+  goHome = () => {
+    const navigateHome = NavigationActions.navigate({
+      routeName: "Home",
+    });
+    this.props.navigation.dispatch(navigateHome);
+  }
+
+  // render() {
   return (
       <Content style={styles.centeredContent}>
         <Card style={styles.centeredContent}>
@@ -31,7 +58,7 @@ export default EggScreen = (props) => {
                     <Text>Hatch</Text> 
                 </Button>
                 <Button danger rounded style={{ flex: 1, margin: 10}}
-                    onPress={ () => this.releaseEgg(egg) }
+                    onPress={ (eggId) => this.releaseEgg(eggId)  }
                 > 
                     <Text>Release</Text> 
                 </Button>
@@ -42,7 +69,8 @@ export default EggScreen = (props) => {
           </CardItem>
         </Card>
       </Content>
-  );
+    )
+  // }
 }
 
 const styles = StyleSheet.create({

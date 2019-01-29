@@ -30,8 +30,10 @@ export default {
     },
     getUserEggs: (userId) => {
         return axios.get(`${baseURL}/api/eggs/` + userId)
-        // return axios.post(`${baseURL}/auth/login`, userObj);
     },
+    deleteEgg: (eggId) => {
+        return axios.delete(`${baseURL}/api/eggs/` + eggId)
+    }, 
     signUp: (userObj) => {
         return axios.post(`${baseURL}/auth/signup`, userObj);
     },
