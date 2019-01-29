@@ -25,7 +25,7 @@ export default class Match3Screen extends Component {
 		const difficultyLevel = this.props.navigation.getParam("difficultyLevel");
 		const petInfo = this.props.navigation.getParam("petInfo");
 		const enemyInfo = this.randomEnemy();
-		BackHandler.addEventListener("hardwareBackPress", this.showAlert);
+		this.backHandler = BackHandler.addEventListener("hardwareBackPress", this.showAlert);
 		this.setState({ petInfo: petInfo, difficultyLevel: difficultyLevel, enemyInfo: enemyInfo });
 	}
 
@@ -139,6 +139,7 @@ export default class Match3Screen extends Component {
 
 	navigate = (routeName) => {
 		this.setState({ gameEnded: false }, () => {
+			this.backHandler.remove();
 			const navigate = NavigationActions.navigate({
 				routeName: routeName });
 			const reset = StackActions.reset({
