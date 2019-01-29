@@ -31,6 +31,9 @@ export default {
     saveEgg: (eggObj, userId) => {
         return axios.post(`${baseURL}/api/eggs/` + userId, eggObj)
     },
+    getEgg: (eggId) => {
+        return axios.get(`${baseURL}/api/eggs/` + eggId)
+    },
     getUserEggs: (userId) => {
         return axios.get(`${baseURL}/api/eggs/` + userId)
         // return axios.post(`${baseURL}/auth/login`, userObj);

@@ -84,7 +84,7 @@ export default class HomeScreen extends React.Component {
   eggOnPress = (index) => {
     const navigateAction = NavigationActions.navigate({
       routeName: 'EggScreen',
-      params: { egg: this.state.eggs[index] },
+      params: { egg: this.state.eggs[index]._id },
     });
     
     this.props.navigation.dispatch(navigateAction);
