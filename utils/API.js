@@ -13,6 +13,9 @@ export default {
     getUser: () => {
         return axios.get(`${baseURL}/auth/user`)
     },
+    getPet: (petId) => {
+        return axios.get(`${baseURL}/api/pets/` + petId)
+    },
     // registerUser: (userObj) => {
     //     return axios.post("https://crossbreed-backend.herokuapp.com/auth/signup", userObj)
     // },
