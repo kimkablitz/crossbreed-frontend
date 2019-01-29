@@ -25,7 +25,7 @@ export default class Match3Screen extends Component {
 		const difficultyLevel = this.props.navigation.getParam("difficultyLevel");
 		const petInfo = this.props.navigation.getParam("petInfo");
 		const enemyInfo = this.randomEnemy();
-		BackHandler.addEventListener("hardwareBackPress", this.showAlert);
+		this.backHandler = BackHandler.addEventListener("hardwareBackPress", this.showAlert);
 		this.setState({ petInfo: petInfo, difficultyLevel: difficultyLevel, enemyInfo: enemyInfo });
 	}
 
@@ -33,14 +33,43 @@ export default class Match3Screen extends Component {
 		return Math.floor(Math.random() * 256);
 	}
 
+	determineOutlineColor = (color) => {
+        //This looks at an existing color and determines if a constrast color should be black or white 
+        //The below algorithm comes from the w3c standard for accessibility 
+        //First, we convert the rgb value for each color into its contrast value
+        const contrasts = [color.red, color.green, color.blue].map(currentColor => {
+            let currentContrast = currentColor / 255.0;
+            if (currentContrast <= 0.03928) {
+                currentContrast = currentContrast / 12.92;
+            }
+            else {
+                currentContrast = Math.pow(((currentContrast + 0.055) / 1.055), 2.4);
+            }
+            return currentContrast;
+        });
+        //now we use that contrast to calculate an overall luminosity:
+        const luminosity = 0.2126 * contrasts[0] + 0.7152 * contrasts[1] + 0.0722 * contrasts[2];
+        if (luminosity > 0.179) {
+            //if the luminosity is bright, use black as contrast
+            return {
+                red: 0,
+                green: 0,
+                blue: 0,
+                transparency: 1
+            };
+        }
+        else { //otherwise, use white as a contrast
+            return {
+                red: 255,
+                green: 255,
+                blue: 255,
+                transparency: 1
+            };
+        }
+    }
+
 	randomEnemy = () => {
-		return enemySlime = {
-			outlineColor: {
-			  blue: this.randomColor(),
-			  green: this.randomColor(),
-			  red: this.randomColor(),
-			  transparency: 1
-			},
+		const enemySlime = {
 			baseColor: {
 			  blue: this.randomColor(),
 			  green: this.randomColor(),
@@ -48,6 +77,9 @@ export default class Match3Screen extends Component {
 			  transparency: 1
 			}
 		  }
+		const outlineColor = this.determineOutlineColor(enemySlime.baseColor);
+		enemySlime.outlineColor = outlineColor;
+		return enemySlime;
 	}
 
 	updateScore = (newScore) => {
@@ -139,6 +171,7 @@ export default class Match3Screen extends Component {
 
 	navigate = (routeName) => {
 		this.setState({ gameEnded: false }, () => {
+			this.backHandler.remove();
 			const navigate = NavigationActions.navigate({
 				routeName: routeName });
 			const reset = StackActions.reset({

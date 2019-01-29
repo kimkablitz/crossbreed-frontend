@@ -4,6 +4,7 @@ import { Container, Content, Form, Item, Input, Label, Text, Button} from 'nativ
 import { NavigationActions } from "react-navigation";
 import * as Expo from 'expo';
 import API from "../utils/API";
+import Alerts from "../utils/Alerts";
 
 export default class AUTHENTICATION extends Component {
   constructor(props) {
@@ -38,10 +39,20 @@ export default class AUTHENTICATION extends Component {
   }
 
   localSignIn = () => {
+    if(this.state.username === "" || this.state.password === ""){
+      return Alerts.singleButtonError("Error", "Please fill in all fields");
+    }
     this.setState({ authenticating: true }, () => {
       API.login({ username: this.state.username, password: this.state.password })
       .then(res => this.goToHome(res.data))
-      .catch(err => this.setState({ authenticating: false }, () => console.log(err)));
+      .catch(err => {
+        this.setState({ authenticating: false }, () => {
+          if(err.response.status === 403){
+            return Alerts.singleButtonError("Unable to login", err.response.data.message);
+          }
+          return Alerts.singleButtonError("Something went wrong!", "Please try again!");
+        })
+      })
     })
   }
 
@@ -94,7 +105,7 @@ export default class AUTHENTICATION extends Component {
                     <Label>Username</Label>
                     <Input onChangeText={(value) => this.setState({username: value})}/>
                   </Item>
-                  <Item floatingLabel last>
+                  <Item floatingLabel>
                     <Label>Password</Label>
                     <Input secureTextEntry={true} onChangeText={(value) => this.setState({password: value})}/>
                   </Item>
@@ -118,12 +129,12 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#fff",
-    alignItems: "center",
+    alignContent: "center",
     justifyContent: "center"
   },
   formContainer: {
     flex: 1 , 
-    justifyContent: "center"
+    justifyContent: "flex-start"
   },
   centerSelf: {
     alignSelf: "center"
