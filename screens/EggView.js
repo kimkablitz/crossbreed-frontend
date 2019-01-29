@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import axios from 'axios';
-import { StyleSheet, View, Alert } from 'react-native';
+import { StyleSheet, View, Alert, AsyncStorage } from 'react-native';
 import { Svg } from 'expo';
 import { Content, Card, CardItem, Text, Button, Body } from 'native-base';
 import { Col, Row, Grid } from "react-native-easy-grid";
@@ -23,38 +23,15 @@ export default class EggScreen extends React.Component {
   componentWillMount() {
     const id = this.props.navigation.getParam('egg');
     console.log(id)
-    // const { _id, createdOn, isFrozen, isStarter, parents } = param;
-    this.setState({ egg: { _id: id }});
-    // releaseEgg = (id) => {
-  
-    //   // event.preventDefault();
-    //   API.deleteEgg(id).then(res => {
-    //     console.log("im testing" + res.data);
-
-    //   })
-      // axios.delete("https://crossbreed-backend.herokuapp.com/api/eggs" + "_" +id )
-      // console.log("here!")
-        //  console.log(eggId)
-        // .then(res => {
-        //   console.log(res);
-        //   console.log("im testing" + res.data);
-        // })
-    }
-
-
-
-    // API.getEgg(id).then(res => {
-    //   console.log(selectedEggId);
-    //   console.log(res.data);
-    //   var thisEgg = res.data
-    //   this.setState({
-    //     egg: thisEgg
-    //   })
-    // }).catch(err => {
-    //   console.log(err);
-    // });
-  //}
-
+    API.getEgg(id).then(res => {
+      var thisEgg = res.data
+      this.setState({
+        egg: thisEgg
+      })
+    }).catch(err => {
+      console.log(err);
+    });
+  }
 
   releaseEgg = (egg) => {
     console.log("egg id: " + egg);
@@ -64,8 +41,17 @@ export default class EggScreen extends React.Component {
     // console.log("here!")
       //  console.log(eggId)
       .then(res => {
-        console.log(res);
-        console.log("im testing" + res.data);
+        AsyncStorage.getItem("user").then( user => {
+          user = JSON.parse(user);
+          user.eggs = user.eggs.filter( egg => {
+            if (egg._id !== this.state.egg._id){
+              return egg;
+            }
+          });
+          AsyncStorage.setItem("user", JSON.stringify(user)).then(() =>{
+            this.goHome();
+          })
+        })
       })
       .catch(err => console.log(err))
   }
