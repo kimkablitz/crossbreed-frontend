@@ -1,9 +1,9 @@
 import React from 'react';
 import API from '../utils/API'
 
-import { StyleSheet, View, TextInput } from 'react-native';
+import { StyleSheet, View, KeyboardAvoidingView } from 'react-native';
 import { Svg } from 'expo';
-import { Content, Card, CardItem, Text, Button, Header, Body, Title, Icon } from 'native-base';
+import { Content, Card, CardItem, Text, Button, Header, Body, Title, Item, Input } from 'native-base';
 import { Col, Row, Grid } from "react-native-easy-grid";
 import { NavigationActions } from 'react-navigation';
 const { Circle } = Svg;
@@ -17,7 +17,9 @@ export default class PetScreen extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
-            pet: {}
+            pet: {},
+            editing: false,
+            nameInput: ""
         }
     }
 
@@ -63,9 +65,22 @@ export default class PetScreen extends React.Component {
         this.props.navigation.dispatch(navigateToGameLobby);
     }
 
+    editName = () => {
+        this.setState(state => {
+            return {
+                editing: !state.editing
+            }
+        })
+    }
+
     render() {
         if (this.state.pet._id) {
             return (
+                <KeyboardAvoidingView
+                    style={{flex: 1}}
+                    behavior='padding'
+                    enabled
+                >
                 <Content style={styles.centeredContent} >
                     <Header>
                         <Body>
@@ -99,7 +114,17 @@ export default class PetScreen extends React.Component {
                                         <Text>Release</Text>
                                     </Button>
                                 </Row>
-                                <Text style={{ alignSelf: "center" }}>Name: {this.state.pet.name}</Text>
+                                
+                                {this.state.editing ? <Item rounded><Input value={this.state.pet.name} 
+                                    autoCapitalize='words'
+                                    onChangeText={(text) => this.setState({nameInput: text})}
+                                /></Item>
+                                : <Text style={{ alignSelf: "center" }}>Name: {this.state.pet.name}</Text>}
+                                <Button dark rounded small style={{ alignSelf: 'center', margin: 10 }}
+                                    onPress={() => this.editName()}
+                                >
+                                    <Text>Rename</Text>
+                                </Button>
                                 <Text style={{ alignSelf: "center" }}>Level: {this.state.pet.level}</Text>
                                 {this.state.pet.level > 1 && <Text style={{ alignSelf: "center" }}>Primary Game Color: {this.state.pet.gameColor.primary}</Text>}
                                 {this.state.pet.level > 9 && <Text style={{ alignSelf: "center" }}>Secondary Game Color: {this.state.pet.gameColor.secondary}</Text>}
@@ -108,6 +133,7 @@ export default class PetScreen extends React.Component {
                         </CardItem>
                     </Card>
                 </Content>
+                </KeyboardAvoidingView>
             );
         }
         else {
