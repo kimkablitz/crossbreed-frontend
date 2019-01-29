@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Platform, StyleSheet, View, AsyncStorage } from 'react-native';
+import { Platform, StyleSheet, View, AsyncStorage, KeyboardAvoidingView } from 'react-native';
 import { Container, Content, Form, Item, Input, Label, Text, Button} from 'native-base';
 import { NavigationActions } from "react-navigation";
 import * as Expo from 'expo';
@@ -80,7 +80,12 @@ export default class AUTHENTICATION extends Component {
       ? <View style={styles.container}>
         <Text style={styles.centerSelf}>Loading Stable...</Text>
       </View>
-      : <Container>
+      : <KeyboardAvoidingView
+        style={{flex: 1}}
+        behavior='padding'
+        enabled
+      >
+      <Container>
           {/* {Platform.OS === "ios"
             ? <View style={styles.container}> 
                 <Button style={styles.centerSelf} onPress={ () => this.googleSignIn() }>
@@ -108,6 +113,7 @@ export default class AUTHENTICATION extends Component {
               </Content>
           {/* } */}
         </Container>
+        </KeyboardAvoidingView>
       }
     )
   }
@@ -123,7 +129,7 @@ const styles = StyleSheet.create({
   },
   formContainer: {
     flex: 1 , 
-    justifyContent: "center"
+    justifyContent: "center",
   },
   centerSelf: {
     alignSelf: "center"
