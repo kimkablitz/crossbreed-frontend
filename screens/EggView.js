@@ -22,10 +22,12 @@ export default class EggScreen extends React.Component {
 
   componentWillMount() {
     const id = this.props.navigation.getParam('egg');
-    const { _id, createdOn, isFrozen, isStarter, parents } = param;
-    let selectedEggId = JSON.stringify(id)
+    console.log(id)
+    // const { _id, createdOn, isFrozen, isStarter, parents } = param;
+    const selectedEggId = JSON.stringify(id)
     console.log("hereis the ID" + selectedEggId);
-    API.getEgg(id).then(res => {
+    API.getEgg(selectedEggId).then(res => {
+      console.log(selectedEggId);
       console.log(res.data);
       var thisEgg = res.data
       this.setState({
@@ -36,24 +38,17 @@ export default class EggScreen extends React.Component {
     });
   }
 
-  // handleChange = event => {
-  //   this.setState({ eggId: event.target.value })
-  //   console.log("oops?")
-  // }
 
   releaseEgg = (egg) => {
-    console.log(egg)
-    // const eggId = {
-    //   id: this.state.egg._id
-    // };
-
     // event.preventDefault();
     // API.deleteEgg(selectedEggId)
-    axios.delete(`https://crossbreed-backend.herokuapp.com/api/eggs` + { eggId })
-    console.log("here!")
+    axios.delete("https://crossbreed-backend.herokuapp.com/api/eggs" + egg)
+    // console.log("here!")
       //  console.log(eggId)
-      .then(res => this.goHome())
-      .catch(err => console.log(err))
+      .then(res => {
+        console.log(res);
+        console.log("im testing" + res.data);
+      })
   }
 
   goHome = () => {
@@ -73,7 +68,7 @@ export default class EggScreen extends React.Component {
           onPress: () => console.log('Cancel Pressed'),
           style: 'cancel',
         },
-        { text: 'OK', onPress: () => this.releaseEgg() },
+        { text: 'OK', onPress: () => this.releaseEgg(selectedEggId) },
       ],
       { cancelable: false },
     )
@@ -84,9 +79,7 @@ export default class EggScreen extends React.Component {
   // const { _id, createdOn, isFrozen, isStarter, parents } = param;
 
   render() {
-
-    //     const param = this.props.navigation.getParam('eggId');
-    // const { _id, createdOn, isFrozen, isStarter, parents } = param;
+    // if (this.state.egg._id) {
     return (
       <Content style={styles.centeredContent}>
         <Card style={styles.centeredContent}>
@@ -106,21 +99,26 @@ export default class EggScreen extends React.Component {
                   <Text>Hatch</Text>
                 </Button>
                 <Button danger rounded style={{ flex: 1, margin: 10 }}
-                  // onPress={(eggId) => this.releaseEgg(eggId)}
-                  // onPress={this.handleChange}
+                  onPress={() => this.releaseEgg(selectedEggId)}
                   onPress={this.showConfirm}
                 >
                   <Text>Release</Text>
                 </Button>
               </Row>
               <Text style={{ alignSelf: "center" }}>Created: {this.state.egg.createdOn}</Text>
-              {this.parents && <Text style={{ alignSelf: "center" }}> {this.parents.length > 1 ? `Parents: ${this.parents[0].name}, ${this.parents[1].name}` : `Parents: THE WILD`}</Text>}
+              {this.state.egg.parents && <Text style={{ alignSelf: "center" }}> {this.state.egg.parents.length > 1 ? `Parents: ${this.state.egg.parents[0].name}, ${this.state.egg.parents[1].name}` : `Parents: THE WILD`}</Text>}
             </Body>
           </CardItem>
         </Card>
       </Content>
-    )
-  }
+    );
+  // }
+  // else {
+  //     return null;
+  //     console.log("The id does not exist")
+  //     }
+ }
+
 }
 
 
