@@ -40,14 +40,17 @@ export default class AUTHENTICATION extends Component {
 
   localSignIn = () => {
     if(this.state.username === "" || this.state.password === ""){
-      return Alerts.emptyFieldError();
+      return Alerts.singleButtonError("Error", "Please fill in all fields");
     }
     this.setState({ authenticating: true }, () => {
       API.login({ username: this.state.username, password: this.state.password })
       .then(res => this.goToHome(res.data))
       .catch(err => {
         this.setState({ authenticating: false }, () => {
-          return Alerts.loginError(err.response.data.message);
+          if(err.response.status === 403){
+            return Alerts.singleButtonError("Unable to login", err.response.data.message);
+          }
+          return Alerts.singleButtonError("Something went wrong!", "Please try again!");
         })
       })
     })

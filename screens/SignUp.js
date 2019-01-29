@@ -15,7 +15,7 @@ export default class SignUp extends Component {
 
     signUp = () => {
       if(this.state.username === "" || this.state.password === "" || this.state.displayName === ""){
-        return Alerts.emptyFieldError();
+        return Alerts.singleButtonError("Error", "Please fill in all fields");
       }
         // deconstruct state object
         const { username, password, displayName } = this.state;
@@ -28,7 +28,10 @@ export default class SignUp extends Component {
                 this.handleLoginRedirect(res.data)
             })
             .catch(err => {
-                console.log(err)
+                if(err.response.status === 403){
+                  return Alerts.singleButtonError("Sign up Failed", err.response.data.message);
+                }
+                return Alerts.singleButtonError("Something went wrong", "Please try again!");
             })
     }
 
