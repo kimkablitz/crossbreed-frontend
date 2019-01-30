@@ -17,7 +17,8 @@ export default EggCard = (props) => {
           >
               <Body>
                 <View style={{alignSelf: 'center'}}>
-                  <SlimeEgg />
+                {/* NOTE: we need to pass the prop 'lifeStage' to change icon...'egg', 'incubating', or 'readyToHatch' */}
+                  <SlimeEgg height="128" width="100" lifeStage="egg" />
                 </View>
               </Body>
           </CardItem>
