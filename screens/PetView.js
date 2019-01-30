@@ -38,6 +38,34 @@ export default class PetScreen extends React.Component {
         });
     }
 
+    releasePet = (pet) => {
+        console.log("pet id: " + pet);
+        // event.preventDefault();
+        API.deletePet(pet)
+     
+          .then(res => {
+            AsyncStorage.getItem("user").then( user => {
+              user = JSON.parse(user);
+              user.pets = user.pets.filter( pet => {
+                if (pet._id !== this.state.pet._id){
+                  return pet;
+                }
+              });
+              AsyncStorage.setItem("user", JSON.stringify(user)).then(() =>{
+                this.goHome();
+              })
+            })
+          })
+          .catch(err => console.log(err))
+      }
+      goHome = () => {
+        const navigateHome = NavigationActions.navigate({
+            routeName: "Home",
+        });
+        this.props.navigation.dispatch(navigateHome);
+    }
+
+
     toGameLobby = (pet) => {
         const navigateToGameLobby = NavigationActions.navigate({
             routeName: "GameLobby",
