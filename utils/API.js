@@ -20,32 +20,38 @@ export default {
     //     return axios.post("https://crossbreed-backend.herokuapp.com/auth/signup", userObj)
     // },
     savePet: (petObj, userId) => {
-        return axios.post(`${baseURL}/api/pet/` + userId, petObj)
+        return axios.post(`${baseURL}/api/pet/${userId}`, petObj)
     },
     getUserPets: (userId) => {
-        return axios.get(`${baseURL}/api/pet/` + userId)
+        return axios.get(`${baseURL}/api/pet/${userId}`)
     },
     breedPets: (parentsObj) => {
         return axios.post(`${baseURL}/api/eggs/`, parentsObj)
     },
     updatePetName: (petId, newName) => {
-        return axios.put(`${baseURL}/api/pets/` + petId, {name: newName} )
+        return axios.put(`${baseURL}/api/pets/${petId}`, {name: newName} )
     },
     saveEgg: (eggObj, userId) => {
-        return axios.post(`${baseURL}/api/eggs/` + userId, eggObj)
+        return axios.post(`${baseURL}/api/eggs/${userId}`, eggObj)
     },
     getEgg: (eggId) => {
-        return axios.get(`${baseURL}/api/eggs/` + eggId)
+        return axios.get(`${baseURL}/api/eggs/${eggId}`)
     },
     getUserEggs: (userId) => {
-        return axios.get(`${baseURL}/api/eggs/` + userId)
+        return axios.get(`${baseURL}/api/eggs/${userId}`)
     },
     getEgg: (eggId) => {
-        return axios.get(`${baseURL}/api/eggs/` + eggId)
+        return axios.get(`${baseURL}/api/eggs/${eggId}`)
     },
     deleteEgg: (eggId) => {
         return axios.delete(`${baseURL}/api/eggs/${eggId}`);
     }, 
+    updateEgg: (eggId, eggObj) => {
+        return axios.put(`${baseURL}/api/eggs/${eggId}`, eggObj);
+    },
+    hatchEgg: (eggObj) => {
+        return axios.post(`${baseURL}/api/pets`, eggObj);
+    },
     signUp: (userObj) => {
         return axios.post(`${baseURL}/auth/signup`, userObj);
     },

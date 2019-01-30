@@ -173,7 +173,7 @@ export default class PetScreen extends React.Component {
                                 <Text style={{ alignSelf: "center" }}>Level: {this.state.pet.level}</Text>
                                 {this.state.pet.level > 1 && <Text style={{ alignSelf: "center" }}>Primary Game Color: {this.state.pet.gameColor.primary}</Text>}
                                 {this.state.pet.level > 9 && <Text style={{ alignSelf: "center" }}>Secondary Game Color: {this.state.pet.gameColor.secondary}</Text>}
-                                {this.state.pet.parents && <Text style={{ alignSelf: "center" }}> {this.state.pet.parents.length > 1 ? `Parents: ${this.state.pet.parents[0]}, ${this.state.pet.parents[1]}` : `Parents: THE WILD`}</Text>}
+                                {this.state.pet.parents && <Text style={{ alignSelf: "center" }}> {this.state.pet.parents.length > 1 ? `Parents: ${this.state.pet.parents[0].name}, ${this.state.pet.parents[1].name}` : `Parents: THE WILD`}</Text>}
                             </Body>
                         </CardItem>
                     </Card>
