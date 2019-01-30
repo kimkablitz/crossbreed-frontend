@@ -28,6 +28,9 @@ export default {
     breedPets: (parentsObj) => {
         return axios.post(`${baseURL}/api/eggs/`, parentsObj)
     },
+    updatePetName: (petId, newName) => {
+        return axios.put(`${baseURL}/api/pets/` + petId, {name: newName} )
+    },
     saveEgg: (eggObj, userId) => {
         return axios.post(`${baseURL}/api/eggs/` + userId, eggObj)
     },

@@ -13,28 +13,28 @@ import { convertMongoDateToPST } from "../utils/action"
 
 
 export default class EggScreen extends React.Component {
-  static navigationOptions = {
-    header: null,
-  };
-  constructor(props) {
-    super(props)
-    this.state = {
-      egg: {}
+    static navigationOptions = {
+        header: null,
+    };
+    constructor(props) {
+        super(props)
+        this.state = {
+            egg: {}
+        }
     }
-  }
 
-  componentWillMount() {
-    const id = this.props.navigation.getParam('egg');
-    console.log(id)
-    API.getEgg(id).then(res => {
-      var thisEgg = res.data
-      this.setState({
-        egg: thisEgg
-      })
-    }).catch(err => {
-      console.log(err);
-    });
-  }
+    componentWillMount() {
+        const id = this.props.navigation.getParam('egg');
+        console.log(id)
+        API.getEgg(id).then(res => {
+            var thisEgg = res.data
+            this.setState({
+                egg: thisEgg
+            })
+        }).catch(err => {
+            console.log(err);
+        });
+    }
 
   releaseEgg = (egg) => {
     console.log("egg id: " + egg);
@@ -57,29 +57,29 @@ export default class EggScreen extends React.Component {
       .catch(err => console.log(err))
   }
 
-  goHome = () => {
-    const navigateHome = NavigationActions.navigate({
-      routeName: "Home",
-    });
-    this.props.navigation.dispatch(navigateHome);
-  }
+    goHome = () => {
+        const navigateHome = NavigationActions.navigate({
+            routeName: "Home",
+        });
+        this.props.navigation.dispatch(navigateHome);
+    }
 
-  showConfirm = () => {
-    Alert.alert(
-      'Are you sure you want to remove this egg?',
-      'Removal is permanent and cannot be undone',
-      [
-        {
-          text: 'Cancel',
-          onPress: () => console.log('Cancel Pressed'),
-          style: 'cancel',
-        },
-        { text: 'Remove egg', onPress: () => this.releaseEgg(this.state.egg._id) },
-      ],
-      { cancelable: false },
-    )
-    return true;
-  }
+    showConfirm = () => {
+        Alert.alert(
+            'Are you sure you want to remove this egg?',
+            'Removal is permanent and cannot be undone',
+            [
+                {
+                    text: 'Cancel',
+                    onPress: () => console.log('Cancel Pressed'),
+                    style: 'cancel',
+                },
+                { text: 'Remove egg', onPress: () => this.releaseEgg(this.state.egg._id) },
+            ],
+            { cancelable: false },
+        )
+        return true;
+    }
 
 
   render() {
