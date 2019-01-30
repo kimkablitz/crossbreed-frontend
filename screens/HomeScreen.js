@@ -8,12 +8,13 @@ import {
   View,
   AsyncStorage
 } from 'react-native';
-import axios from "axios";
+import _ from "lodash";
 import PetCard from '../components/Stable/PetCard';
 import EggCard from '../components/Stable/EggCard';
 import { Col, Row, Grid } from "react-native-easy-grid";
 import { NavigationActions } from 'react-navigation';
 import { Content, Container, Header, Body, Button, Title, Text } from 'native-base';
+import { throwIfAudioIsDisabled } from 'expo/build/av/Audio/AudioAvailability';
 
 export default class HomeScreen extends React.Component {
   static navigationOptions = {
@@ -25,7 +26,7 @@ export default class HomeScreen extends React.Component {
     // this will hold all the users's pets
     stalls: [],
     // this will hold all the user's eggs
-    eggs: []
+    eggs: [],
   }
 
   componentWillMount(){
@@ -48,17 +49,40 @@ export default class HomeScreen extends React.Component {
       if (value !== null) {
         // We have data!!
         const userInfo = JSON.parse(value);
-        // console.log(userInfo);
-        // console.log(userInfo.pets)
+        const incubatingEggs = [];
+        userInfo.eggs.map( egg => {
+          if(egg.lifeStage === "incubating"){
+            incubatingEggs.push(egg);
+          }
+        });
+        this.incubatingEggs = incubatingEggs;
+        if(this.incubatingEggs.length > 0){
+          this.incubationTimer();
+        }
         this.setState({ 
           stalls: userInfo.pets,
-          eggs: userInfo.eggs
+          eggs: userInfo.eggs,
         });
       }
     } catch (error) {
         // Error retrieving data
         console.log(error);
     }
+  }
+
+  incubationTimer = () => {
+    this.timer = setInterval( () => {
+      this.incubatingEggs.forEach((egg, index) => {
+        const now = Date.now();
+        if(parseInt(now) >= parseInt(egg.willHatchOn)){
+          this.incubatingEggs.splice(index, 1);
+        }
+      });
+      if(this.incubatingEggs.length === 0){
+        clearInterval(timer);
+      }
+      console.log("incubating eggs " + this.incubatingEggs);
+    }, 60000)
   }
 
   petOnPress = (index) => {
@@ -81,6 +105,38 @@ export default class HomeScreen extends React.Component {
 
   setView = (view) => {
     this.setState({ view: view });
+  }
+
+  mapPetsAndEggs = () => {
+    const renderArray = [];
+    this.state.stalls.map( (stall, index) => {
+      renderArray.push( <Col key={stall._id} style={{width: 150, height: 200}} >
+        <PetCard key={stall._id} data={stall} press={() => {this.petOnPress(index)}} />
+      </Col>)
+    });
+    if(this.state.eggs.length > 0){
+      this.state.eggs.map(( egg, index) => {
+        if(egg.lifeStage === "readyToHatch"){
+          renderArray.push( <Col key={egg._id} style={{width: 150, height: 200}} > 
+            <EggCard key={egg._id} data={egg} lifeStage={egg.lifeStage} press={() => {this.eggOnPress(index)}} />
+          </Col>)
+        }
+        else if(egg.lifeStage === "incubating"){
+          const now = Date.now();
+          if(parseInt(now) >= parseInt(egg.willHatchOn)){
+            renderArray.push( <Col key={egg._id} style={{width: 150, height: 200}} > 
+              <EggCard key={egg._id} data={egg} lifeStage="readyToHatch" press={() => {this.eggOnPress(index)}} />
+            </Col>)
+          }
+          else{
+            renderArray.push( <Col key={egg._id} style={{width: 150, height: 200}} > 
+              <EggCard key={egg._id} data={egg} lifeStage={egg.lifeStage} press={() => {this.eggOnPress(index)}} />
+            </Col>)
+          }
+        }
+      })
+    }
+    return renderArray;
   }
 
   render() {
@@ -109,22 +165,15 @@ export default class HomeScreen extends React.Component {
           <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
             <Grid>
               <Row style={{flexWrap: "wrap", justifyContent: 'space-evenly'}} > 
-                {this.state.stalls ? (this.state.view === "pets" ? (this.state.stalls.map( (stall, index) => {
-                    return <Col key={stall._id} style={{width: 150, height: 200}} >
-                      <PetCard key={stall._id} data={stall} press={() => {this.petOnPress(index)}} />
-                    </Col>
-                  })(this.state.eggs.length > 0 && (this.state.eggs.map(( egg, index) => {
-                    if(egg.lifeStage === "readyToHatch"){
+                {this.state.stalls ? (this.state.view === "pets" ? (this.mapPetsAndEggs().map( card => {
+                  return card;
+                }))
+                   : this.state.eggs.length > 0 ? (this.state.eggs.map((egg, index)  => {
+                    if(egg.lifeStage === "egg"){
                       return <Col key={egg._id} style={{width: 150, height: 200}} > 
-                        <EggCard key={egg._id} data={egg} press={() => {this.eggOnPress(index)}} />
+                        <EggCard key={egg._id} data={egg} lifeStage={egg.lifeStage} press={() => {this.eggOnPress(index)}} />
                       </Col>
                     }
-                  }))))
-                   : this.state.eggs.length > 0 ? (this.state.eggs.map((egg, index)  => {
-                    console.log();
-                    return <Col key={egg._id} style={{width: 150, height: 200}} > 
-                      <EggCard key={egg._id} data={egg} press={() => {this.eggOnPress(index)}} />
-                    </Col>
                   }) ) 
                   : <Text> No Eggs Here </Text>
                   )

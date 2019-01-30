@@ -87,7 +87,7 @@ export default class EggScreen extends React.Component {
     let timer = setInterval( () => {
         now = Date.now();
         timeTillHatch = parseInt(now) - parseInt(hatchTime);
-        console.log(hatchTime);
+        console.log(timeTillHatch);
         this.setState({ timeTillHatchable: timeTillHatch })
     }, 1000);
     if(timeTillHatch <= 0){
@@ -188,7 +188,7 @@ export default class EggScreen extends React.Component {
             <Body>
               <View style={styles.svgContainer}>
               {/* NOTE: to change the icon, we need to pass the prop 'lifeStage': 'egg', 'incubating' or 'readyToHatch' */}
-                <SlimeEgg height="205" width="200" scale="1.6" lifeStage="egg" />
+                <SlimeEgg height="205" width="200" scale="1.6" lifeStage={this.state.egg.lifeStage} />
               </View>
             </Body>
           </CardItem>
