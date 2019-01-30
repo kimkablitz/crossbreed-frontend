@@ -1,7 +1,7 @@
 import React from 'react';
 import API from '../utils/API'
 
-import { StyleSheet, View, KeyboardAvoidingView, AsyncStorage } from 'react-native';
+import { StyleSheet, View, KeyboardAvoidingView, AsyncStorage, Alert } from 'react-native';
 import { Svg } from 'expo';
 import { Content, Card, CardItem, Text, Button, Header, Body, Title, Item, Input } from 'native-base';
 import { Col, Row, Grid } from "react-native-easy-grid";
@@ -37,6 +37,51 @@ export default class PetScreen extends React.Component {
             console.log(err);
         });
     }
+
+    releasePet = (pet) => {
+        console.log("pet id: " + pet);
+        // event.preventDefault();
+        API.deletePet(pet)
+     
+          .then(res => {
+            AsyncStorage.getItem("user").then( user => {
+              user = JSON.parse(user);
+              user.pets = user.pets.filter( pet => {
+                if (pet._id !== this.state.pet._id){
+                  return pet;
+                }
+              });
+              AsyncStorage.setItem("user", JSON.stringify(user)).then(() =>{
+                this.goHome();
+              })
+            })
+          })
+          .catch(err => console.log(err))
+      }
+      goHome = () => {
+        const navigateHome = NavigationActions.navigate({
+            routeName: "Home",
+        });
+        this.props.navigation.dispatch(navigateHome);
+    }
+
+    showConfirm = () => {
+        Alert.alert(
+            'Are you sure you want to remove this Pet?',
+            'Removal is permanent and cannot be undone',
+            [
+                {
+                    text: 'Cancel',
+                    onPress: () => console.log('Cancel Pressed'),
+                    style: 'cancel',
+                },
+                { text: 'Remove pet', onPress: () => this.releasePet(this.state.pet._id) },
+            ],
+            { cancelable: false },
+        )
+        return true;
+    }
+
 
     toGameLobby = (pet) => {
         const navigateToGameLobby = NavigationActions.navigate({
@@ -105,6 +150,7 @@ export default class PetScreen extends React.Component {
         });
     }
 
+
     render() {
         if (this.state.pet._id) {
             return (
@@ -141,7 +187,8 @@ export default class PetScreen extends React.Component {
                                         <Text>Breed</Text>
                                     </Button>
                                     <Button danger rounded style={{ margin: 10 }}
-                                        onPress={() => this.releasePet(pet)}
+                                        // onPress={() => this.releasePet(pet)}
+                                        onPress={this.showConfirm}
                                     >
                                         <Text>Release</Text>
                                     </Button>
@@ -173,7 +220,7 @@ export default class PetScreen extends React.Component {
                                 <Text style={{ alignSelf: "center" }}>Level: {this.state.pet.level}</Text>
                                 {this.state.pet.level > 1 && <Text style={{ alignSelf: "center" }}>Primary Game Color: {this.state.pet.gameColor.primary}</Text>}
                                 {this.state.pet.level > 9 && <Text style={{ alignSelf: "center" }}>Secondary Game Color: {this.state.pet.gameColor.secondary}</Text>}
-                                {this.state.pet.parents && <Text style={{ alignSelf: "center" }}> {this.state.pet.parents.length > 1 ? `Parents: ${this.state.pet.parents[0]}, ${this.state.pet.parents[1]}` : `Parents: THE WILD`}</Text>}
+                                {this.state.pet.parents && <Text style={{ alignSelf: "center" }}> {this.state.pet.parents.length > 1 ? `Parents: ${this.state.pet.parents[0].name}, ${this.state.pet.parents[1].name}` : `Parents: THE WILD`}</Text>}
                             </Body>
                         </CardItem>
                     </Card>

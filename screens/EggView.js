@@ -19,7 +19,8 @@ export default class EggScreen extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
-            egg: {}
+            egg: {},
+            timeTillHatchable: 0
         }
     }
 
@@ -28,8 +29,18 @@ export default class EggScreen extends React.Component {
         console.log(id)
         API.getEgg(id).then(res => {
             var thisEgg = res.data
+            console.log(thisEgg);
             this.setState({
                 egg: thisEgg
+            }, () => {
+                const now = Date.now();
+                if( parseInt(now) >= parseInt(this.state.egg.willHatchOn)){
+                    this.readyToHatch();
+                }
+                else{
+                    const { willHatchOn } = this.state.egg;
+                    this.hatchTimer(willHatchOn);
+                }
             })
         }).catch(err => {
             console.log(err);
@@ -40,7 +51,6 @@ export default class EggScreen extends React.Component {
     console.log("egg id: " + egg);
     // event.preventDefault();
     API.deleteEgg(egg)
- 
       .then(res => {
         AsyncStorage.getItem("user").then( user => {
           user = JSON.parse(user);
@@ -55,6 +65,75 @@ export default class EggScreen extends React.Component {
         })
       })
       .catch(err => console.log(err))
+  }
+
+  incubateEgg = () => {
+    const now = Date.now();
+    const { _id, duration } = this.state.egg;
+    const eggObj = {
+        lifeStage: "incubating",
+        startIncubate: now,
+        duration: duration
+    }
+    this.updateEggViaAPI( _id, eggObj);
+  }
+
+  hatchTimer = (hatchTime) => {
+    let now;
+    let timer = setInterval( () => {
+        const now = Date.now();
+        const timeTillHatch = parseInt(now) - parseInt(hatchTime);
+        this.setState({ timeTillHatchable: timeTillHatch })
+    }, 1000);
+  }
+
+  readyToHatch = () => {
+      const eggObj = { lifeStage : "readyToHatch" }
+      const { _id } = this.state.egg;
+      this.updateEggViaAPI( _id, eggObj);
+  }
+
+  hatchEgg = () => {
+      API.hatchEgg(this.state.egg)
+      .then(res => {
+          AsyncStorage.getItem("user").then(user => {
+              user = JSON.parse(user);
+              user.eggs = user.eggs.filter( egg => {
+                  if(egg._id !== this.state.egg._id){
+                      return egg;
+                  }
+              });
+              user.pets.push(res.data);
+              AsyncStorage.setItem("user", JSON.stringify(user)).then( () => {
+                const navigate = NavigationActions.navigate({
+                    routeName: "PetScreen",
+                    params: {pet: res.data._id}
+                  });
+                this.props.navigation.dispatch(navigate);
+              })
+          })
+      })
+      .catch( err => {
+          console.log(err);
+      })
+  }
+
+  updateEggViaAPI = ( _id, eggObj ) => {
+    API.updateEgg(_id, eggObj)
+    .then( res => {
+        AsyncStorage.getItem("user").then( user => {
+            user = JSON.parse(user);
+            user.eggs = user.eggs.map( egg => {
+                if(egg._id === this.state.egg._id){
+                    egg.lifeStage = res.data.lifeStage;
+                }
+                return egg;
+            });
+            AsyncStorage.setItem("user", JSON.stringify(user)).then( () => {
+                this.setState({ egg: res.data });
+            });
+        })
+    })
   }
 
     goHome = () => {
@@ -105,9 +184,19 @@ export default class EggScreen extends React.Component {
             <Body>
               <Row style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-evenly', alignItems: 'center' }}>
                 <Button success rounded style={{ flex: 1, margin: 10 }}
-                  onPress={() => this.hatchEgg(egg)}
+                  disabled={ this.state.egg.lifeStage === "incubating" ? true : false }
+                  onPress={() => {
+                      if(this.state.egg.lifeStage === "egg"){
+                          this.incubateEgg();
+                      }
+                      else if(this.state.egg.lifeStage === "readyToHatch"){
+                          this.hatchEgg();
+                      }
+                  }}
                 >
-                  <Text>Hatch</Text>
+                  <Text>
+                      { this.state.egg.lifeStage !== "egg" ? "Hatch" : "Incubate" }
+                  </Text>
                 </Button>
                 <Button danger rounded style={{ flex: 1, margin: 10 }}
                   onPress={this.showConfirm}
