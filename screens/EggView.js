@@ -39,7 +39,9 @@ export default class EggScreen extends React.Component {
                 }
                 else{
                     const { willHatchOn } = this.state.egg;
-                    this.hatchTimer(willHatchOn);
+                    if(willHatchOn){
+                        this.hatchTimer(willHatchOn);
+                    }
                 }
             })
         }).catch(err => {
@@ -69,7 +71,7 @@ export default class EggScreen extends React.Component {
 
   incubateEgg = () => {
     const now = Date.now();
-    const { _id, duration } = this.state.egg;
+    const { _id, duration, willHatchOn } = this.state.egg;
     const eggObj = {
         lifeStage: "incubating",
         startIncubate: now,
@@ -79,12 +81,18 @@ export default class EggScreen extends React.Component {
   }
 
   hatchTimer = (hatchTime) => {
+    console.log("in hatchTimer")
     let now;
+    let timeTillHatch;
     let timer = setInterval( () => {
-        const now = Date.now();
-        const timeTillHatch = parseInt(now) - parseInt(hatchTime);
+        now = Date.now();
+        timeTillHatch = parseInt(now) - parseInt(hatchTime);
+        console.log(hatchTime);
         this.setState({ timeTillHatchable: timeTillHatch })
     }, 1000);
+    if(timeTillHatch <= 0){
+        clearInterval(timer);
+    }
   }
 
   readyToHatch = () => {
@@ -130,7 +138,11 @@ export default class EggScreen extends React.Component {
                 return egg;
             });
             AsyncStorage.setItem("user", JSON.stringify(user)).then( () => {
-                this.setState({ egg: res.data });
+                this.setState({ egg: res.data }, () => {
+                    if(res.data.lifeStage === "incubating"){
+                        this.hatchTimer(res.data.willHatchOn);
+                    }
+                });
             });
         })
     })
@@ -181,6 +193,9 @@ export default class EggScreen extends React.Component {
           </CardItem>
           <CardItem>
             <Body>
+              <Row>
+                  <Text>{this.state.timeTillHatchable > 0 && this.state.timeTillHatchable}</Text>
+              </Row>
               <Row style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-evenly', alignItems: 'center' }}>
                 <Button success rounded style={{ flex: 1, margin: 10 }}
                   disabled={ this.state.egg.lifeStage === "incubating" ? true : false }

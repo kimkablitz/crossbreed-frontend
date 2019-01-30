@@ -28,39 +28,28 @@ export default class HomeScreen extends React.Component {
     eggs: []
   }
 
-  // getPets = (event) => {
-  //   event.preventDefault();
-  //   axios
-  //   .get("localhost:3000/")
-  //   .then(({ data: { results } }) => {
-  //     console.log(results)
-  //     this.setState({stalls: results})
-  //   })
-  //   .catch(err => console.log(err));
-  // }
   componentWillMount(){
-    this.grabAsynStorage();
+    this.grabAsyncStorage();
   }
 
   componentDidMount(){
     const willFocus = this.props.navigation.addListener(
       'willFocus',
       () => {
-        this.setState({stalls: []}, this.grabAsynStorage);
+        this.setState({stalls: []}, this.grabAsyncStorage);
       }
     );
   }
 
-  grabAsynStorage = async () => {
+  grabAsyncStorage = async () => {
     try {
-      // Temporary method of passing pets to game lobby, in future, user info should contain pets
       // await AsyncStorage.setItem('pets', JSON.stringify(this.state.stalls));
       const value = await AsyncStorage.getItem('user');
       if (value !== null) {
         // We have data!!
         const userInfo = JSON.parse(value);
-        console.log(userInfo);
-        console.log(userInfo.pets)
+        // console.log(userInfo);
+        // console.log(userInfo.pets)
         this.setState({ 
           stalls: userInfo.pets,
           eggs: userInfo.eggs
@@ -120,20 +109,27 @@ export default class HomeScreen extends React.Component {
           <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
             <Grid>
               <Row style={{flexWrap: "wrap", justifyContent: 'space-evenly'}} > 
-                {this.state.stalls ? (this.state.view === "pets" ? this.state.stalls.map( (stall, index) => {
-                return <Col key={stall._id} style={{width: 150, height: 200}} >
-                  <PetCard key={stall._id} data={stall} press={() => {this.petOnPress(index)}} />
-                </Col>
-                }) : this.state.eggs.length > 0 ? (this.state.eggs.map((egg, index) => {
-                  console.log();
-                  return <Col key={egg._id} style={{width: 150, height: 200}} > 
-                    <EggCard key={egg._id} data={egg} press={() => {this.eggOnPress(index)}} />
-                  </Col>
-                }) ) 
-                : <Text> No Eggs Here </Text>
-                )
-              : <Text> Loading Stable </Text>
-              }
+                {this.state.stalls ? (this.state.view === "pets" ? (this.state.stalls.map( (stall, index) => {
+                    return <Col key={stall._id} style={{width: 150, height: 200}} >
+                      <PetCard key={stall._id} data={stall} press={() => {this.petOnPress(index)}} />
+                    </Col>
+                  })(this.state.eggs.length > 0 && (this.state.eggs.map(( egg, index) => {
+                    if(egg.lifeStage === "readyToHatch"){
+                      return <Col key={egg._id} style={{width: 150, height: 200}} > 
+                        <EggCard key={egg._id} data={egg} press={() => {this.eggOnPress(index)}} />
+                      </Col>
+                    }
+                  }))))
+                   : this.state.eggs.length > 0 ? (this.state.eggs.map((egg, index)  => {
+                    console.log();
+                    return <Col key={egg._id} style={{width: 150, height: 200}} > 
+                      <EggCard key={egg._id} data={egg} press={() => {this.eggOnPress(index)}} />
+                    </Col>
+                  }) ) 
+                  : <Text> No Eggs Here </Text>
+                  )
+                : <Text> Loading Stable </Text>
+                }
               </Row>
             </Grid>
           </ScrollView>
