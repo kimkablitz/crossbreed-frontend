@@ -6,6 +6,7 @@ import TinyPetCard from '../components/Stable/TinyPetCard';
 import { Col, Row, Grid } from 'react-native-easy-grid';
 import { Header, Body, Title, Button, Text, Content } from 'native-base';
 import { NavigationActions } from 'react-navigation';
+import Alerts from "../utils/Alerts";
 
 export default class BreedScreen extends React.Component {
   static navigationOptions = {
@@ -130,7 +131,7 @@ export default class BreedScreen extends React.Component {
         })
       })
     })
-    .catch(err => console.log(err));
+    .catch(err => Alerts.singleButtonError("Error", "Something went wrong! Please try again!"));
   }
 
   render() {
