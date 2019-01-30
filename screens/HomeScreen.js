@@ -121,12 +121,12 @@ export default class HomeScreen extends React.Component {
             <Grid>
               <Row style={{flexWrap: "wrap", justifyContent: 'space-evenly'}} > 
                 {this.state.stalls ? (this.state.view === "pets" ? this.state.stalls.map( (stall, index) => {
-                return <Col key={stall._id} style={{width: 150, height: 200}} >
+                return <Col key={stall._id} style={{width: 150}} >
                   <PetCard key={stall._id} data={stall} press={() => {this.petOnPress(index)}} />
                 </Col>
                 }) : this.state.eggs.length > 0 ? (this.state.eggs.map((egg, index) => {
                   console.log();
-                  return <Col key={egg._id} style={{width: 150, height: 200}} > 
+                  return <Col key={egg._id} style={{width: 150}} > 
                     <EggCard key={egg._id} data={egg} press={() => {this.eggOnPress(index)}} />
                   </Col>
                 }) ) 
