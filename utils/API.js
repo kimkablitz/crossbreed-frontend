@@ -28,6 +28,9 @@ export default {
     breedPets: (parentsObj) => {
         return axios.post(`${baseURL}/api/eggs/`, parentsObj)
     },
+    deletePet: (petId) => {
+        return axios.delete(`${baseURL}/api/pets/${petId}`);
+    }, 
     updatePetName: (petId, newName) => {
         return axios.put(`${baseURL}/api/pets/${petId}`, {name: newName} )
     },
