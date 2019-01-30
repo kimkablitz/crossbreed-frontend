@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import axios from 'axios';
+// import axios from 'axios';
 import { StyleSheet, View, Alert, AsyncStorage } from 'react-native';
 import { Svg } from 'expo';
 import { Content, Header, Title, Card, CardItem, Text, Button, Body } from 'native-base';
@@ -8,6 +8,9 @@ import { NavigationActions, StackActions } from 'react-navigation';
 const { Circle } = Svg;
 import SlimeEgg from "../components/SlimeEgg";
 import API from "../utils/API";
+import { convertMongoDateToPST } from "../utils/action"
+
+
 
 export default class EggScreen extends React.Component {
   static navigationOptions = {
@@ -37,9 +40,7 @@ export default class EggScreen extends React.Component {
     console.log("egg id: " + egg);
     // event.preventDefault();
     API.deleteEgg(egg)
-   //axios.delete("https://crossbreed-backend.herokuapp.com/api/eggs" + egg)
-    // console.log("here!")
-      //  console.log(eggId)
+ 
       .then(res => {
         AsyncStorage.getItem("user").then( user => {
           user = JSON.parse(user);
@@ -80,10 +81,9 @@ export default class EggScreen extends React.Component {
     return true;
   }
 
-  // const param = props.navigation.getParam('eggId');
-  // const { _id, createdOn, isFrozen, isStarter, parents } = param;
 
   render() {
+    const eggMadeTime = this.state.egg.createdOn
     // if (this.state.egg._id) {
     return (
       <Content style={styles.centeredContent}>
@@ -114,7 +114,7 @@ export default class EggScreen extends React.Component {
                   <Text>Release</Text>
                 </Button>
               </Row>
-              <Text style={{ alignSelf: "center" }}>Created: {this.state.egg.createdOn}</Text>
+              <Text style={{ alignSelf: "center" }}>Created: {convertMongoDateToPST(eggMadeTime)} </Text>
               {this.state.egg.parents && <Text style={{ alignSelf: "center" }}> {this.state.egg.parents.length > 1 ? `Parents: ${this.state.egg.parents[0].name}, ${this.state.egg.parents[1].name}` : `Parents: THE WILD`}</Text>}
             </Body>
           </CardItem>
