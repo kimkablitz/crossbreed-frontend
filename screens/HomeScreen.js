@@ -123,26 +123,26 @@ export default class HomeScreen extends React.Component {
   mapPetsAndEggs = () => {
     const renderArray = [];
     this.state.stalls.map( (stall, index) => {
-      renderArray.push( <Col key={stall._id} style={{width: 150, height: 200}} >
+      renderArray.push( <Col key={stall._id} style={{width: 150}} >
         <PetCard key={stall._id} data={stall} press={() => {this.petOnPress(index)}} />
       </Col>)
     });
     if(this.state.eggs.length > 0){
       this.state.eggs.map(( egg, index) => {
         if(egg.lifeStage === "readyToHatch"){
-          renderArray.push( <Col key={egg._id} style={{width: 150, height: 200}} > 
+          renderArray.push( <Col key={egg._id} style={{width: 150}} > 
             <EggCard key={egg._id} data={egg} lifeStage={egg.lifeStage} press={() => {this.eggOnPress(index)}} />
           </Col>)
         }
         else if(egg.lifeStage === "incubating"){
           const now = Date.now();
           if(parseInt(now) >= parseInt(egg.willHatchOn)){
-            renderArray.push( <Col key={egg._id} style={{width: 150, height: 200}} > 
+            renderArray.push( <Col key={egg._id} style={{width: 150}} > 
               <EggCard key={egg._id} data={egg} lifeStage="readyToHatch" press={() => {this.eggOnPress(index)}} />
             </Col>)
           }
           else{
-            renderArray.push( <Col key={egg._id} style={{width: 150, height: 200}} > 
+            renderArray.push( <Col key={egg._id} style={{width: 150}} > 
               <EggCard key={egg._id} data={egg} lifeStage={egg.lifeStage} press={() => {this.eggOnPress(index)}} />
             </Col>)
           }
