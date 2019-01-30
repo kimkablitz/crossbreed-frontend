@@ -100,7 +100,7 @@ export default class EggScreen extends React.Component {
         console.log(timeTillHatch);
         if(timeTillHatch <= 0){
             this.readyToHatch();
-            clearInterval(timer);
+            clearInterval(this.timer);
         }
     }, 60000);
   }
@@ -207,7 +207,7 @@ export default class EggScreen extends React.Component {
             <Body>
               <View style={styles.svgContainer}>
               {/* NOTE: to change the icon, we need to pass the prop 'lifeStage': 'egg', 'incubating' or 'readyToHatch' */}
-                <SlimeEgg height="205" width="200" scale="1.6" lifeStage={this.state.egg.lifeStage} />
+                <SlimeEgg height="205" width="200" scale="1.6" transformX="10" lifeStage={this.state.egg.lifeStage} />
               </View>
             </Body>
           </CardItem>
@@ -217,7 +217,7 @@ export default class EggScreen extends React.Component {
                   <Text>{this.state.timeTillHatchable > 0 && this.state.timeTillHatchable}</Text>
               </Row>
               <Row style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-evenly', alignItems: 'center' }}>
-                <Button success rounded style={{ flex: 1, margin: 10 }}
+                <Button success rounded style={{ flex: 1, margin: 10, justifyContent: "center" }}
                   disabled={ this.state.egg.lifeStage === "incubating" ? true : false }
                   onPress={() => {
                       if(this.state.egg.lifeStage === "egg"){
@@ -232,7 +232,7 @@ export default class EggScreen extends React.Component {
                       { this.state.egg.lifeStage !== "egg" ? "Hatch" : "Incubate" }
                   </Text>
                 </Button>
-                <Button danger rounded style={{ flex: 1, margin: 10 }}
+                <Button danger rounded style={{ flex: 1, margin: 10, justifyContent: "center" }}
                   onPress={this.showConfirm}
                 >
                   <Text>Release</Text>
