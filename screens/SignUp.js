@@ -4,6 +4,7 @@ import { Container, Header, Content, Form, Item, Input, Label, Button, Text } fr
 import { NavigationActions } from "react-navigation";
 import API from "../utils/API";
 import Alerts from "../utils/Alerts";
+import validator from '../utils/validation';
 
 export default class SignUp extends Component {
 
@@ -19,6 +20,10 @@ export default class SignUp extends Component {
       }
         // deconstruct state object
         const { username, password, displayName } = this.state;
+        const passwordMessage = validator.password(password)
+        if (passwordMessage !== "Success") {
+          return Alerts.singleButtonError(passwordMessage.title, passwordMessage.message)
+        }
 
         // create newUser object to be sent to database
         const newUser = { username, password, displayName };
