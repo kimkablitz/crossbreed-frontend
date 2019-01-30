@@ -131,12 +131,12 @@ export default class PetScreen extends React.Component {
                             <Body style={{justifyContent: 'center'}}>
                                 <Row style={{flex: 1, alignSelf: 'center'}}>
                                     <Button success rounded style={{ margin: 10 }}
-                                        onPress={() => this.toGameLobby(param)}
+                                        onPress={() => this.toGameLobby(this.state.pet)}
                                     >
                                         <Text>Play</Text>
                                     </Button>
                                     <Button warning rounded style={{ margin: 10 }}
-                                        onPress={() => this.toBreedPage(param)}
+                                        onPress={() => this.toBreedPage(this.state.pet)}
                                     >
                                         <Text>Breed</Text>
                                     </Button>
