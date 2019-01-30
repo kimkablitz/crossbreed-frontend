@@ -1,7 +1,7 @@
 import React from 'react';
 import API from '../utils/API'
 
-import { StyleSheet, View, KeyboardAvoidingView, AsyncStorage } from 'react-native';
+import { StyleSheet, View, KeyboardAvoidingView, AsyncStorage, Alert } from 'react-native';
 import { Svg } from 'expo';
 import { Content, Card, CardItem, Text, Button, Header, Body, Title, Item, Input } from 'native-base';
 import { Col, Row, Grid } from "react-native-easy-grid";
@@ -63,6 +63,23 @@ export default class PetScreen extends React.Component {
             routeName: "Home",
         });
         this.props.navigation.dispatch(navigateHome);
+    }
+
+    showConfirm = () => {
+        Alert.alert(
+            'Are you sure you want to remove this Pet?',
+            'Removal is permanent and cannot be undone',
+            [
+                {
+                    text: 'Cancel',
+                    onPress: () => console.log('Cancel Pressed'),
+                    style: 'cancel',
+                },
+                { text: 'Remove pet', onPress: () => this.releasePet(this.state.pet._id) },
+            ],
+            { cancelable: false },
+        )
+        return true;
     }
 
 
@@ -133,6 +150,7 @@ export default class PetScreen extends React.Component {
         });
     }
 
+
     render() {
         if (this.state.pet._id) {
             return (
@@ -169,7 +187,8 @@ export default class PetScreen extends React.Component {
                                         <Text>Breed</Text>
                                     </Button>
                                     <Button danger rounded style={{ margin: 10 }}
-                                        onPress={() => this.releasePet(pet)}
+                                        // onPress={() => this.releasePet(pet)}
+                                        onPress={this.showConfirm}
                                     >
                                         <Text>Release</Text>
                                     </Button>
