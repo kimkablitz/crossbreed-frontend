@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const baseURL = "http://192.168.0.6:3001" //"https://crossbreed-backend.herokuapp.com"
+const baseURL = "http://10.19.105.66:3001" //"https://crossbreed-backend.herokuapp.com"
 
 export default {
     
@@ -27,6 +27,9 @@ export default {
     },
     breedPets: (parentsObj) => {
         return axios.post(`${baseURL}/api/eggs/`, parentsObj)
+    },
+    updatePetName: (petId, newName) => {
+        return axios.put(`${baseURL}/api/pets/` + petId, {name: newName} )
     },
     saveEgg: (eggObj, userId) => {
         return axios.post(`${baseURL}/api/eggs/` + userId, eggObj)

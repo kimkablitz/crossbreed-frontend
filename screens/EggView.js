@@ -49,12 +49,12 @@ export default class EggScreen extends React.Component {
                     <CardItem>
                         <Body>
                             <Row style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-evenly', alignItems: 'center' }}>
-                                <Button success rounded style={{ flex: 1, margin: 10 }}
+                                <Button success rounded style={{ flex: 1, textAlign: 'center', margin: 10 }}
                                     onPress={() => this.hatchEgg(this.state.egg._id)}
                                 >
                                     <Text>Hatch</Text>
                                 </Button>
-                                <Button danger rounded style={{ flex: 1, margin: 10 }}
+                                <Button danger rounded style={{ flex: 1, textAlign: 'center', margin: 10 }}
                                     onPress={() => this.releaseEgg(this.state.egg._id)}
                                 >
                                     <Text>Release</Text>

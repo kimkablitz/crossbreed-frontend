@@ -1,7 +1,7 @@
 import React from 'react';
 import API from '../utils/API'
 
-import { StyleSheet, View, KeyboardAvoidingView } from 'react-native';
+import { StyleSheet, View, KeyboardAvoidingView, AsyncStorage } from 'react-native';
 import { Svg } from 'expo';
 import { Content, Card, CardItem, Text, Button, Header, Body, Title, Item, Input } from 'native-base';
 import { Col, Row, Grid } from "react-native-easy-grid";
@@ -30,7 +30,8 @@ export default class PetScreen extends React.Component {
             console.log(res.data);
             var thisPet = res.data
             this.setState({
-                pet: thisPet
+                pet: thisPet,
+                nameInput: thisPet.name
             })
         }).catch(err => {
             console.log(err);
@@ -66,11 +67,42 @@ export default class PetScreen extends React.Component {
     }
 
     editName = () => {
-        this.setState(state => {
-            return {
-                editing: !state.editing
-            }
+        this.setState({
+            editing: true
         })
+    }
+
+    confirmEditName = () => {
+        API.updatePetName(this.state.pet._id, this.state.nameInput)
+        .then(res => {
+            AsyncStorage.getItem("user").then( user => {
+                user = JSON.parse(user);
+                user.pets = user.pets.map(pet => {
+                    if(pet._id === res.data._id) {
+                        return res.data
+                    }
+                    return pet
+                });
+                AsyncStorage.setItem("user", JSON.stringify(user)).then( () => {
+                    this.setState({
+                        pet: res.data,
+                        editing: false,
+                        nameInput: res.data.name
+                    })
+                })
+              })
+        })
+        .catch(err => {
+            console.log(err)
+        })
+    }
+    cancelEditName = () => {
+        this.setState( state => {
+            return {
+                editing: true,
+                nameInput: state.pet.name
+            }
+        });
     }
 
     render() {
@@ -96,8 +128,8 @@ export default class PetScreen extends React.Component {
                             </Body>
                         </CardItem>
                         <CardItem>
-                            <Body>
-                                <Row size={1}>
+                            <Body style={{justifyContent: 'center'}}>
+                                <Row style={{flex: 1, alignSelf: 'center'}}>
                                     <Button success rounded style={{ margin: 10 }}
                                         onPress={() => this.toGameLobby(param)}
                                     >
@@ -115,16 +147,29 @@ export default class PetScreen extends React.Component {
                                     </Button>
                                 </Row>
                                 
-                                {this.state.editing ? <Item rounded><Input value={this.state.pet.name} 
+                                {this.state.editing ? <Item rounded><Input value={this.state.nameInput} 
                                     autoCapitalize='words'
                                     onChangeText={(text) => this.setState({nameInput: text})}
                                 /></Item>
                                 : <Text style={{ alignSelf: "center" }}>Name: {this.state.pet.name}</Text>}
-                                <Button dark rounded small style={{ alignSelf: 'center', margin: 10 }}
+                                {this.state.editing ? 
+                                    <Row style={{flex: 1, alignSelf: 'center' }}>
+                                        <Button success rounded small style={{ alignSelf: 'center', margin: 10 }}
+                                            onPress={() => this.confirmEditName()}
+                                        >
+                                            <Text>Confirm</Text>
+                                        </Button>
+                                        <Button danger rounded small style={{ alignSelf: 'center', margin: 10 }}
+                                            onPress={() => this.cancelEditName()}
+                                        >
+                                            <Text>Cancel</Text>
+                                        </Button>
+                                    </Row>
+                                : <Button dark rounded small style={{ alignSelf: 'center', margin: 10 }}
                                     onPress={() => this.editName()}
                                 >
                                     <Text>Rename</Text>
-                                </Button>
+                                </Button>}
                                 <Text style={{ alignSelf: "center" }}>Level: {this.state.pet.level}</Text>
                                 {this.state.pet.level > 1 && <Text style={{ alignSelf: "center" }}>Primary Game Color: {this.state.pet.gameColor.primary}</Text>}
                                 {this.state.pet.level > 9 && <Text style={{ alignSelf: "center" }}>Secondary Game Color: {this.state.pet.gameColor.secondary}</Text>}
