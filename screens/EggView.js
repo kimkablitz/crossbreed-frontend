@@ -7,24 +7,38 @@ import { Col, Row, Grid } from "react-native-easy-grid";
 import { NavigationActions, StackActions } from 'react-navigation';
 const { Circle } = Svg;
 import SlimeEgg from "../components/SlimeEgg";
+import Timer from "../components/Stable/IncubationTimer";
 import API from "../utils/API";
 import { convertMongoDateToPST } from "../utils/action"
 
 
 
-export default class EggScreen extends React.Component {
+export default class EggScreen extends Component {
     static navigationOptions = {
         header: null,
     };
     constructor(props) {
         super(props)
         this.state = {
-            egg: {},
-            timeTillHatchable: 0
-        }
+            egg: {}
+        },
+        this.incubationTimer;
     }
 
     componentWillMount() {
+        this.grabEggInfo();
+    }
+
+    componentDidMount(){
+        this.props.navigation.addListener(
+            "willFocus",
+            () => {
+                this.grabEggInfo();
+            }
+        )
+    }
+
+    grabEggInfo = () => {
         const id = this.props.navigation.getParam('egg');
         console.log(id)
         API.getEgg(id).then(res => {
@@ -39,7 +53,9 @@ export default class EggScreen extends React.Component {
                 }
                 else{
                     const { willHatchOn } = this.state.egg;
-                    this.hatchTimer(willHatchOn);
+                    if(willHatchOn){
+                        this.hatchTimer(willHatchOn);
+                    }
                 }
             })
         }).catch(err => {
@@ -69,7 +85,7 @@ export default class EggScreen extends React.Component {
 
   incubateEgg = () => {
     const now = Date.now();
-    const { _id, duration } = this.state.egg;
+    const { _id, duration, willHatchOn } = this.state.egg;
     const eggObj = {
         lifeStage: "incubating",
         startIncubate: now,
@@ -79,12 +95,21 @@ export default class EggScreen extends React.Component {
   }
 
   hatchTimer = (hatchTime) => {
-    let now;
-    let timer = setInterval( () => {
-        const now = Date.now();
-        const timeTillHatch = parseInt(now) - parseInt(hatchTime);
-        this.setState({ timeTillHatchable: timeTillHatch })
-    }, 1000);
+    console.log("in hatchTimer")
+    // let now = Date.now();
+    // let timeTillHatch = parseInt(hatchTime) - parseInt(now);
+    // if(timeTillHatch > 0){
+    //     this.incubationTimer = timeTillHatch;
+    // }
+    this.timer = setInterval( () => {
+        now = Date.now();
+        timeTillHatch = parseInt(hatchTime) - parseInt(now);
+        this.setState({ timeTillHatchable: timeTillHatch });
+        if(timeTillHatch <= 0){
+            this.readyToHatch();
+            clearInterval(this.timer);
+        }
+    }, 60000);
   }
 
   readyToHatch = () => {
@@ -105,11 +130,19 @@ export default class EggScreen extends React.Component {
               });
               user.pets.push(res.data);
               AsyncStorage.setItem("user", JSON.stringify(user)).then( () => {
-                const navigate = NavigationActions.navigate({
-                    routeName: "PetScreen",
-                    params: {pet: res.data._id}
-                  });
-                this.props.navigation.dispatch(navigate);
+                const reset = StackActions.reset({
+                    index: 1,
+                    actions: [
+                        NavigationActions.navigate({
+                            routeName: "Home"
+                        }),
+                        NavigationActions.navigate({ 
+                            routeName: "PetScreen",
+                            params: { pet: res.data._id }
+                        })
+                    ],
+                })
+                this.props.navigation.dispatch(reset);
               })
           })
       })
@@ -126,11 +159,16 @@ export default class EggScreen extends React.Component {
             user.eggs = user.eggs.map( egg => {
                 if(egg._id === this.state.egg._id){
                     egg.lifeStage = res.data.lifeStage;
+                    egg.willHatchOn = res.data.willHatchOn;
                 }
                 return egg;
             });
             AsyncStorage.setItem("user", JSON.stringify(user)).then( () => {
-                this.setState({ egg: res.data });
+                this.setState({ egg: res.data }, () => {
+                    if(res.data.lifeStage === "incubating"){
+                        this.hatchTimer(res.data.willHatchOn);
+                    }
+                });
             });
         })
     })
@@ -176,14 +214,17 @@ export default class EggScreen extends React.Component {
             <Body>
               <View style={styles.svgContainer}>
               {/* NOTE: to change the icon, we need to pass the prop 'lifeStage': 'egg', 'incubating' or 'readyToHatch' */}
-                <SlimeEgg height="205" width="200" scale="1.6" lifeStage="egg" />
+                <SlimeEgg height="205" width="200" scale="1.6" transformX="10" lifeStage={this.state.egg.lifeStage} />
               </View>
             </Body>
           </CardItem>
           <CardItem>
             <Body>
+              <Row style={{ alignSelf: "center", backgroundColor: "red"}}>
+                  <Timer readyToHatch={ this.readyToHatch } timeLeft={ this.incubationTimer }/>
+              </Row>
               <Row style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-evenly', alignItems: 'center' }}>
-                <Button success rounded style={{ flex: 1, margin: 10 }}
+                <Button success rounded style={{ flex: 1, margin: 10, justifyContent: "center" }}
                   disabled={ this.state.egg.lifeStage === "incubating" ? true : false }
                   onPress={() => {
                       if(this.state.egg.lifeStage === "egg"){
@@ -198,7 +239,7 @@ export default class EggScreen extends React.Component {
                       { this.state.egg.lifeStage !== "egg" ? "Hatch" : "Incubate" }
                   </Text>
                 </Button>
-                <Button danger rounded style={{ flex: 1, margin: 10 }}
+                <Button danger rounded style={{ flex: 1, margin: 10, justifyContent: "center" }}
                   onPress={this.showConfirm}
                 >
                   <Text>Release</Text>

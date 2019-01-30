@@ -8,68 +8,94 @@ import {
   View,
   AsyncStorage
 } from 'react-native';
-import axios from "axios";
+import _ from "lodash";
 import PetCard from '../components/Stable/PetCard';
 import EggCard from '../components/Stable/EggCard';
 import { Col, Row, Grid } from "react-native-easy-grid";
 import { NavigationActions } from 'react-navigation';
 import { Content, Container, Header, Body, Button, Title, Text } from 'native-base';
+import { throwIfAudioIsDisabled } from 'expo/build/av/Audio/AudioAvailability';
 
 export default class HomeScreen extends React.Component {
   static navigationOptions = {
     header: null,
   };
 
-  state = {
-    view: "pets",
-    // this will hold all the users's pets
-    stalls: [],
-    // this will hold all the user's eggs
-    eggs: []
+  constructor(props) {
+    super(props);
+    this.state = {
+      view: "pets",
+      // this will hold all the users's pets
+      stalls: [],
+      // this will hold all the user's eggs
+      eggs: [],
+    },
+    this.timer;
   }
 
-  // getPets = (event) => {
-  //   event.preventDefault();
-  //   axios
-  //   .get("localhost:3000/")
-  //   .then(({ data: { results } }) => {
-  //     console.log(results)
-  //     this.setState({stalls: results})
-  //   })
-  //   .catch(err => console.log(err));
-  // }
   componentWillMount(){
-    this.grabAsynStorage();
+    this.grabAsyncStorage();
   }
 
   componentDidMount(){
-    const willFocus = this.props.navigation.addListener(
+    this.props.navigation.addListener(
       'willFocus',
       () => {
-        this.setState({stalls: []}, this.grabAsynStorage);
+        this.setState({stalls: []}, this.grabAsyncStorage);
       }
     );
+    this.props.navigation.addListener(
+      "willBlur",
+      () => {
+        clearInterval(this.timer);
+      }
+    )
   }
 
-  grabAsynStorage = async () => {
+  grabAsyncStorage = async () => {
     try {
-      // Temporary method of passing pets to game lobby, in future, user info should contain pets
       // await AsyncStorage.setItem('pets', JSON.stringify(this.state.stalls));
       const value = await AsyncStorage.getItem('user');
       if (value !== null) {
         // We have data!!
         const userInfo = JSON.parse(value);
-        console.log(userInfo);
-        console.log(userInfo.pets)
+        const incubatingEggs = [];
+        userInfo.eggs.map( egg => {
+          if(egg.lifeStage === "incubating"){
+            incubatingEggs.push(egg);
+          }
+        });
+        this.incubatingEggs = incubatingEggs;
+        if(this.incubatingEggs.length > 0){
+          this.incubationTimer();
+        }
         this.setState({ 
           stalls: userInfo.pets,
-          eggs: userInfo.eggs
+          eggs: userInfo.eggs,
         });
       }
     } catch (error) {
         // Error retrieving data
         console.log(error);
     }
+  }
+
+  incubationTimer = () => {
+    clearInterval(this.timer);
+    this.timer = setInterval( () => {
+      if(this.incubatingEggs.length < 1){
+        clearInterval(this.timer);
+      }
+      this.incubatingEggs.forEach((egg, index) => {
+        const now = Date.now();
+        if(parseInt(now) >= parseInt(egg.willHatchOn)){
+          this.incubatingEggs.splice(index, 1);
+          const eggs = _.clone(this.state.eggs);
+          eggs.find(i => i._id === egg._id).lifeStage = "readyToHatch";
+          this.setState({ eggs: eggs });
+        }
+      });
+    }, 60000)
   }
 
   petOnPress = (index) => {
@@ -92,6 +118,38 @@ export default class HomeScreen extends React.Component {
 
   setView = (view) => {
     this.setState({ view: view });
+  }
+
+  mapPetsAndEggs = () => {
+    const renderArray = [];
+    this.state.stalls.map( (stall, index) => {
+      renderArray.push( <Col key={stall._id} style={{width: 150}} >
+        <PetCard key={stall._id} data={stall} press={() => {this.petOnPress(index)}} />
+      </Col>)
+    });
+    if(this.state.eggs.length > 0){
+      this.state.eggs.map(( egg, index) => {
+        if(egg.lifeStage === "readyToHatch"){
+          renderArray.push( <Col key={egg._id} style={{width: 150}} > 
+            <EggCard key={egg._id} data={egg} lifeStage={egg.lifeStage} press={() => {this.eggOnPress(index)}} />
+          </Col>)
+        }
+        else if(egg.lifeStage === "incubating"){
+          const now = Date.now();
+          if(parseInt(now) >= parseInt(egg.willHatchOn)){
+            renderArray.push( <Col key={egg._id} style={{width: 150}} > 
+              <EggCard key={egg._id} data={egg} lifeStage="readyToHatch" press={() => {this.eggOnPress(index)}} />
+            </Col>)
+          }
+          else{
+            renderArray.push( <Col key={egg._id} style={{width: 150}} > 
+              <EggCard key={egg._id} data={egg} lifeStage={egg.lifeStage} press={() => {this.eggOnPress(index)}} />
+            </Col>)
+          }
+        }
+      })
+    }
+    return renderArray;
   }
 
   render() {
@@ -120,20 +178,20 @@ export default class HomeScreen extends React.Component {
           <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
             <Grid>
               <Row style={{flexWrap: "wrap", justifyContent: 'space-evenly'}} > 
-                {this.state.stalls ? (this.state.view === "pets" ? this.state.stalls.map( (stall, index) => {
-                return <Col key={stall._id} style={{width: 150}} >
-                  <PetCard key={stall._id} data={stall} press={() => {this.petOnPress(index)}} />
-                </Col>
-                }) : this.state.eggs.length > 0 ? (this.state.eggs.map((egg, index) => {
-                  console.log();
-                  return <Col key={egg._id} style={{width: 150}} > 
-                    <EggCard key={egg._id} data={egg} press={() => {this.eggOnPress(index)}} />
-                  </Col>
-                }) ) 
-                : <Text> No Eggs Here </Text>
-                )
-              : <Text> Loading Stable </Text>
-              }
+                {this.state.stalls ? (this.state.view === "pets" ? (this.mapPetsAndEggs().map( card => {
+                  return card;
+                }))
+                   : this.state.eggs.length > 0 ? (this.state.eggs.map((egg, index)  => {
+                    if(egg.lifeStage === "egg"){
+                      return <Col key={egg._id} style={{width: 150, height: 200}} > 
+                        <EggCard key={egg._id} data={egg} lifeStage={egg.lifeStage} press={() => {this.eggOnPress(index)}} />
+                      </Col>
+                    }
+                  }) ) 
+                  : <Text> No Eggs Here </Text>
+                  )
+                : <Text> Loading Stable </Text>
+                }
               </Row>
             </Grid>
           </ScrollView>
