@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import { StyleSheet, View, Alert, AsyncStorage } from 'react-native';
 import { Svg } from 'expo';
-import { Content, Card, CardItem, Text, Button, Body } from 'native-base';
+import { Content, Header, Title, Card, CardItem, Text, Button, Body } from 'native-base';
 import { Col, Row, Grid } from "react-native-easy-grid";
 import { NavigationActions, StackActions } from 'react-navigation';
 const { Circle } = Svg;
@@ -87,6 +87,11 @@ export default class EggScreen extends React.Component {
         // if (this.state.egg._id) {
         return (
             <Content style={styles.centeredContent}>
+                <Header>
+                    <Body>
+                        <Title style={{ alignSelf: 'center' }}>Egg</Title>
+                    </Body>
+                </Header>
                 <Card style={styles.centeredContent}>
                     <CardItem>
                         <Body>

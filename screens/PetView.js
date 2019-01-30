@@ -99,7 +99,7 @@ export default class PetScreen extends React.Component {
     cancelEditName = () => {
         this.setState( state => {
             return {
-                editing: true,
+                editing: false,
                 nameInput: state.pet.name
             }
         });
