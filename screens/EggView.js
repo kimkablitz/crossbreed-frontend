@@ -23,6 +23,7 @@ export default class EggScreen extends React.Component {
   componentWillMount() {
     const id = this.props.navigation.getParam('egg');
     console.log(id)
+    console.log(Date.now());
     API.getEgg(id).then(res => {
       var thisEgg = res.data
       this.setState({
@@ -37,9 +38,6 @@ export default class EggScreen extends React.Component {
     console.log("egg id: " + egg);
     // event.preventDefault();
     API.deleteEgg(egg)
-   //axios.delete("https://crossbreed-backend.herokuapp.com/api/eggs" + egg)
-    // console.log("here!")
-      //  console.log(eggId)
       .then(res => {
         AsyncStorage.getItem("user").then( user => {
           user = JSON.parse(user);
@@ -80,9 +78,6 @@ export default class EggScreen extends React.Component {
     return true;
   }
 
-  // const param = props.navigation.getParam('eggId');
-  // const { _id, createdOn, isFrozen, isStarter, parents } = param;
-
   render() {
     // if (this.state.egg._id) {
     return (
@@ -99,9 +94,12 @@ export default class EggScreen extends React.Component {
             <Body>
               <Row style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-evenly', alignItems: 'center' }}>
                 <Button success rounded style={{ flex: 1, margin: 10 }}
+                  disabled={ this.state.egg.lifeStage === "incubating" ? true : false }
                   onPress={() => this.hatchEgg(egg)}
                 >
-                  <Text>Hatch</Text>
+                  <Text>
+                      {this.state.egg.lifeStage === "egg" ? "Incubate" : "Hatch"}
+                  </Text>
                 </Button>
                 <Button danger rounded style={{ flex: 1, margin: 10 }}
                   onPress={this.showConfirm}
