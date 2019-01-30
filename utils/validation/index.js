@@ -16,9 +16,10 @@ export default {
     },
     password: (input) => {
         const requirements = `Passwords must: 
-        - be at least 8 characters long
-        - have at least one uppercase and one lowercase letter
-        - have a least one space or one of these characters: ! * & # $ % ^ @ ?`
+    - be at least 8 characters long
+    - have at least one uppercase and one lowercase letter
+    - have a least one space or one of these special characters: 
+    ! * & # $ % ^ @ ?`
         if(input.length < 8) {
             return {
                 title: "Your password is too short. ", 
