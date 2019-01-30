@@ -144,9 +144,9 @@ export default class BreedScreen extends React.Component {
         </Header>
         <View style={styles.container}>
           <Grid>
-            <Row style={{flexWrap: "wrap", justifyContent: 'space-evenly', height: 175}}>
+            <Row style={{flexWrap: "wrap", justifyContent: 'space-evenly', minHeight: 50}}>
             {this.state.tobreed.map( (breeder, index) => {
-              return <Col key={breeder._id} style={{width: 150, height: 200}} >
+              return <Col key={breeder._id} style={{width: 150}} >
                 <PetCard key={index} data={breeder} press={() => {this.breederOnPress(index)}} 
                 />
               </Col>
@@ -164,7 +164,7 @@ export default class BreedScreen extends React.Component {
             <Grid>
               <Row style={{flexWrap: "wrap", justifyContent: 'space-evenly'}} > 
                 {this.state.pets.map( (pet, index) => {
-                  return <Col key={pet._id} style={{width: 100, height: 140}} >
+                  return <Col key={pet._id} style={{width: 100}} >
                   <TinyPetCard key={index} data={pet} press={() => {this.petOnPress(index)}} />
                 </Col>
                 })}
