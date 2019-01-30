@@ -11,7 +11,6 @@ export default EggCard = (props) => {
   const { _id, createdOn, isFrozen, isStarter, parents } = props.data;
   const timeMade = props.data.createdOn
   return (
-      <Content>
         <Card style={{flex: 1}}>
           <CardItem
             button={true}
@@ -30,6 +29,5 @@ export default EggCard = (props) => {
             </Body>
           </CardItem>
         </Card>
-      </Content>
   );
 }
