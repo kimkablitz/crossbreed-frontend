@@ -40,6 +40,9 @@ export default class HomeScreen extends React.Component {
         this.setState({stalls: []}, this.grabAsyncStorage);
       }
     );
+    if(this.incubatingEggs && this.incubatingEggs.length === 0){
+      clearInterval(this.timer);
+    }
   }
 
   grabAsyncStorage = async () => {
@@ -78,9 +81,6 @@ export default class HomeScreen extends React.Component {
           this.incubatingEggs.splice(index, 1);
         }
       });
-      if(this.incubatingEggs.length === 0){
-        clearInterval(timer);
-      }
       console.log("incubating eggs " + this.incubatingEggs);
     }, 60000)
   }

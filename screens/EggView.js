@@ -86,13 +86,13 @@ export default class EggScreen extends React.Component {
     let timeTillHatch;
     let timer = setInterval( () => {
         now = Date.now();
-        timeTillHatch = parseInt(now) - parseInt(hatchTime);
+        timeTillHatch = parseInt(hatchTime) - parseInt(now);
         console.log(timeTillHatch);
         this.setState({ timeTillHatchable: timeTillHatch })
-    }, 1000);
-    if(timeTillHatch <= 0){
-        clearInterval(timer);
-    }
+        if(timeTillHatch <= 0){
+            clearInterval(timer);
+        }
+    }, 60000);
   }
 
   readyToHatch = () => {
