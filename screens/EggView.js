@@ -187,7 +187,8 @@ export default class EggScreen extends React.Component {
           <CardItem>
             <Body>
               <View style={styles.svgContainer}>
-                <SlimeEgg height="205" width="200" scale="1.6" />
+              {/* NOTE: to change the icon, we need to pass the prop 'lifeStage': 'egg', 'incubating' or 'readyToHatch' */}
+                <SlimeEgg height="205" width="200" scale="1.6" lifeStage="egg" />
               </View>
             </Body>
           </CardItem>
