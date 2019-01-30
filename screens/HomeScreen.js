@@ -21,12 +21,16 @@ export default class HomeScreen extends React.Component {
     header: null,
   };
 
-  state = {
-    view: "pets",
-    // this will hold all the users's pets
-    stalls: [],
-    // this will hold all the user's eggs
-    eggs: [],
+  constructor(props) {
+    super(props);
+    this.state = {
+      view: "pets",
+      // this will hold all the users's pets
+      stalls: [],
+      // this will hold all the user's eggs
+      eggs: [],
+    },
+    this.timer;
   }
 
   componentWillMount(){

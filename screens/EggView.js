@@ -7,12 +7,13 @@ import { Col, Row, Grid } from "react-native-easy-grid";
 import { NavigationActions, StackActions } from 'react-navigation';
 const { Circle } = Svg;
 import SlimeEgg from "../components/SlimeEgg";
+import Timer from "../components/Stable/IncubationTimer";
 import API from "../utils/API";
 import { convertMongoDateToPST } from "../utils/action"
 
 
 
-export default class EggScreen extends React.Component {
+export default class EggScreen extends Component {
     static navigationOptions = {
         header: null,
     };
@@ -21,7 +22,8 @@ export default class EggScreen extends React.Component {
         this.state = {
             egg: {},
             timeTillHatchable: 0
-        }
+        },
+        this.timer;
     }
 
     componentWillMount() {
@@ -97,7 +99,7 @@ export default class EggScreen extends React.Component {
     this.timer = setInterval( () => {
         now = Date.now();
         timeTillHatch = parseInt(hatchTime) - parseInt(now);
-        console.log(timeTillHatch);
+        this.setState({ timeTillHatchable: timeTillHatch });
         if(timeTillHatch <= 0){
             this.readyToHatch();
             clearInterval(this.timer);
@@ -213,8 +215,8 @@ export default class EggScreen extends React.Component {
           </CardItem>
           <CardItem>
             <Body>
-              <Row>
-                  <Text>{this.state.timeTillHatchable > 0 && this.state.timeTillHatchable}</Text>
+              <Row style={{ flex: 1, justifyContent: "center", backgroundColor: "red"}}>
+                  <Timer />
               </Row>
               <Row style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-evenly', alignItems: 'center' }}>
                 <Button success rounded style={{ flex: 1, margin: 10, justifyContent: "center" }}
