@@ -49,6 +49,16 @@ export default class EggScreen extends React.Component {
         });
     }
 
+    componentDidMount(){
+        this.props.navigation.addListener(
+            "willBlur",
+            () => {
+                console.log("clearing interval");
+                clearInterval(this.timer);
+            }
+        )
+    }
+
   releaseEgg = (egg) => {
     console.log("egg id: " + egg);
     // event.preventDefault();
@@ -84,12 +94,12 @@ export default class EggScreen extends React.Component {
     console.log("in hatchTimer")
     let now;
     let timeTillHatch;
-    let timer = setInterval( () => {
+    this.timer = setInterval( () => {
         now = Date.now();
         timeTillHatch = parseInt(hatchTime) - parseInt(now);
         console.log(timeTillHatch);
-        this.setState({ timeTillHatchable: timeTillHatch })
         if(timeTillHatch <= 0){
+            this.readyToHatch();
             clearInterval(timer);
         }
     }, 60000);
@@ -113,11 +123,19 @@ export default class EggScreen extends React.Component {
               });
               user.pets.push(res.data);
               AsyncStorage.setItem("user", JSON.stringify(user)).then( () => {
-                const navigate = NavigationActions.navigate({
-                    routeName: "PetScreen",
-                    params: {pet: res.data._id}
-                  });
-                this.props.navigation.dispatch(navigate);
+                const reset = StackActions.reset({
+                    index: 1,
+                    actions: [
+                        NavigationActions.navigate({
+                            routeName: "Home"
+                        }),
+                        NavigationActions.navigate({ 
+                            routeName: "PetScreen",
+                            params: { pet: res.data._id }
+                        })
+                    ],
+                })
+                this.props.navigation.dispatch(reset);
               })
           })
       })
@@ -134,6 +152,7 @@ export default class EggScreen extends React.Component {
             user.eggs = user.eggs.map( egg => {
                 if(egg._id === this.state.egg._id){
                     egg.lifeStage = res.data.lifeStage;
+                    egg.willHatchOn = res.data.willHatchOn;
                 }
                 return egg;
             });

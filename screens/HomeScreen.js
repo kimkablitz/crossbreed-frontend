@@ -34,15 +34,18 @@ export default class HomeScreen extends React.Component {
   }
 
   componentDidMount(){
-    const willFocus = this.props.navigation.addListener(
+    this.props.navigation.addListener(
       'willFocus',
       () => {
         this.setState({stalls: []}, this.grabAsyncStorage);
       }
     );
-    if(this.incubatingEggs && this.incubatingEggs.length === 0){
-      clearInterval(this.timer);
-    }
+    this.props.navigation.addListener(
+      "willBlur",
+      () => {
+        clearInterval(this.timer);
+      }
+    )
   }
 
   grabAsyncStorage = async () => {
@@ -74,14 +77,20 @@ export default class HomeScreen extends React.Component {
   }
 
   incubationTimer = () => {
+    clearInterval(this.timer);
     this.timer = setInterval( () => {
+      if(this.incubatingEggs.length < 1){
+        clearInterval(this.timer);
+      }
       this.incubatingEggs.forEach((egg, index) => {
         const now = Date.now();
         if(parseInt(now) >= parseInt(egg.willHatchOn)){
           this.incubatingEggs.splice(index, 1);
+          const eggs = _.clone(this.state.eggs);
+          eggs.find(i => i._id === egg._id).lifeStage = "readyToHatch";
+          this.setState({ eggs: eggs });
         }
       });
-      console.log("incubating eggs " + this.incubatingEggs);
     }, 60000)
   }
 
