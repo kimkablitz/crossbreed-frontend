@@ -15,6 +15,10 @@ export default class Timer extends Component {
       this.startCountDown = this.startCountDown.bind(this);
       this.tick = this.tick.bind(this);
     }
+
+    componentWillReceiveProps(nextProps){
+        // if(nextProps.timeLeft)
+    }
   
     tick() {
       var min = Math.floor(this.secondsRemaining / 60);
@@ -40,6 +44,7 @@ export default class Timer extends Component {
       }
   
       if (min === 0 & sec === 0) {
+        this.props.readyToHatch();
         clearInterval(this.intervalHandle);
       }
   
@@ -58,8 +63,8 @@ export default class Timer extends Component {
   
     render() {
       return (
-        <View style={{ textAlign: "center" }}>
-            <H2 style={{ alignSelf: "center" }}>{this.state.hours} : {this.state.minutes} : {this.state.seconds}</H2>
+        <View>
+            <H2>{this.state.hours} : {this.state.minutes} : {this.state.seconds}</H2>
         </View>
       );
     }

@@ -20,13 +20,25 @@ export default class EggScreen extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            egg: {},
-            timeTillHatchable: 0
+            egg: {}
         },
-        this.timer;
+        this.incubationTimer;
     }
 
     componentWillMount() {
+        this.grabEggInfo();
+    }
+
+    componentDidMount(){
+        this.props.navigation.addListener(
+            "willFocus",
+            () => {
+                this.grabEggInfo();
+            }
+        )
+    }
+
+    grabEggInfo = () => {
         const id = this.props.navigation.getParam('egg');
         console.log(id)
         API.getEgg(id).then(res => {
@@ -49,16 +61,6 @@ export default class EggScreen extends Component {
         }).catch(err => {
             console.log(err);
         });
-    }
-
-    componentDidMount(){
-        this.props.navigation.addListener(
-            "willBlur",
-            () => {
-                console.log("clearing interval");
-                clearInterval(this.timer);
-            }
-        )
     }
 
   releaseEgg = (egg) => {
@@ -94,8 +96,11 @@ export default class EggScreen extends Component {
 
   hatchTimer = (hatchTime) => {
     console.log("in hatchTimer")
-    let now;
-    let timeTillHatch;
+    // let now = Date.now();
+    // let timeTillHatch = parseInt(hatchTime) - parseInt(now);
+    // if(timeTillHatch > 0){
+    //     this.incubationTimer = timeTillHatch;
+    // }
     this.timer = setInterval( () => {
         now = Date.now();
         timeTillHatch = parseInt(hatchTime) - parseInt(now);
@@ -215,8 +220,8 @@ export default class EggScreen extends Component {
           </CardItem>
           <CardItem>
             <Body>
-              <Row style={{ flex: 1, justifyContent: "center", backgroundColor: "red"}}>
-                  <Timer />
+              <Row style={{ alignSelf: "center", backgroundColor: "red"}}>
+                  <Timer readyToHatch={ this.readyToHatch } timeLeft={ this.incubationTimer }/>
               </Row>
               <Row style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-evenly', alignItems: 'center' }}>
                 <Button success rounded style={{ flex: 1, margin: 10, justifyContent: "center" }}
