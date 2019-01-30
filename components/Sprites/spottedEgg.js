@@ -5,7 +5,7 @@ const { Path, G, Circle } = Svg;
 export default SpottedEgg = (props) => {
     const spotsColor = props.spotsColor;
     const eggshellColor = props.eggshellColor;
-    const eggshellOutline = props.eggshellOutline;
+    const eggshellOutline = props.eggshellOutline; 
 
     const slimeEggHeight = props.height;
     const slimeEggWidth = props.width;

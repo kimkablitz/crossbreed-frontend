@@ -1,6 +1,8 @@
 import React from 'react';
 import { Svg } from 'expo';
 const { Path, G, Circle, Rect, Polygon } = Svg;
+import SpottedEgg from './spottedEgg';
+import spottedEgg from './spottedEgg';
 
 export default SpottedEggCracked = (props) => {
     const spotsColor = props.spotsColor;
@@ -21,8 +23,8 @@ export default SpottedEggCracked = (props) => {
             <G
                 transform={`translate(${slimeEggTransformX},${slimeEggTransformY})`}
                 scale={slimeEggScale}
-                >
-            <Rect
+            >
+                <Rect
                     id="rect1014"
                     height="91.308998"
                     width="68.193001"
@@ -83,7 +85,9 @@ export default SpottedEggCracked = (props) => {
                     fill="#fdfeff" /><Path
                     id="path1072"
                     d="m 8.013,99.084 c -0.828,0 -1.5,-0.671 -1.5,-1.5 v -2.853 c 0,-0.829 0.672,-1.5 1.5,-1.5 0.828,0 1.5,0.671 1.5,1.5 v 2.853 c 0,0.829 -0.672,1.5 -1.5,1.5 z"
-                    fill="#fdfeff" /><Path
+                    fill="#fdfeff" />
+      
+                <Path
                     id="path1078"
                     d="m 23.513,122.277 h -1.166 c -0.828,0 -1.5,-0.671 -1.5,-1.5 0,-0.829 0.672,-1.5 1.5,-1.5 h 1.166 c 0.828,0 1.5,0.671 1.5,1.5 0,0.829 -0.672,1.5 -1.5,1.5 z"
                     fill="#33363a" /><Path
@@ -110,7 +114,8 @@ export default SpottedEggCracked = (props) => {
                     fill="#7bc67b" /><Path
                     id="path1114"
                     d="m 49.351,97.47 c -1.961,2.144 -4.121,3.194 -2.973,4.244 1.148,1.051 3.67,0.165 5.631,-1.979 1.961,-2.145 2.621,-4.734 1.471,-5.785 -1.148,-1.052 -2.168,1.374 -4.129,3.52 z"
-                    fill="#54af79" /><Path
+                    fill="#54af79" />  
+                    <Path
                     fill="#33363a"
                     d="m 36.179,108.168 c -12.548,0 -22.756,-10.209 -22.756,-22.758 0,-11.919 9.609,-34.82 22.756,-34.82 13.147,0 22.758,22.901 22.758,34.82 0,12.549 -10.209,22.758 -22.758,22.758 z m 0,-54.578 c -10.812,0 -19.756,21.068 -19.756,31.82 0,10.895 8.862,19.758 19.756,19.758 10.895,0 19.758,-8.863 19.758,-19.758 0,-10.752 -8.945,-31.82 -19.758,-31.82 z"
                     id="path1120" /><Path
@@ -165,7 +170,7 @@ export default SpottedEggCracked = (props) => {
                     id="path1164" /><Path
                     fill="#54af79"
                     d="m 36.179,75.852 c 3.068,-0.213 1.645,-3.025 1.645,-6.465 0,-3.439 1.424,-6.253 -1.645,-6.467 z"
-                    id="path1168" />
+                    id="path1168" /> 
             </G>
         </Svg>
     );

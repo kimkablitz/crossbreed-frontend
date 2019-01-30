@@ -3,33 +3,15 @@ import { Svg } from 'expo';
 const { Path, G, Circle } = Svg;
 
 export default SpottedEggCracked = (props) => {
-    //Color is a customizable prop
-    const spotsColor = (props.spotsColor ? props.spotsColor : {
-        red: 123,
-        green: 198,
-        blue: 123,
-        transparency: 1
-    });
-    const eggshellColor = (props.eggshellColor ? props.eggshellColor : {
-        red: 255,
-        green: 255,
-        blue: 250,
-        transparency: 1
-    });
-    const eggshellOutline = (props.eggshellOutline ? props.eggshellOutline : {
-        red: 0,
-        green: 0,
-        blue: 0,
-        transparency: 1
-    });
+    const spotsColor = props.spotsColor;
+    const eggshellColor = props.eggshellColor;
+    const eggshellOutline = props.eggshellOutline;
 
-    //Defaults are provided for height/width/scale 
-    const slimeEggHeight = (props.height ? props.height : 128);
-    const slimeEggWidth = (props.height ? props.width : 100);
-    const slimeEggScale = (props.scale ? props.scale : 0);
-    const slimeEggTransformX = (props.transformX ? props.transformX : 0);
-    const slimeEggTransformY = (props.transformY ? props.transformY : 0);
-    const eggState = (props.lifeStage ? props.lifeStage : "egg");
+    const slimeEggHeight = props.height;
+    const slimeEggWidth = props.width;
+    const slimeEggScale = props.scale;
+    const slimeEggTransformX = props.transformX;
+    const slimeEggTransformY = props.transformY;
 
     return (
         <Svg
@@ -124,7 +106,6 @@ export default SpottedEggCracked = (props) => {
                     fill={`rgba(${spotsColor.red}, ${spotsColor.green},  ${spotsColor.blue}, ${spotsColor.transparency})`}
                     d="m 49.668,55.341 c 6.951,-0.482 3.725,-6.854 3.725,-14.648 0,-7.794 3.227,-14.169 -3.725,-14.651 z"
                 />
-                {/* These portions of the path should only be included when the egg is just about ready to hatch */}
                 <Path
                     d="M 49.668,126.666 C 22.281,126.666 0,104.386 0,77 0,63.058 5.612,44.036 14.299,28.54 24.616,10.136 37.177,0 49.668,0 62.158,0 74.719,10.136 85.035,28.54 93.722,44.036 99.334,63.058 99.334,77 c 0,27.386 -22.28,49.666 -49.666,49.666 z M 49.668,3 C 34.344,3 22.57,19.921 16.916,30.007 8.462,45.088 3,63.534 3,77 c 0,25.732 20.936,46.666 46.668,46.666 25.731,0 46.666,-20.934 46.666,-46.666 0,-13.466 -5.462,-31.912 -13.916,-46.993 C 76.765,19.921 64.991,3 49.668,3 Z"
                     fill={`rgba(${eggshellOutline.red}, ${eggshellOutline.green},  ${eggshellOutline.blue}, ${eggshellOutline.transparency})`}

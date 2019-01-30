@@ -28,7 +28,7 @@ export default SlimeEgg = (props) => {
     //Defaults are provided for height/width/scale 
     const slimeEggHeight = (props.height ? props.height : 128);
     const slimeEggWidth = (props.height ? props.width : 100);
-    const slimeEggScale = (props.scale ? props.scale : 0);
+    const slimeEggScale = (props.scale ? props.scale : 1);
     const slimeEggTransformX = (props.transformX ? props.transformX : 0);
     const slimeEggTransformY = (props.transformY ? props.transformY : 0);
 
