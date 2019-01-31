@@ -1,5 +1,7 @@
 import React from 'react';
-import API from '../utils/API'
+import API from '../utils/API';
+import validator from '../utils/validation';
+import Alerts from "../utils/Alerts";
 
 import { StyleSheet, View, KeyboardAvoidingView, AsyncStorage, Alert } from 'react-native';
 import { Svg } from 'expo';
@@ -118,28 +120,34 @@ export default class PetScreen extends React.Component {
     }
 
     confirmEditName = () => {
-        API.updatePetName(this.state.pet._id, this.state.nameInput)
-        .then(res => {
-            AsyncStorage.getItem("user").then( user => {
-                user = JSON.parse(user);
-                user.pets = user.pets.map(pet => {
-                    if(pet._id === res.data._id) {
-                        return res.data
-                    }
-                    return pet
-                });
-                AsyncStorage.setItem("user", JSON.stringify(user)).then( () => {
-                    this.setState({
-                        pet: res.data,
-                        editing: false,
-                        nameInput: res.data.name
+        const message = validator.petname(this.state.nameInput);
+        if (message === "Success") {
+            API.updatePetName(this.state.pet._id, this.state.nameInput)
+            .then(res => {
+                AsyncStorage.getItem("user").then( user => {
+                    user = JSON.parse(user);
+                    user.pets = user.pets.map(pet => {
+                        if(pet._id === res.data._id) {
+                            return res.data
+                        }
+                        return pet
+                    });
+                    AsyncStorage.setItem("user", JSON.stringify(user)).then( () => {
+                        this.setState({
+                            pet: res.data,
+                            editing: false,
+                            nameInput: res.data.name
+                        })
                     })
                 })
-              })
-        })
-        .catch(err => {
-            console.log(err)
-        })
+            })
+            .catch(err => {
+                console.log(err)
+            })
+        }
+        else {
+            return Alerts.singleButtonError("Uh Oh!", message);
+        }
     }
     cancelEditName = () => {
         this.setState( state => {
