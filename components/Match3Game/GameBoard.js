@@ -167,7 +167,7 @@ export default class GameBoard extends Component {
                         this.checkMatchesOnBoard();
                     }
                     .bind(this),
-                    300)
+                    200)
                 : 
                 this.checkMatchesOnBoard();
         });
@@ -292,7 +292,7 @@ export default class GameBoard extends Component {
                             this.shiftTilesDown();
                         }
                         .bind(this),
-                        300)
+                        200)
                 })
             }
             .bind(this),
@@ -322,7 +322,7 @@ export default class GameBoard extends Component {
                 this.fillInEmptyTiles(tiles)
             }
             .bind(this),
-            300)
+            200)
         : this.fillInEmptyTiles(tiles)
     }
 
@@ -361,7 +361,7 @@ export default class GameBoard extends Component {
                     this.checkMatchesOnBoard();
                 }
                 .bind(this),
-                500)
+                300)
             : this.checkMatchesOnBoard()
         })
     }

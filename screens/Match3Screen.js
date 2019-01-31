@@ -102,21 +102,21 @@ export default class Match3Screen extends Component {
 	}
 
 	endGame = (name) => {
-		let baseXP;
+		const baseXP = 150;
 		let winBonusXP;
 		let totalXP;
-		switch(this.state.difficultyLevel){
-			case "easy":
-				baseXP = 150;
-				break;
-			case "normal":
-				baseXP = 200;
-				break;
-			case "hard":
-				baseXP = 250;
-		}
 		if(name === "playerScore"){
-			winBonusXP = 300;
+			switch(this.state.difficultyLevel){
+				case "easy":
+					winBonusXP = 50;
+					break;
+				case "normal":
+					winBonusXP = 150;
+					break;
+				case "hard":
+					winBonusXP = 250;
+					break;
+			}
 			totalXP = baseXP + winBonusXP;
 		}
 		else{
