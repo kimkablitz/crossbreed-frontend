@@ -9,6 +9,7 @@ const { Circle } = Svg;
 import SlimeEgg from "../components/SlimeEgg";
 import Timer from "../components/Stable/IncubationTimer";
 import API from "../utils/API";
+import Alerts from "../utils/Alerts";
 import { convertMongoDateToPST } from "../utils/action"
 
 
@@ -63,8 +64,6 @@ export default class EggScreen extends Component {
     }
 
   releaseEgg = (egg) => {
-    console.log("egg id: " + egg);
-    // event.preventDefault();
     API.deleteEgg(egg)
       .then(res => {
         AsyncStorage.getItem("user").then( user => {
@@ -75,11 +74,14 @@ export default class EggScreen extends Component {
             }
           });
           AsyncStorage.setItem("user", JSON.stringify(user)).then(() =>{
+            Alerts.singleButtonError("Done!", "Your egg was successfully removed!");
             this.goHome();
           })
         })
       })
-      .catch(err => console.log(err))
+      .catch(() => {
+          Alerts.singleButtonError("Error", "Something went wrong, please try again!");
+      })
   }
 
   incubateEgg = () => {

@@ -2,7 +2,6 @@ import React from 'react';
 import API from '../utils/API';
 import validator from '../utils/validation';
 import Alerts from "../utils/Alerts";
-
 import { StyleSheet, View, KeyboardAvoidingView, AsyncStorage, Alert } from 'react-native';
 import { Svg } from 'expo';
 import { Content, Card, CardItem, Text, Button, Header, Body, Title, Item, Input } from 'native-base';
@@ -63,11 +62,14 @@ export default class PetScreen extends React.Component {
                 }
               });
               AsyncStorage.setItem("user", JSON.stringify(user)).then(() =>{
+                Alerts.singleButtonError("Done!", `${this.state.pet.name} has been released to the wild!`);
                 this.goHome();
               })
             })
           })
-          .catch(err => console.log(err))
+          .catch(() => {
+              Alerts.singleButtonError("Error", "Something went wrong, please try again!");
+          })
       }
       goHome = () => {
         const navigateHome = NavigationActions.navigate({
