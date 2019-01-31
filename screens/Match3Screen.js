@@ -102,21 +102,21 @@ export default class Match3Screen extends Component {
 	}
 
 	endGame = (name) => {
-		let baseXP;
+		const baseXP = 150;
 		let winBonusXP;
 		let totalXP;
-		switch(this.state.difficultyLevel){
-			case "easy":
-				baseXP = 150;
-				break;
-			case "normal":
-				baseXP = 200;
-				break;
-			case "hard":
-				baseXP = 250;
-		}
 		if(name === "playerScore"){
-			winBonusXP = 300;
+			switch(this.state.difficultyLevel){
+				case "easy":
+					winBonusXP = 50;
+					break;
+				case "normal":
+					winBonusXP = 150;
+					break;
+				case "hard":
+					winBonusXP = 250;
+					break;
+			}
 			totalXP = baseXP + winBonusXP;
 		}
 		else{
@@ -140,7 +140,7 @@ export default class Match3Screen extends Component {
 				});
 				AsyncStorage.setItem("user", JSON.stringify(user)).then( () => {
 					this.modalMessage(level, gainedXP, res.data.level);
-					this.setState({ gameEnded: true });
+					this.setState({ gameEnded: true, petInfo: res.data });
 				});
 			}).done();
 		})
@@ -205,7 +205,7 @@ export default class Match3Screen extends Component {
 			<Content padder scrollEnabled={false} contentContainerStyle={{ flexGrow: 1, justifyContent: "flex-start", alignItems: "center" }}>
 				<RaceDisplay playerScore={ this.state.playerScore } enemyScore={ this.state.enemyScore } petInfo={ this.state.petInfo } enemyInfo={ this.state.enemyInfo } />
 				<GameBoard gameEnded={ this.state.gameEnded } difficulty={ this.state.difficultyLevel } pet={ this.state.petInfo } playerScore={ this.state.playerScore } enemyScore={ this.state.enemyScore } updateScore={ this.updateScore }/>
-				<MyModal visible={ this.state.gameEnded }>
+				<MyModal visible={ this.state.gameEnded } goToLobby={ () => this.navigate("GameLobby") }>
 					<Grid style={{ backgroundColor: "rgba(0,0,0,0.8)", justifyContent: "center", alignItems: "center"}}>
 						<Row size={ 3 }>
 							<H3 style={{ alignSelf: "center", color: "white", textAlign: "center" }}> { modalMessage }</H3>
