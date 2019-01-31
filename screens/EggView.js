@@ -30,15 +30,13 @@ export default class EggScreen extends Component {
         this.props.navigation.addListener(
             "willFocus",
             () => {
-                this.grabEggInfo();
+                this.setState({ runTimer: false}, this.grabEggInfo);
             }
         )
-        this.props.navigation.addListener(
-            "willBlur",
-            () => {
-                this.setState({ runTimer: false });
-            }
-        )
+    }
+
+    componentWillUnmount(){
+        this.setState({ runTimer: false });
     }
 
     grabEggInfo = () => {
