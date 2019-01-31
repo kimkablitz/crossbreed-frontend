@@ -25,6 +25,19 @@ export default class BreedScreen extends React.Component {
   }
 
   componentWillMount(){
+    this.grabAsyncData();
+  }
+
+  componentDidMount(){
+    this.props.navigation.addListener(
+      'willFocus',
+      () => {
+        this.setState({ pets: [], tobreed: [] }, this.grabAsyncData);
+      }
+    );
+  }
+
+  grabAsyncData = () => {
     // get data from AsyncStorage for continuity between screens
     (async () => {
       try {
@@ -121,7 +134,7 @@ export default class BreedScreen extends React.Component {
     .then((res) => {
       AsyncStorage.getItem("user").then( user => {
         user = JSON.parse(user);
-        user.eggs.push({ _id: res.data._id, createdOn: res.data.createdOn });
+        user.eggs.push({ _id: res.data._id, createdOn: res.data.createdOn, lifeStage: res.data.lifeStage });
         AsyncStorage.setItem("user", JSON.stringify(user)).then( () => {
           const navigate = NavigationActions.navigate({
             routeName: "EggScreen",
