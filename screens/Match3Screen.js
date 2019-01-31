@@ -205,7 +205,7 @@ export default class Match3Screen extends Component {
 			<Content padder scrollEnabled={false} contentContainerStyle={{ flexGrow: 1, justifyContent: "flex-start", alignItems: "center" }}>
 				<RaceDisplay playerScore={ this.state.playerScore } enemyScore={ this.state.enemyScore } petInfo={ this.state.petInfo } enemyInfo={ this.state.enemyInfo } />
 				<GameBoard gameEnded={ this.state.gameEnded } difficulty={ this.state.difficultyLevel } pet={ this.state.petInfo } playerScore={ this.state.playerScore } enemyScore={ this.state.enemyScore } updateScore={ this.updateScore }/>
-				<MyModal visible={ this.state.gameEnded }>
+				<MyModal visible={ this.state.gameEnded } goToLobby={ () => this.navigate("GameLobby") }>
 					<Grid style={{ backgroundColor: "rgba(0,0,0,0.8)", justifyContent: "center", alignItems: "center"}}>
 						<Row size={ 3 }>
 							<H3 style={{ alignSelf: "center", color: "white", textAlign: "center" }}> { modalMessage }</H3>
