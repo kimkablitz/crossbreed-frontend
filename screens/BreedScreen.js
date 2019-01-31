@@ -35,6 +35,12 @@ export default class BreedScreen extends React.Component {
         this.setState({ pets: [], tobreed: [] }, this.grabAsyncData);
       }
     );
+    this.props.navigation.addListener(
+      "willBlur",
+      () => {
+        this.setState({ tobreed: [] });
+      }
+    )
   }
 
   grabAsyncData = () => {
