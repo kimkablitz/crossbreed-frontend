@@ -59,6 +59,7 @@ export default class BreedScreen extends React.Component {
                 }
             } catch (error) {
                 // Error retrieving data
+                return Alerts.singleButtonError("Error", error)
             }
         })()
     }
