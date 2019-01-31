@@ -35,19 +35,19 @@ class Tile extends Component{
                 switch(this.props.switched){
                     case "up":
                         this.yShiftTile("up");
-                        setTimeout(function(){this.setState({color: this.props.color}, this.yShiftTile())}.bind(this), 300);
+                        setTimeout(function(){this.setState({color: this.props.color}, this.yShiftTile())}.bind(this), 200);
                         break;
                     case "down":
                         this.yShiftTile("down");
-                        setTimeout(function(){this.setState({color: this.props.color}, this.yShiftTile())}.bind(this), 300);
+                        setTimeout(function(){this.setState({color: this.props.color}, this.yShiftTile())}.bind(this), 200);
                         break;
                     case "left":
                         this.xShiftTile("left");
-                        setTimeout(function(){this.setState({color: this.props.color}, this.xShiftTile())}.bind(this), 300);
+                        setTimeout(function(){this.setState({color: this.props.color}, this.xShiftTile())}.bind(this), 200);
                         break;
                     case "right":
                         this.xShiftTile("right");
-                        setTimeout(function(){this.setState({color: this.props.color}, this.xShiftTile())}.bind(this), 300);
+                        setTimeout(function(){this.setState({color: this.props.color}, this.xShiftTile())}.bind(this), 200);
                         break;
                     default:
                         break;
@@ -80,7 +80,7 @@ class Tile extends Component{
             this.state.yShiftAnimation,
             {
                 toValue: finalPosition,
-                duration: 300,
+                duration: 200,
                 useNativeDriver: true
             }
         ).start();
@@ -101,7 +101,7 @@ class Tile extends Component{
             this.state.xShiftAnimation,
             {
                 toValue: finalPosition,
-                duration: 300,
+                duration: 200,
                 useNativeDriver: true
             }
         ).start();
@@ -114,7 +114,7 @@ class Tile extends Component{
                 rotateValue,
                 {
                     toValue: 1,
-                    duration: 300,
+                    duration: 200,
                     useNativeDriver: true
                 }
             ),
@@ -122,7 +122,7 @@ class Tile extends Component{
                 this.state.fadeOutAnimation,
                 {
                     toValue: 0,
-                    duration: 300,
+                    duration: 200,
                     useNativeDriver: true
                 }
             )
@@ -160,7 +160,7 @@ class Tile extends Component{
             >
                 <Col style={{ width: 70, alignItems: "center", justifyContent: "center" }}>
                     <Animated.View style={{ opacity: this.state.fadeOutAnimation, 
-                        transform: [ {translateY: this.state.yShiftAnimation}, {translateX: this.state.xShiftAnimation}] 
+                        transform: [ {translateY: this.state.yShiftAnimation}, {translateX: this.state.xShiftAnimation} ] 
                     }}>
                         <Ionicons name={ this.updateIcon() } size={ 40 } color={ this.state.color !== "" ? this.state.color : "transparent"}/>
                     </Animated.View>
