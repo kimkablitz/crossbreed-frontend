@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 // import axios from 'axios';
 import { StyleSheet, View, Alert, AsyncStorage } from 'react-native';
 import { Svg } from 'expo';
-import { Content, Header, Title, Card, CardItem, Text, Button, Body } from 'native-base';
+import { Content, Header, Title, Card, CardItem, Text, Button, Body, H2 } from 'native-base';
 import { Col, Row, Grid } from "react-native-easy-grid";
 import { NavigationActions, StackActions } from 'react-navigation';
 const { Circle } = Svg;
@@ -20,13 +20,10 @@ export default class EggScreen extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            egg: {}
-        },
-        this.incubationTimer;
-    }
-
-    componentWillMount() {
-        this.grabEggInfo();
+            egg: {},
+            incubationTimer: 0,
+            runTimer: false
+        }
     }
 
     componentDidMount(){
@@ -36,14 +33,18 @@ export default class EggScreen extends Component {
                 this.grabEggInfo();
             }
         )
+        this.props.navigation.addListener(
+            "willBlur",
+            () => {
+                this.setState({ runTimer: false });
+            }
+        )
     }
 
     grabEggInfo = () => {
         const id = this.props.navigation.getParam('egg');
-        console.log(id)
         API.getEgg(id).then(res => {
             var thisEgg = res.data
-            console.log(thisEgg);
             this.setState({
                 egg: thisEgg
             }, () => {
@@ -52,8 +53,8 @@ export default class EggScreen extends Component {
                     this.readyToHatch();
                 }
                 else{
-                    const { willHatchOn } = this.state.egg;
-                    if(willHatchOn){
+                    const { willHatchOn, lifeStage } = this.state.egg;
+                    if(willHatchOn && lifeStage === "incubating"){
                         this.hatchTimer(willHatchOn);
                     }
                 }
@@ -95,21 +96,12 @@ export default class EggScreen extends Component {
   }
 
   hatchTimer = (hatchTime) => {
-    console.log("in hatchTimer")
-    // let now = Date.now();
-    // let timeTillHatch = parseInt(hatchTime) - parseInt(now);
-    // if(timeTillHatch > 0){
-    //     this.incubationTimer = timeTillHatch;
-    // }
-    this.timer = setInterval( () => {
-        now = Date.now();
-        timeTillHatch = parseInt(hatchTime) - parseInt(now);
-        this.setState({ timeTillHatchable: timeTillHatch });
-        if(timeTillHatch <= 0){
-            this.readyToHatch();
-            clearInterval(this.timer);
-        }
-    }, 60000);
+    const now = Date.now();
+    const timeTillHatch = parseInt(hatchTime) - parseInt(now);
+    if(timeTillHatch > 0){
+        console.log("in hatchTimer update")
+        this.setState({ incubationTimer: timeTillHatch, runTimer: true });
+    }
   }
 
   readyToHatch = () => {
@@ -201,62 +193,65 @@ export default class EggScreen extends Component {
 
   render() {
     const eggMadeTime = this.state.egg.createdOn
-    // if (this.state.egg._id) {
-    return (
-      <Content style={styles.centeredContent}>
-        <Header>
-            <Body>
-                <Title style={{ alignSelf: 'center' }}>Egg</Title>
-            </Body>
-        </Header>
-        <Card style={styles.centeredContent}>
-          <CardItem>
-            <Body>
-              <View style={styles.svgContainer}>
-              {/* NOTE: to change the icon, we need to pass the prop 'lifeStage': 'egg', 'incubating' or 'readyToHatch' */}
-                <SlimeEgg height="205" width="200" scale="1.6" transformX="10" lifeStage={this.state.egg.lifeStage} />
-              </View>
-            </Body>
-          </CardItem>
-          <CardItem>
-            <Body>
-              <Row style={{ alignSelf: "center", backgroundColor: "red"}}>
-                  <Timer readyToHatch={ this.readyToHatch } timeLeft={ this.incubationTimer }/>
-              </Row>
-              <Row style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-evenly', alignItems: 'center' }}>
-                <Button success rounded style={{ flex: 1, margin: 10, justifyContent: "center" }}
-                  disabled={ this.state.egg.lifeStage === "incubating" ? true : false }
-                  onPress={() => {
-                      if(this.state.egg.lifeStage === "egg"){
-                          this.incubateEgg();
-                      }
-                      else if(this.state.egg.lifeStage === "readyToHatch"){
-                          this.hatchEgg();
-                      }
-                  }}
-                >
-                  <Text>
-                      { this.state.egg.lifeStage !== "egg" ? "Hatch" : "Incubate" }
-                  </Text>
-                </Button>
-                <Button danger rounded style={{ flex: 1, margin: 10, justifyContent: "center" }}
-                  onPress={this.showConfirm}
-                >
-                  <Text>Release</Text>
-                </Button>
-              </Row>
-              <Text style={{ alignSelf: "center" }}>Created: {convertMongoDateToPST(eggMadeTime)} </Text>
-              {this.state.egg.parents && <Text style={{ alignSelf: "center" }}> {this.state.egg.parents.length > 1 ? `Parents: ${this.state.egg.parents[0].name}, ${this.state.egg.parents[1].name}` : `Parents: THE WILD`}</Text>}
-            </Body>
-          </CardItem>
-        </Card>
-      </Content>
-    );
-  // }
-  // else {
-  //     return null;
-  //     console.log("The id does not exist")
-  //     }
+    if (this.state.egg._id) {
+        return (
+          <Content style={styles.centeredContent}>
+            <Header>
+                <Body>
+                    <Title style={{ alignSelf: 'center' }}>Egg</Title>
+                </Body>
+            </Header>
+            <Card style={styles.centeredContent}>
+              <CardItem>
+                <Body>
+                  <View style={styles.svgContainer}>
+                  {/* NOTE: to change the icon, we need to pass the prop 'lifeStage': 'egg', 'incubating' or 'readyToHatch' */}
+                    <SlimeEgg height="205" width="200" scale="1.6" transformX="10" lifeStage={this.state.egg.lifeStage} />
+                  </View>
+                </Body>
+              </CardItem>
+              <CardItem>
+                <Body>
+                  <Row style={{ alignSelf: "center" }}> 
+                      <Timer readyToHatch={ this.readyToHatch } timeLeft={ this.state.incubationTimer } runTimer={this.state.runTimer} lifeStage={ this.state.egg.lifeStage }/>
+                </Row>
+                  <Row style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-evenly', alignItems: 'center' }}>
+                    <Button success rounded style={{ flex: 1, margin: 10, justifyContent: "center" }}
+                      disabled={ this.state.egg.lifeStage === "incubating" ? true : false }
+                      onPress={() => {
+                          if(this.state.egg.lifeStage === "egg"){
+                              this.incubateEgg();
+                          }
+                          else if(this.state.egg.lifeStage === "readyToHatch"){
+                              this.hatchEgg();
+                          }
+                      }}
+                    >
+                      <Text>
+                          { this.state.egg.lifeStage !== "egg" ? "Hatch" : "Incubate" }
+                      </Text>
+                    </Button>
+                    <Button danger rounded style={{ flex: 1, margin: 10, justifyContent: "center" }}
+                      onPress={this.showConfirm}
+                    >
+                      <Text>Release</Text>
+                    </Button>
+                  </Row>
+                  <Text style={{ alignSelf: "center" }}>Created: {convertMongoDateToPST(eggMadeTime)} </Text>
+                  {this.state.egg.parents && <Text style={{ alignSelf: "center" }}> {this.state.egg.parents.length > 1 ? `Parents: ${this.state.egg.parents[0].name}, ${this.state.egg.parents[1].name}` : `Parents: THE WILD`}</Text>}
+                </Body>
+              </CardItem>
+            </Card>
+          </Content>
+        );
+  }
+  else {
+      return (
+        <Content style={ styles.centeredContent }>
+            <Text style={{ alignSelf: "center" }}>Loading Egg...</Text>
+        </Content>
+      )
+  }
  }
 }
 
@@ -267,7 +262,7 @@ const styles = StyleSheet.create({
         color: 'rgba(0,0,0,1)',
         fontSize: 14,
         lineHeight: 19,
-        textAlign: 'center',
+        textAlign: 'center'
     },
     centeredContent: {
         alignContent: 'center',

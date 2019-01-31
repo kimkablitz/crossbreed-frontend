@@ -41,7 +41,7 @@ export default class HomeScreen extends React.Component {
     this.props.navigation.addListener(
       'willFocus',
       () => {
-        this.setState({stalls: []}, this.grabAsyncStorage);
+        this.grabAsyncStorage();
       }
     );
     this.props.navigation.addListener(
@@ -95,7 +95,7 @@ export default class HomeScreen extends React.Component {
           this.setState({ eggs: eggs });
         }
       });
-    }, 60000)
+    }, 1000)
   }
 
   petOnPress = (index) => {
