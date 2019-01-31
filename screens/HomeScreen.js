@@ -101,7 +101,7 @@ export default class HomeScreen extends React.Component {
   petOnPress = (index) => {
     const navigateAction = NavigationActions.navigate({
       routeName: 'PetScreen',
-      params: { pet: this.state.stalls[index]._id },
+      params: { pet: this.state.stalls[index]._id, currentPetNumber: this.state.stalls.length },
     });
     
     this.props.navigation.dispatch(navigateAction);
