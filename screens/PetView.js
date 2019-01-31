@@ -25,7 +25,16 @@ export default class PetScreen extends React.Component {
         }
     }
 
-    componentWillMount() {
+    componentDidMount(){
+        this.props.navigation.addListener(
+            "willFocus",
+            () => {
+                this.getPetData();
+            }
+        )
+    }
+
+    getPetData = () => {
         const id = this.props.navigation.getParam('pet');
         console.log(id);
         API.getPet(id).then(res => {
