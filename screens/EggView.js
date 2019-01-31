@@ -246,7 +246,11 @@ export default class EggScreen extends Component {
         );
   }
   else {
-      return <Text>Loading Egg...</Text>
+      return (
+        <Content style={ styles.centeredContent }>
+            <Text style={{ alignSelf: "center" }}>Loading Egg...</Text>
+        </Content>
+      )
   }
  }
 }
@@ -258,7 +262,7 @@ const styles = StyleSheet.create({
         color: 'rgba(0,0,0,1)',
         fontSize: 14,
         lineHeight: 19,
-        textAlign: 'center',
+        textAlign: 'center'
     },
     centeredContent: {
         alignContent: 'center',
