@@ -130,7 +130,7 @@ export default class EggScreen extends Component {
                         }),
                         NavigationActions.navigate({ 
                             routeName: "PetScreen",
-                            params: { pet: res.data._id }
+                            params: { pet: res.data._id, currentPetNumber: user.pets.length }
                         })
                     ],
                 })

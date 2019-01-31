@@ -21,7 +21,8 @@ export default class PetScreen extends React.Component {
             pet: {},
             editing: false,
             nameInput: ""
-        }
+        },
+        this.currentPetNumber
     }
 
     componentDidMount(){
@@ -35,6 +36,7 @@ export default class PetScreen extends React.Component {
 
     getPetData = () => {
         const id = this.props.navigation.getParam('pet');
+        this.currentPetNumber = this.props.navigation.getParam('currentPetNumber');
         console.log(id);
         API.getPet(id).then(res => {
             console.log(res.data);
@@ -205,12 +207,14 @@ export default class PetScreen extends React.Component {
                                     >
                                         <Text>Breed</Text>
                                     </Button>
-                                    <Button danger rounded style={{ margin: 10 }}
-                                        // onPress={() => this.releasePet(pet)}
-                                        onPress={this.showConfirm}
-                                    >
-                                        <Text>Release</Text>
-                                    </Button>
+                                    {this.currentPetNumber > 2 && 
+                                        <Button danger rounded style={{ margin: 10 }}
+                                            // onPress={() => this.releasePet(pet)}
+                                            onPress={this.showConfirm}
+                                        >
+                                            <Text>Release</Text>
+                                        </Button>
+                                    }
                                 </Row>
                                 
                                 {this.state.editing ? <Item rounded><Input value={this.state.nameInput} 
