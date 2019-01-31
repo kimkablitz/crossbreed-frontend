@@ -4,7 +4,7 @@ const regexkey = {
     password: {
         capLetter: /[A-Z]/,
         lowLetter: /[a-z]/,
-        special: /[ !*&#$%^@?]/
+        special: /[ !#$%&*,./?@^_`~]/
     },
     petname: /[^ 0-9a-z]+/i
 };
@@ -18,8 +18,8 @@ export default {
         const requirements = `Passwords must: 
     - be at least 8 characters long
     - have at least one uppercase and one lowercase letter
-    - have a least one space or one of these special characters: 
-    ! * & # $ % ^ @ ?`
+    - have a least one space inside (not at the end or beginning) or one of these special characters: 
+    ! # $ % & * , . / ? @ ^ _ \` ~`
         if(input.length < 8) {
             return {
                 title: "Your password is too short. ", 
