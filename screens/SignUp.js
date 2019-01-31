@@ -4,6 +4,7 @@ import { Container, Header, Content, Form, Item, Input, Label, Button, Text } fr
 import { NavigationActions } from "react-navigation";
 import API from "../utils/API";
 import Alerts from "../utils/Alerts";
+import validator from '../utils/validation';
 
 export default class SignUp extends Component {
 
@@ -19,6 +20,10 @@ export default class SignUp extends Component {
       }
         // deconstruct state object
         const { username, password, displayName } = this.state;
+        const passwordMessage = validator.password(password)
+        if (passwordMessage !== "Success") {
+          return Alerts.singleButtonError(passwordMessage.title, passwordMessage.message)
+        }
 
         // create newUser object to be sent to database
         const newUser = { username, password, displayName };
@@ -55,15 +60,15 @@ export default class SignUp extends Component {
           <Form>
             <Item floatingLabel>
               <Label>Username</Label>
-              <Input name='username' onChangeText={(value) => this.setState({username: value})} />
+              <Input name='username' onChangeText={(value) => this.setState({username: value.trim()})} />
             </Item>
             <Item floatingLabel>
               <Label>Password</Label>
-              <Input secureTextEntry={true} onChangeText={(value) => this.setState({password: value})}/>
+              <Input secureTextEntry={true} onChangeText={(value) => this.setState({password: value.trim()})}/>
             </Item>
             <Item floatingLabel>
               <Label>Display Name</Label>
-              <Input name="displayName" onChangeText={(value) => this.setState({displayName: value})}/>
+              <Input name="displayName" onChangeText={(value) => this.setState({displayName: value.trim()})}/>
             </Item>
             <View style={{ marginVertical: 20 }}>
                <Button block onPress={this.signUp}> 
