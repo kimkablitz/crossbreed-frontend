@@ -7,64 +7,65 @@ export default class Timer extends Component {
       super(props);
       this.state = {
         seconds: '00',
-        minutes: '05',
-        hours: '00'
+        minutes: '00'
       }
       this.secondsRemaining;
       this.intervalHandle;
-      this.startCountDown = this.startCountDown.bind(this);
-      this.tick = this.tick.bind(this);
     }
 
-    componentWillReceiveProps(nextProps){
-        // if(nextProps.timeLeft)
+    componentDidUpdate(prevProps){
+        if(prevProps.timeLeft !== this.props.timeLeft && this.props.timeLeft > 0 && this.props.lifeStage === "incubating"){
+            clearInterval(this.intervalHandle);
+            const timeLeft = Math.floor(this.props.timeLeft/ 1000);
+            console.log("Timer(ms): " + this.props.timeLeft);
+            console.log("Timer(s): " + timeLeft);
+            this.startCountDown(timeLeft);
+        }
+    }
+
+    componentWillUnmount(){
+        console.log("unmounting");
+        clearInterval(this.intervalHandle);
+    }
+
+    setTimeState = () => {
+        var min = Math.floor(this.secondsRemaining / 60);
+        var sec = this.secondsRemaining - (min * 60);
+        
+        if(min < 10 ){
+            min = "0" + min;
+        }
+
+        if(sec < 10){
+            sec = "0" + sec;
+        }
+
+        this.setState({
+          minutes: min,
+          seconds: sec,
+        });
     }
   
-    tick() {
-      var min = Math.floor(this.secondsRemaining / 60);
-      var sec = this.secondsRemaining - (min * 60);
-  
-      this.setState({
-        value: min,
-        seconds: sec,
-      })
-  
-      if (sec < 10) {
-        this.setState({
-          seconds: "0" + this.state.seconds,
-        })
-  
-      }
-  
-      if (min < 10) {
-        this.setState({
-          value: "0" + min,
-        })
-  
-      }
-  
-      if (min === 0 & sec === 0) {
+    tick = () => {
+      this.setTimeState();
+
+      if(this.secondsRemaining === 0){
         this.props.readyToHatch();
-        clearInterval(this.intervalHandle);
+        return clearInterval(this.intervalHandle);
       }
-  
   
       this.secondsRemaining--
     }
   
-    startCountDown() {
+    startCountDown = (timeLeft) => {
+      this.secondsRemaining = timeLeft;
       this.intervalHandle = setInterval(this.tick, 1000);
-      let time = this.state.value;
-      this.secondsRemaining = time * 60;
-      this.setState({
-        isClicked : true
-      })
     }
   
     render() {
       return (
         <View>
-            <H2>{this.state.hours} : {this.state.minutes} : {this.state.seconds}</H2>
+            <H2 style={{ color: (this.state.minutes !== "00" && this.state.seconds !== "00" ? "black" : "white")}}>{this.state.minutes} : {this.state.seconds}</H2>
         </View>
       );
     }

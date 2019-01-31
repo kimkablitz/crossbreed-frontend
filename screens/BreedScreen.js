@@ -25,6 +25,19 @@ export default class BreedScreen extends React.Component {
   }
 
   componentWillMount(){
+    this.grabAsyncData();
+  }
+
+  componentDidMount(){
+    this.props.navigation.addListener(
+      'willFocus',
+      () => {
+        this.setState({ pets: [], tobreed: [] }, this.grabAsyncData);
+      }
+    );
+  }
+
+  grabAsyncData = () => {
     // get data from AsyncStorage for continuity between screens
     (async () => {
       try {
