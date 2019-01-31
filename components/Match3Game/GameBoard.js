@@ -145,7 +145,7 @@ export default class GameBoard extends Component {
             default:
                 break;
         }
-        if(this.state.tilesSwipeable){
+        if(this.state.tilesSwipeable && secondTileDirection !== ""){
             this.switchTiles(firstTileCoordinates, secondTileCoordinates, directionSwiped, secondTileDirection);
         }
     } 
