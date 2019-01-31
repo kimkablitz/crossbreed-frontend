@@ -14,7 +14,11 @@ export default class Timer extends Component {
     }
 
     componentDidUpdate(prevProps){
-        if(prevProps.timeLeft !== this.props.timeLeft && this.props.timeLeft > 0 && this.props.lifeStage === "incubating"){
+        if(prevProps.runTimer !== this.props.runTimer && this.props.runTimer === false){
+            clearInterval(this.intervalHandle);
+            this.setState({ seconds: "00", minutes: "00"});
+        }
+        else if(prevProps.runTimer !== this.props.runTimer && this.props.timeLeft > 0 && this.props.lifeStage === "incubating"){
             clearInterval(this.intervalHandle);
             const timeLeft = Math.floor(this.props.timeLeft/ 1000);
             console.log("Timer(ms): " + this.props.timeLeft);
@@ -65,7 +69,7 @@ export default class Timer extends Component {
     render() {
       return (
         <View>
-            <H2 style={{ color: (this.state.minutes !== "00" && this.state.seconds !== "00" ? "black" : "white")}}>{this.state.minutes} : {this.state.seconds}</H2>
+            <H2 style={{ color: (this.state.minutes !== "00" || this.state.seconds !== "00" ? "black" : "white")}}>{this.state.minutes} : {this.state.seconds}</H2>
         </View>
       );
     }
