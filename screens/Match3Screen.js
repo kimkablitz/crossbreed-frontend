@@ -140,7 +140,7 @@ export default class Match3Screen extends Component {
 				});
 				AsyncStorage.setItem("user", JSON.stringify(user)).then( () => {
 					this.modalMessage(level, gainedXP, res.data.level);
-					this.setState({ gameEnded: true });
+					this.setState({ gameEnded: true, petInfo: res.data });
 				});
 			}).done();
 		})
