@@ -207,23 +207,25 @@ export default class Match3Screen extends Component {
 				<GameBoard gameEnded={ this.state.gameEnded } difficulty={ this.state.difficultyLevel } pet={ this.state.petInfo } playerScore={ this.state.playerScore } enemyScore={ this.state.enemyScore } updateScore={ this.updateScore }/>
 				<MyModal visible={ this.state.gameEnded } goToLobby={ () => this.navigate("GameLobby") }>
 					<Grid style={{ backgroundColor: "rgba(0,0,0,0.8)", justifyContent: "center", alignItems: "center"}}>
-						<Row size={ 3 }>
+						<Row size={ 6 }>
 							<H3 style={{ alignSelf: "center", color: "white", textAlign: "center" }}> { modalMessage }</H3>
 						</Row>
 						<Row size={ 1 }>
-							<Button success rounded style={{ alignSelf: "center", margin: 5 }}
+							<Button success rounded style={{ alignSelf: "center" }}
 								onPress={ () => this.startGame() }
 							>
 								<Text> Play Again </Text>
 							</Button>
 						</Row>
 						<Row size={ 1 }>
-							<Button warning rounded style={{ alignSelf: "center", marginHorizontal: 5 }}
+							<Button warning rounded style={{ alignSelf: "center" }}
 								onPress={ () => this.navigate("GameLobby") }
 							> 
 								<Text style={{ color: "white" }}> Return to Lobby</Text> 
 							</Button>
-							<Button danger rounded style={{ alignSelf: "center", marginHorizontal: 5 }}
+						</Row>
+						<Row size={ 1 } style={{ paddingBottom: 20 }}>
+							<Button danger rounded style={{ alignSelf: "center" }}
 								onPress={ () => this.navigate("Home") }
 							> 
 								<Text style={{ color: "white" }}> Return to Stable </Text> 
