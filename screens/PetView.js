@@ -156,6 +156,7 @@ export default class PetScreen extends React.Component {
             })
             .catch(err => {
                 console.log(err)
+                Alerts.singleButtonError("Uh Oh! Database Issue:", err)
             })
         }
         else {
