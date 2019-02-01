@@ -207,14 +207,12 @@ export default class PetScreen extends React.Component {
                                     >
                                         <Text>Breed</Text>
                                     </Button>
-                                    {this.currentPetNumber > 2 && 
-                                        <Button danger rounded style={{ margin: 10 }}
-                                            // onPress={() => this.releasePet(pet)}
-                                            onPress={this.showConfirm}
-                                        >
-                                            <Text>Release</Text>
-                                        </Button>
-                                    }
+                                    <Button danger rounded style={{ margin: 10 }}
+                                        disabled={ this.currentPetNumber > 2 ? false : true }
+                                        onPress={this.showConfirm}
+                                    >
+                                        <Text>Release</Text>
+                                    </Button>
                                 </Row>
                                 
                                 {this.state.editing ? <Item rounded><Input value={this.state.nameInput} 
