@@ -9,6 +9,7 @@ import { Col, Row, Grid } from "react-native-easy-grid";
 import { NavigationActions } from 'react-navigation';
 const { Circle } = Svg;
 import SlimePet from "../components/SlimePet";
+import Layout from "../constants/Layout";
 
 export default class PetScreen extends React.Component {
     static navigationOptions = {
@@ -178,7 +179,9 @@ export default class PetScreen extends React.Component {
             return (
                 <KeyboardAvoidingView
                     style={{flex: 1}}
-                    behavior='padding'
+                    behavior='position'
+                    contentContainerStyle={ {height: Layout.window.height} }
+                    keyboardVerticalOffset={0}
                     enabled
                 >
                 <Content style={styles.centeredContent} >
