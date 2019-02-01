@@ -85,8 +85,12 @@ export default class EggScreen extends Component {
   }
 
   incubateEgg = () => {
+    const stallsTaken = this.props.navigation.getParam("stallsTaken");
+    if(stallsTaken === 10){
+       return Alerts.singleButtonError("No space!", "There's no space in your stable to incubate your egg!");
+    }
     const now = Date.now();
-    const { _id, duration, willHatchOn } = this.state.egg;
+    const { _id, duration } = this.state.egg;
     const eggObj = {
         lifeStage: "incubating",
         startIncubate: now,
