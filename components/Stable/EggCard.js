@@ -8,10 +8,9 @@ import SlimeEgg from "../SlimeEgg";
 import { convertMongoDateToPST } from "../../utils/action"
 
 export default EggCard = (props) => {
-  const { _id, createdOn, isFrozen, isStarter, parents } = props.data;
-  const timeMade = props.data.createdOn
+  const { _id, createdOn, } = props.data;
+  const lifeStage = props.lifeStage;
   return (
-      <Content>
         <Card style={{flex: 1}}>
           <CardItem
             button={true}
@@ -19,16 +18,16 @@ export default EggCard = (props) => {
           >
               <Body>
                 <View style={{alignSelf: 'center'}}>
-                  <SlimeEgg />
+                {/* NOTE: we need to pass the prop 'lifeStage' to change icon...'egg', 'incubating', or 'readyToHatch' */}
+                  <SlimeEgg height="128" width="100" lifeStage={lifeStage} />
                 </View>
               </Body>
           </CardItem>
           <CardItem>
             <Body>
-            <Text style={{alignSelf: 'center'}}>{ convertMongoDateToPST (timeMade)}</Text>
+            <Text style={{alignSelf: 'center'}}>{ convertMongoDateToPST (createdOn)}</Text>
             </Body>
           </CardItem>
         </Card>
-      </Content>
   );
 }

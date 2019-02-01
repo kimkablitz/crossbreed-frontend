@@ -8,7 +8,6 @@ const { Circle } = Svg;
 export default TinyPetCard = (props) => {
   const { name, baseColor, outlineColor } = props.data;
   return (
-    <Content >
       <Card style={{ flex: 1 }}>
         <CardItem
           button={true}
@@ -22,6 +21,5 @@ export default TinyPetCard = (props) => {
         </CardItem>
         <Text style={{ alignSelf: 'center', textAlign: 'center', marginBottom: 5 }}>{name}</Text>
       </Card>
-    </Content>
   );
 }

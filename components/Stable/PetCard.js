@@ -10,7 +10,6 @@ import SlimePet from '../SlimePet';
 export default PetCard = (props) => {
   const { name, baseColor, outlineColor } = props.data;
   return (
-    <Content>
       <Card style={{ flex: 1 }}>
         <CardItem
           button={true}
@@ -18,7 +17,7 @@ export default PetCard = (props) => {
         >
           <Body>
             <View style={{ alignSelf: 'center' }}>
-              <SlimePet baseColor={baseColor} outlineColor={outlineColor} height="100" width="100" scale="0.80" /> 
+              <SlimePet baseColor={baseColor} outlineColor={outlineColor} height="100" width="100" scale="0.80" />  
             </View>
           </Body>
         </CardItem>
@@ -28,6 +27,5 @@ export default PetCard = (props) => {
           </Body>
         </CardItem>
       </Card>
-    </Content>
   );
 }
