@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const baseURL = "http://192.168.0.6:3001" //"https://crossbreed-backend.herokuapp.com"
+const baseURL = "http://10.19.60.208:3001" //"https://crossbreed-backend.herokuapp.com"
 
 export default {
     
