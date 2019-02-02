@@ -169,7 +169,7 @@ export default class Match3Screen extends Component {
 		// 	]
 		// )
 		// return true;
-		Alerts.exitGame((() => this.navigate("GameLobby")))
+		return Alerts.exitGame((() => this.navigate("GameLobby")))
 	}
 
 	navigate = (routeName) => {

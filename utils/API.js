@@ -66,5 +66,8 @@ export default {
     },
     updateLevelAndXP: (petId, levelObj) => {
         return axios.put(`${baseURL}/api/pets/${petId}`, levelObj);
+    },
+    getHangmanWord: (difficulty) => {
+        return axios.get(`${baseURL}/api/words/${difficulty}`)
     }
 }
