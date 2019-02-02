@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import { Alert, BackHandler, AsyncStorage, StyleSheet } from "react-native";
-import { Container, Header, Body, Title, Left, Right, Button, Icon, Content, H2, H3, Text } from "native-base";
+import { Alert, BackHandler, AsyncStorage, StyleSheet, View } from "react-native";
+import { Container, Header, Body, Title, Left, Right, Button, Icon, Content, H1, H2, H3, Text } from "native-base";
 import { Grid, Row, Col } from "react-native-easy-grid";
 import { NavigationActions, StackActions } from 'react-navigation';
 import MyModal from "../components/Modal";
@@ -72,7 +72,8 @@ export default class HangmanScreen extends Component {
 		let newUnguessed = this.state.unguessed.filter((notblank) => {
 				return notblank !== letter;
 		})
-		let newGuessedWrong = goodGuess ? this.state.guessedWrong : _.clone(this.state.guessedWrong).push(letter);
+		let newGuessedWrong = _.clone(this.state.guessedWrong);
+		goodGuess ? this.state.guessedWrong : newGuessedWrong.push(letter);
 		this.setState({
 			blanksRemaining: newblanksRemaining,
 			blanks: newBlanks, 
@@ -110,40 +111,55 @@ export default class HangmanScreen extends Component {
 			    	</Button>
 			      </Right>
         	    </Header>	
-                <MyModal visible={ this.state.helpModalVisible }>
-					<Grid style={{ backgroundColor: "rgba(0,0,0,0.9)", justifyContent: "center", alignItems: "center"}}>
-						<Row size={ 1 } >
-							<H2 style={{ alignSelf: "center", color: "white", textAlign: "center" }}>
-								Play Hangman with your pet!
-							</H2>
+				<Content>
+					<MyModal visible={ this.state.helpModalVisible }>
+						<Grid style={{ backgroundColor: "rgba(0,0,0,0.9)", justifyContent: "center", alignItems: "center"}}>
+							<Row size={ 1 } >
+								<H2 style={{ alignSelf: "center", color: "white", textAlign: "center" }}>
+									Play Hangman with your pet!
+								</H2>
+							</Row>
+							<Row size={ 1 }>
+								<Button onPress={ () => this.setState({ helpModalVisible: false }) }>
+									<Text>Close</Text>
+								</Button>
+							</Row>
+						</Grid>
+					</MyModal>
+					{/* <EndGameModal modalMessage={ modalMessage } visible={ this.state.gameEnded } navigateToLobby={ ()=> this.navigate("GameLobby")} startGame={ ()=> this.startGame() } navigateToStable={ ()=> this.navigate("Home")} /> */}
+					<View style={{flex: 1, alignItems: 'center', padding: 20 }}>
+						<H2 style={{ paddingTop: 20 }}>The Magic Word:</H2>
+						<H1>
+							{this.state.blanks.map(blank => {
+								return blank
+							})}
+						</H1>
+						<H2 style={{ paddingTop: 20 }}>Wrong Letters:</H2>
+						<Row style={{flex: 1, flexWrap: 'wrap', alignSelf: 'center', alignItems: 'center', justifyContent: 'center' }}>
+							{this.state.guessedWrong.map( wLetter => {
+								return (
+									<Button key={wLetter} dark rounded small style={{ margin: 10 }}
+									>
+										<Text>{wLetter}</Text>
+									</Button>
+								)
+							})}
 						</Row>
-						<Row size={ 1 }>
-							<Button onPress={ () => this.setState({ helpModalVisible: false }) }>
-								<Text>Close</Text>
-							</Button>
+						<H3 style={{ paddingTop: 20 }}>Guesses Remaining: { 8 - this.state.guessedWrong.length }</H3>
+						<H2 style={{ paddingTop: 20 }}>Unguessed Letters:</H2>
+						<Row style={{flex: 1, flexWrap: 'wrap', alignSelf: 'center', alignItems: 'center', justifyContent: 'center' }}>
+							{this.state.unguessed.map( unLetter => {
+								return (
+									<Button key={unLetter} primary rounded small style={{ margin: 10 }}
+										onPress={() => this.playGame(unLetter)}
+									>
+										<Text>{unLetter}</Text>
+									</Button>
+								)
+							})}
 						</Row>
-					</Grid>
-				</MyModal>
-				<EndGameModal modalMessage={ modalMessage } visible={ this.state.gameEnded } navigateToLobby={ ()=> this.navigate("GameLobby")} startGame={ ()=> this.startGame() } navigateToStable={ ()=> this.navigate("Home")} />
-				<View>
-					<H3>The Magic Word:</H3>
-					<H2>_____</H2>
-					<H3>Wrong Letters</H3>
-					<Row style={{flex: 1, alignSelf: 'center' }}>
-						<Button dark rounded small style={{ alignSelf: 'center', margin: 10 }}
-						>
-							<Text>A</Text>
-						</Button>
-					</Row>
-					<H3>Unguessed Letters</H3>
-					<Row style={{flex: 1, alignSelf: 'center' }}>
-						<Button primary rounded small style={{ alignSelf: 'center', margin: 10 }}
-							onPress={() => this.confirmEditName()}
-						>
-							<Text>B</Text>
-						</Button>
-					</Row>
-				</View>
+					</View>
+				</Content>
             </Container>
         )
     }
