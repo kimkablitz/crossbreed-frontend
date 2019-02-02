@@ -8,8 +8,8 @@ import SlimeEgg from "../SlimeEgg";
 import { convertMongoDateToPST } from "../../utils/action"
 
 export default EggCard = (props) => {
-  const { _id, createdOn, } = props.data;
-  const lifeStage = props.lifeStage;
+  const { createdOn, lifeStage } = props.data;
+
   return (
         <Card style={{flex: 1}}>
           <CardItem
