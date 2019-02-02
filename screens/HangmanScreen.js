@@ -3,9 +3,8 @@ import { Alert, BackHandler, AsyncStorage, StyleSheet } from "react-native";
 import { Container, Header, Body, Title, Left, Right, Button, Icon, Content, H2, H3, Text } from "native-base";
 import { Grid, Row, Col } from "react-native-easy-grid";
 import { NavigationActions, StackActions } from 'react-navigation';
-import GameBoard from '../components/Match3Game/GameBoard';
-import RaceDisplay from "../components/Match3Game/RaceDisplay";
 import MyModal from "../components/Modal";
+import EndGameModal from "../components/EndGameModal";
 import API from "../utils/API";
 import Alerts from "../utils/Alerts";
 import _ from "lodash";
@@ -17,7 +16,7 @@ export default class HangmanScreen extends Component {
         gameEnded: false,
 		helpModalVisible: false,
 		word: ['M', 'A', 'G', 'I', 'C'],
-		blanksRemaining = 0,
+		blanksRemaining: 0,
 		blanks: [],
 		unguessed: ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'],
 		guessedWrong: []
@@ -75,6 +74,7 @@ export default class HangmanScreen extends Component {
 		})
 		let newGuessedWrong = goodGuess ? this.state.guessedWrong : _.clone(this.state.guessedWrong).push(letter);
 		this.setState({
+			blanksRemaining: newblanksRemaining,
 			blanks: newBlanks, 
 			unguessed: newUnguessed, 
 			guessedWrong: newGuessedWrong 
@@ -82,11 +82,13 @@ export default class HangmanScreen extends Component {
 		this.winLose();
 	}
 
-	// win lose function:
-		// if wrong letters === limit, lose
-		// if blanks list has no more blanks, win
 	winLose = () => {
-
+		if (this.state.blanksRemaining <= 0) {
+			// win
+		}
+		else if (this.state.guessedWrong.length >= 8) {
+			// lose
+		}
 	}
 
     render(){
@@ -122,6 +124,26 @@ export default class HangmanScreen extends Component {
 						</Row>
 					</Grid>
 				</MyModal>
+				<EndGameModal modalMessage={ modalMessage } visible={ this.state.gameEnded } navigateToLobby={ ()=> this.navigate("GameLobby")} startGame={ ()=> this.startGame() } navigateToStable={ ()=> this.navigate("Home")} />
+				<View>
+					<H3>The Magic Word:</H3>
+					<H2>_____</H2>
+					<H3>Wrong Letters</H3>
+					<Row style={{flex: 1, alignSelf: 'center' }}>
+						<Button dark rounded small style={{ alignSelf: 'center', margin: 10 }}
+						>
+							<Text>A</Text>
+						</Button>
+					</Row>
+					<H3>Unguessed Letters</H3>
+					<Row style={{flex: 1, alignSelf: 'center' }}>
+						<Button primary rounded small style={{ alignSelf: 'center', margin: 10 }}
+							onPress={() => this.confirmEditName()}
+						>
+							<Text>B</Text>
+						</Button>
+					</Row>
+				</View>
             </Container>
         )
     }
