@@ -24,6 +24,7 @@ import {
   H1
 } from "native-base";
 import Layout from "../constants/Layout";
+// import ImageBackground from "../components/BackgroundImage"
 
 export default class HomeScreen extends React.Component {
   static navigationOptions = {
@@ -207,108 +208,116 @@ export default class HomeScreen extends React.Component {
 
   render() {
     return (
-      <Content>
-        <Header>
-          <Body>
-            <Title style={{ alignSelf: "center" }}>Stable</Title>
-          </Body>
-        </Header>
-        <View style={styles.container}>
-          <Grid>
-            <Row
-              style={{
-                flex: 1,
-                flexDirection: "row",
-                justifyContent: "space-evenly"
-              }}
-            >
-              <Button
-                info
-                bordered={this.state.view === "pets" ? false : true}
-                rounded
-                style={{ flex: 1, margin: 10, justifyContent: "center" }}
-                onPress={() => this.setView("pets")}
-              >
-                <Text>Pets</Text>
-              </Button>
-              <Button
-                success
-                bordered={this.state.view === "eggs" ? false : true}
-                rounded
-                style={{ flex: 1, margin: 10, justifyContent: "center" }}
-                onPress={() => this.setView("eggs")}
-              >
-                <Text>Eggs</Text>
-              </Button>
-            </Row>
-            <Row style={{ alignSelf: "center" }}>
-              {this.state.view === "pets" && (
-                <Text>Stalls Taken: {this.state.stallsTaken}/10</Text>
-              )}
-            </Row>
-          </Grid>
-          <ScrollView
-            style={styles.container}
-            contentContainerStyle={styles.contentContainer}
-          >
+      <ImageBackground style={ styles.imgBackground } 
+                 resizeMode='cover' 
+                 source={require('../assets/images/background.png')}>
+        <Content>
+          <Header>
+            <Body>
+              <Title style={{ alignSelf: "center" }}>Stable</Title>
+            </Body>
+          </Header>
+          <View style={styles.container}>
             <Grid>
-              <Row style={{ flexWrap: "wrap", justifyContent: "space-evenly" }}>
-                {this.state.stalls ? (
-                  this.state.view === "pets" ? (
-                    this.mapPetsAndEggs().map(card => {
-                      return card;
-                    })
-                  ) : this.state.eggs.length > 0 ? (
-                    this.state.eggs.map(egg => {
-                      if (egg.lifeStage === "egg") {
-                        return (
-                          <Col
-                            key={egg._id}
-                            style={{ width: 150, height: 200 }}
-                          >
-                            <EggCard
-                              key={egg._id}
-                              data={egg}
-                              press={() => {
-                                this.eggOnPress(egg._id);
-                              }}
-                            />
-                          </Col>
-                        );
-                      }
-                    })
-                  ) : (
-                    <View>
-                      <H1 style={{ alignSelf: "center", paddingTop: 20 }}>
-                        {" "}
-                        No Eggs Here{" "}
-                      </H1>
-                      <Image
-                        style={{
-                          width: Layout.window.width / 2,
-                          height: Layout.window.height / 2,
-                          alignSelf: "center"
-                        }}
-                        resizeMode={"contain"}
-                        source={require("../assets/images/shopping-basket.png")}
-                      />
-                    </View>
-                  )
-                ) : (
-                  <Text> Loading Stable </Text>
+              <Row
+                style={{
+                  flex: 1,
+                  flexDirection: "row",
+                  justifyContent: "space-evenly"
+                }}
+              >
+                <Button
+                  info
+                  bordered={this.state.view === "pets" ? false : true}
+                  rounded
+                  style={{ flex: 1, margin: 10, justifyContent: "center" }}
+                  onPress={() => this.setView("pets")}
+                >
+                  <Text>Pets</Text>
+                </Button>
+                <Button
+                  success
+                  bordered={this.state.view === "eggs" ? false : true}
+                  rounded
+                  style={{ flex: 1, margin: 10, justifyContent: "center" }}
+                  onPress={() => this.setView("eggs")}
+                >
+                  <Text>Eggs</Text>
+                </Button>
+              </Row>
+              <Row style={{ alignSelf: "center" }}>
+                {this.state.view === "pets" && (
+                  <Text>Stalls Taken: {this.state.stallsTaken}/10</Text>
                 )}
               </Row>
             </Grid>
-          </ScrollView>
-        </View>
-      </Content>
+            <ScrollView
+              style={styles.container}
+              contentContainerStyle={styles.contentContainer}
+            >
+              <Grid>
+                <Row style={{ flexWrap: "wrap", justifyContent: "space-evenly" }}>
+                  {this.state.stalls ? (
+                    this.state.view === "pets" ? (
+                      this.mapPetsAndEggs().map(card => {
+                        return card;
+                      })
+                    ) : this.state.eggs.length > 0 ? (
+                      this.state.eggs.map(egg => {
+                        if (egg.lifeStage === "egg") {
+                          return (
+                            <Col
+                              key={egg._id}
+                              style={{ width: 150, height: 200 }}
+                            >
+                              <EggCard
+                                key={egg._id}
+                                data={egg}
+                                press={() => {
+                                  this.eggOnPress(egg._id);
+                                }}
+                              />
+                            </Col>
+                          );
+                        }
+                      })
+                    ) : (
+                          <View>
+                            <H1 style={{ alignSelf: "center", paddingTop: 20 }}>
+                              {" "}
+                              No Eggs Here{" "}
+                            </H1>
+                            <Image
+                              style={{
+                                width: Layout.window.width / 2,
+                                height: Layout.window.height / 2,
+                                alignSelf: "center"
+                              }}
+                              resizeMode={"contain"}
+                              source={require("../assets/images/shopping-basket.png")}
+                            />
+                          </View>
+                        )
+                  ) : (
+                      <Text> Loading Stable </Text>
+                    )}
+                </Row>
+              </Grid>
+            </ScrollView>
+          </View>
+        </Content>
+      </ImageBackground>
     );
   }
 }
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    backgroundColor: "#fff"
-  }
+    flex: 1
+  },
+  imgBackground: {
+    width: '100%',
+    height: '100%',
+    flex: 1 
+},
 });
