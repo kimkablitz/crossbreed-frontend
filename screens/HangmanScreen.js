@@ -42,6 +42,36 @@ export default class HangmanScreen extends Component {
 		})
 	}
 
+	// get word
+	// include alphabet in state at start
+	// save to state:
+		// word .toUppercase
+		// var word = .toUppercase();
+		// difficulty
+		// word in blanks
+		// var blanksList = word
+		// for (var i = 0; i < word.length; i++) {
+		//     if (word.charAt(i) !== " ") {
+		//         blanks = blanks.push("_");
+		//     }
+		//     else {
+		//         blanks = blanks.push(" ")
+		//     }
+		// }
+
+	// play function:
+		// take letter
+		// runs through word in state and checks for match.
+		// if match push letter to blankslist, slice?
+		// else push from blanks list.
+		// if no push, push to wrong letters
+		// then reset state
+		// check for winning or losing status
+
+	// win lose function:
+		// if wrong letters === limit, lose
+		// if blanks list has no more blanks, win
+
     render(){
         return(
             <Container>
