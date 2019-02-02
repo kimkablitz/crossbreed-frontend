@@ -9,13 +9,18 @@ import EggScreen from '../screens/EggView';
 import Match3Screen from '../screens/Match3Screen';
 import GameLobbyScreen from "../screens/GameLobbyScreen";
 import AccountScreen from '../screens/Settings/AccountScreen';
+import AboutGameScreen from '../screens/Settings/subcomponents/aboutGame'
+import AboutUsScreen from '../screens/Settings/subcomponents/aboutUs'
 
 
 const HomeStack = createStackNavigator(
 { 
   Home: HomeScreen, 
   PetScreen: PetScreen,
-  EggScreen: EggScreen },
+  EggScreen: EggScreen,
+  AboutGame: {screen: AboutGameScreen},
+  AboutUs: {screen: AboutUsScreen},
+ },
 { initialRouteName: 'Home' }
 );
 
@@ -75,9 +80,20 @@ Match3Stack.navigationOptions = ({ navigation }) => {
     ),
   };
 };
+
 const AccountStack = createStackNavigator({
   Account: AccountScreen,
+  Settings:{
+    screen: AboutGameScreen,
+    navigationOptions:{
+      gesturesEnabled: false
+    }
+  }
+},{
+  headerMode: "none",
+  initialRouteName: "Account",
 });
+
 AccountStack.navigationOptions = {
   tabBarIcon: ({ focused }) => (
     <TabBarIcon
