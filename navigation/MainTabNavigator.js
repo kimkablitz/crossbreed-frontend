@@ -9,6 +9,7 @@ import EggScreen from '../screens/EggView';
 import Match3Screen from '../screens/Match3Screen';
 import GameLobbyScreen from "../screens/GameLobbyScreen";
 import AccountScreen from '../screens/Settings/AccountScreen';
+import HangmanScreen from "../screens/HangmanScreen";
 
 
 const HomeStack = createStackNavigator(
@@ -46,10 +47,16 @@ BreedStack.navigationOptions = {
 };
 
 
-const Match3Stack = createStackNavigator({
+const GameStack = createStackNavigator({
   GameLobby: GameLobbyScreen,
   Match3Game: {
     screen: Match3Screen,
+    navigationOptions: {
+      gesturesEnabled: false
+    }
+  },
+  HangmanGame: {
+    screen: HangmanScreen,
     navigationOptions: {
       gesturesEnabled: false
     }
@@ -59,7 +66,7 @@ const Match3Stack = createStackNavigator({
   initialRouteName: "GameLobby",
 });
 
-Match3Stack.navigationOptions = ({ navigation }) => {
+GameStack.navigationOptions = ({ navigation }) => {
   let tabBarVisible = true;
   if (navigation.state.index > 0) {
     tabBarVisible = false;
@@ -95,7 +102,7 @@ AccountStack.navigationOptions = {
 export default createBottomTabNavigator({
   HomeStack,
   BreedStack,
-  Match3Stack,
+  GameStack,
   AccountStack
 },
 {

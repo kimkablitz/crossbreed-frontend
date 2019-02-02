@@ -6,7 +6,9 @@ import { NavigationActions, StackActions } from 'react-navigation';
 import GameBoard from '../components/Match3Game/GameBoard';
 import RaceDisplay from "../components/Match3Game/RaceDisplay";
 import MyModal from "../components/Modal";
+import EndGameModal from "../components/EndGameModal";
 import API from "../utils/API";
+import Alerts from "../utils/Alerts";
 
 let modalMessage = "";
 
@@ -158,15 +160,16 @@ export default class Match3Screen extends Component {
 	}
 
 	showAlert = () => {
-		Alert.alert(
-			"Are you sure?",
-			"Returning to the lobby will exit the current game, and your pet will not earn any experience points!",
-			[
-				{ text: "Cancel", style: 'cancel' },
-				{ text: "Return to lobby", onPress: () => this.navigate("GameLobby") }
-			]
-		)
-		return true;
+		// Alert.alert(
+		// 	"Are you sure?",
+		// 	"Returning to the lobby will exit the current game, and your pet will not earn any experience points!",
+		// 	[
+		// 		{ text: "Cancel", style: 'cancel' },
+		// 		{ text: "Return to lobby", onPress: () => this.navigate("GameLobby") }
+		// 	]
+		// )
+		// return true;
+		Alerts.exitGame((() => this.navigate("GameLobby")))
 	}
 
 	navigate = (routeName) => {
@@ -205,7 +208,7 @@ export default class Match3Screen extends Component {
 			<Content padder scrollEnabled={false} contentContainerStyle={{ flexGrow: 1, justifyContent: "flex-start", alignItems: "center" }}>
 				<RaceDisplay playerScore={ this.state.playerScore } enemyScore={ this.state.enemyScore } petInfo={ this.state.petInfo } enemyInfo={ this.state.enemyInfo } />
 				<GameBoard gameEnded={ this.state.gameEnded } difficulty={ this.state.difficultyLevel } pet={ this.state.petInfo } playerScore={ this.state.playerScore } enemyScore={ this.state.enemyScore } updateScore={ this.updateScore }/>
-				<MyModal visible={ this.state.gameEnded } goToLobby={ () => this.navigate("GameLobby") }>
+				{/* <MyModal visible={ this.state.gameEnded } goToLobby={ () => this.navigate("GameLobby") }>
 					<Grid style={{ backgroundColor: "rgba(0,0,0,0.8)", justifyContent: "center", alignItems: "center"}}>
 						<Row size={ 6 }>
 							<H3 style={{ alignSelf: "center", color: "white", textAlign: "center" }}> { modalMessage }</H3>
@@ -232,7 +235,8 @@ export default class Match3Screen extends Component {
 							</Button>
 						</Row>
 					</Grid>
-				</MyModal>
+				</MyModal> */}
+				<EndGameModal modalMessage={ modalMessage } visible={ this.state.gameEnded } navigateToLobby={ ()=> this.navigate("GameLobby")} startGame={ ()=> this.startGame() } navigateToStable={ ()=> this.navigate("Home")} />
 				<MyModal visible={ this.state.helpModalVisible }>
 					<Grid style={{ backgroundColor: "rgba(0,0,0,0.9)", justifyContent: "center", alignItems: "center"}}>
 						<Row size={ 1 } >

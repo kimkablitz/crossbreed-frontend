@@ -10,5 +10,17 @@ export default {
                 { text: "Close", style: "cancel" }
             ]
         )
+    },
+
+    exitGame: (pressFunction) => {
+        Alert.alert(
+			"Are you sure?",
+			"Returning to the lobby will exit the current game, and your pet will not earn any experience points!",
+			[
+				{ text: "Cancel", style: 'cancel' },
+				{ text: "Return to lobby", onPress: pressFunction }
+			]
+		)
+		return true;
     }
 }

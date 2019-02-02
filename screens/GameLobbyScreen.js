@@ -12,7 +12,8 @@ export default class GameLobbyScreen extends Component {
         this.state = {
             difficulty: "easy",
             userPets: [],
-            selectedPet: {}
+            selectedPet: {},
+            selectedGame: "Match3Game"
         }
     }
 
@@ -60,10 +61,14 @@ export default class GameLobbyScreen extends Component {
         this.setState({ selectedPet: petInfo });
     }
 
+    setGame = (selectedGame) => {
+        this.setState({ selectedGame: selectedGame });
+    }
+
     startGame = () => {
         // Navigates to the actual game page, passing the difficulty and selectedPet as params
         const navigateToGame = NavigationActions.navigate({
-            routeName: "Match3Game",
+            routeName: this.state.selectedGame,
             params: { difficultyLevel: this.state.difficulty, petInfo: this.state.selectedPet }
         });
         this.props.navigation.dispatch(navigateToGame);
@@ -79,35 +84,50 @@ export default class GameLobbyScreen extends Component {
         	    </Header>
                 <View style={{ flex: 1 }}>
                     <Grid style={{ alignItems: "center", flex: 1 }}>
-                        <Row size={ 2 }>
-                            <Button rounded info style={{ margin: 10, alignSelf: "center" }} 
+                        <Row size={ 1 } style={{ marginTop: 10 }}>
+                            <Button rounded info style={{ margin: 20, alignSelf: "center" }} 
                                 onPress={ () => this.startGame() }
                             >
                                 <Text>Start Game</Text>
                             </Button>
                         </Row>
                         <Row size={ 1 }>
-                            <Text style={{ marginTop: 20 }}> Choose a difficulty level: </Text>
+                            <Text style={{ marginTop: 15 }}> Choose a difficulty level: </Text>
                         </Row>
                         <Row size={ 1 } >
-                            <Button success bordered={ this.state.difficulty === "easy" ? false : true } rounded style={{ margin: 10}}
+                            <Button success bordered={ this.state.difficulty === "easy" ? false : true } rounded style={{ margin: 10, marginTop: 5 }}
                                 onPress={ () => this.setDifficulty("easy") }
                             > 
                                 <Text>Easy</Text> 
                             </Button>
-                            <Button primary bordered={ this.state.difficulty === "normal" ? false : true } rounded style={{ margin: 10}}
+                            <Button primary bordered={ this.state.difficulty === "normal" ? false : true } rounded style={{ margin: 10, marginTop: 5}}
                                 onPress={ () => this.setDifficulty("normal") }
                             > 
                                 <Text>Normal</Text> 
                             </Button>
-                            <Button danger bordered={ this.state.difficulty === "hard" ? false : true } rounded style={{ margin: 10}}
+                            <Button danger bordered={ this.state.difficulty === "hard" ? false : true } rounded style={{ margin: 10, marginTop: 5}}
                                 onPress={ () => this.setDifficulty("hard") }
                             > 
                                 <Text>Hard</Text> 
                             </Button>
                         </Row>
                         <Row size={ 1 }>
-                            <Text style={{ marginTop: 20 }}> Choose a Pet: </Text>
+                            <Text style={{ marginTop: 15 }}>Choose a game: </Text>
+                        </Row>
+                        <Row size={ 1 }>
+                            <Button dark bordered={ this.state.selectedGame === "Match3Game" ? false : true }style={{ margin: 10, marginTop: 5 }}
+                                onPress={ () => this.setGame("Match3Game")}
+                            >
+                                <Text>Match 3</Text>
+                            </Button>
+                            <Button dark bordered={ this.state.selectedGame === "HangmanGame" ? false : true }style={{ margin: 10, marginTop: 5 }}
+                                onPress={ () => this.setGame("HangmanGame") }
+                            >
+                                <Text>Hangman</Text>
+                            </Button>
+                        </Row>
+                        <Row size={ 1 }>
+                            <Text style={{ marginTop: 15 }}> Choose a Pet: </Text>
                         </Row>
                     </Grid>
                         <ScrollView style={{ flex: 1 }}>
