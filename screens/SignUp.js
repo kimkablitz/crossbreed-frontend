@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 import { View, AsyncStorage } from "react-native"; 
-import { Container, Header, Content, Form, Item, Input, Label, Button, Text } from 'native-base';
+import { Container, Header, Content, Form, Item, Input, Label, Button, Text, Icon } from 'native-base';
 import { NavigationActions } from "react-navigation";
+import { Row } from "react-native-easy-grid";
+import PasswordInputText from "react-native-hide-show-password-input";
 import API from "../utils/API";
 import Alerts from "../utils/Alerts";
 import validator from '../utils/validation';
@@ -62,14 +64,18 @@ export default class SignUp extends Component {
               <Label>Username</Label>
               <Input name='username' onChangeText={(value) => this.setState({username: value.trim()})} />
             </Item>
+            {/* <Button rounded transparent style={{ alignSelf: "flex-end" }}><Icon name="eye"/></Button>
             <Item floatingLabel>
-              <Label>Password</Label>
+              <Label>Password </Label>
               <Input secureTextEntry={true} onChangeText={(value) => this.setState({password: value.trim()})}/>
-            </Item>
+            </Item> */}
             <Item floatingLabel>
               <Label>Display Name</Label>
               <Input name="displayName" onChangeText={(value) => this.setState({displayName: value.trim()})}/>
             </Item>
+            <View style={{ marginLeft: 15 }}>
+              <PasswordInputText value={this.state.password} onChangeText={ (value) => this.setState({ password: value.trim() })}/>
+            </View>
             <View style={{ marginVertical: 20 }}>
                <Button block onPress={this.signUp}> 
                 <Text>Sign Up</Text>

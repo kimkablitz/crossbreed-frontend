@@ -13,8 +13,8 @@ import PetCard from '../components/Stable/PetCard';
 import EggCard from '../components/Stable/EggCard';
 import { Col, Row, Grid } from "react-native-easy-grid";
 import { NavigationActions } from 'react-navigation';
-import { Content, Container, Header, Body, Button, Title, Text } from 'native-base';
-import { throwIfAudioIsDisabled } from 'expo/build/av/Audio/AudioAvailability';
+import { Content, Container, Header, Body, Button, Title, Text, H1 } from 'native-base';
+import Layout from "../constants/Layout";
 
 export default class HomeScreen extends React.Component {
   static navigationOptions = {
@@ -209,7 +209,10 @@ export default class HomeScreen extends React.Component {
                       </Col>
                     }
                   }) ) 
-                  : <Text> No Eggs Here </Text>
+                  : <View>
+                      <H1  style={{ alignSelf: "center", paddingTop: 20 }}> No Eggs Here </H1>
+                      <Image style={{ width: (Layout.window.width/2), height: (Layout.window.height/2), alignSelf: "center" }} resizeMode={'contain'} source={require("../assets/images/shopping-basket.png")}/>
+                    </View>
                   )
                 : <Text> Loading Stable </Text>
                 }
