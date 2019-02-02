@@ -9,6 +9,7 @@ import { Col, Row, Grid } from "react-native-easy-grid";
 import { NavigationActions } from 'react-navigation';
 const { Circle } = Svg;
 import SlimePet from "../components/SlimePet";
+import Layout from "../constants/Layout";
 
 export default class PetScreen extends React.Component {
     static navigationOptions = {
@@ -21,7 +22,8 @@ export default class PetScreen extends React.Component {
             pet: {},
             editing: false,
             nameInput: ""
-        }
+        },
+        this.currentPetNumber
     }
 
     componentDidMount(){
@@ -35,6 +37,7 @@ export default class PetScreen extends React.Component {
 
     getPetData = () => {
         const id = this.props.navigation.getParam('pet');
+        this.currentPetNumber = this.props.navigation.getParam('currentPetNumber');
         console.log(id);
         API.getPet(id).then(res => {
             console.log(res.data);
@@ -154,6 +157,7 @@ export default class PetScreen extends React.Component {
             })
             .catch(err => {
                 console.log(err)
+                Alerts.singleButtonError("Uh Oh! Database Issue:", err)
             })
         }
         else {
@@ -175,7 +179,9 @@ export default class PetScreen extends React.Component {
             return (
                 <KeyboardAvoidingView
                     style={{flex: 1}}
-                    behavior='padding'
+                    behavior='position'
+                    contentContainerStyle={ {height: Layout.window.height} }
+                    keyboardVerticalOffset={0}
                     enabled
                 >
                 <Content style={styles.centeredContent} >
@@ -206,7 +212,7 @@ export default class PetScreen extends React.Component {
                                         <Text>Breed</Text>
                                     </Button>
                                     <Button danger rounded style={{ margin: 10 }}
-                                        // onPress={() => this.releasePet(pet)}
+                                        disabled={ this.currentPetNumber > 2 ? false : true }
                                         onPress={this.showConfirm}
                                     >
                                         <Text>Release</Text>

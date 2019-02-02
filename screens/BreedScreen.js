@@ -38,7 +38,7 @@ export default class BreedScreen extends React.Component {
         this.props.navigation.addListener(
             "willBlur",
             () => {
-                this.setState({ tobreed: [] });
+                this.props.navigation.setParams({ "pet": null });
             }
         )
     }
@@ -148,11 +148,15 @@ export default class BreedScreen extends React.Component {
             .then((res) => {
                 AsyncStorage.getItem("user").then(user => {
                     user = JSON.parse(user);
+                    const nonEggs = user.eggs.filter( egg => {
+                        return egg.lifeStage !== "egg";
+                    });
+                    const stallsTaken = parseInt(user.pets.length) + parseInt(nonEggs.length);
                     user.eggs.push({ _id: res.data._id, createdOn: res.data.createdOn, lifeStage: res.data.lifeStage });
                     AsyncStorage.setItem("user", JSON.stringify(user)).then(() => {
                         const navigate = NavigationActions.navigate({
                             routeName: "EggScreen",
-                            params: { egg: res.data._id }
+                            params: { egg: res.data._id, stallsTaken: stallsTaken }
                         });
                         this.props.navigation.dispatch(navigate);
                     })

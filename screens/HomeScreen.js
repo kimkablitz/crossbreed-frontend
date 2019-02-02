@@ -13,8 +13,8 @@ import PetCard from '../components/Stable/PetCard';
 import EggCard from '../components/Stable/EggCard';
 import { Col, Row, Grid } from "react-native-easy-grid";
 import { NavigationActions } from 'react-navigation';
-import { Content, Container, Header, Body, Button, Title, Text } from 'native-base';
-import { throwIfAudioIsDisabled } from 'expo/build/av/Audio/AudioAvailability';
+import { Content, Container, Header, Body, Button, Title, Text, H1 } from 'native-base';
+import Layout from "../constants/Layout";
 
 export default class HomeScreen extends React.Component {
   static navigationOptions = {
@@ -29,12 +29,12 @@ export default class HomeScreen extends React.Component {
       stalls: [],
       // this will hold all the user's eggs
       eggs: [],
+      incubatingEggs: [],
+      readyToHatchEggs: [],
+      // Stalls that are taken up by a pet, incubating egg, or readyToHatch egg
+      stallsTaken: 0
     },
     this.timer;
-  }
-
-  componentWillMount(){
-    this.grabAsyncStorage();
   }
 
   componentDidMount(){
@@ -54,24 +54,35 @@ export default class HomeScreen extends React.Component {
 
   grabAsyncStorage = async () => {
     try {
-      // await AsyncStorage.setItem('pets', JSON.stringify(this.state.stalls));
       const value = await AsyncStorage.getItem('user');
       if (value !== null) {
         // We have data!!
         const userInfo = JSON.parse(value);
+        const eggs = [];
         const incubatingEggs = [];
+        const readyToHatchEggs = [];
         userInfo.eggs.map( egg => {
           if(egg.lifeStage === "incubating"){
             incubatingEggs.push(egg);
           }
+          else if(egg.lifeStage === "readyToHatch"){
+            readyToHatchEggs.push(egg);
+          }
+          else{
+            eggs.push(egg);
+          }
         });
-        this.incubatingEggs = incubatingEggs;
-        if(this.incubatingEggs.length > 0){
-          this.incubationTimer();
-        }
+        const stallsTaken = parseInt(userInfo.pets.length) + parseInt(incubatingEggs.length) + parseInt(readyToHatchEggs.length);
         this.setState({ 
           stalls: userInfo.pets,
-          eggs: userInfo.eggs,
+          eggs: eggs,
+          incubatingEggs: incubatingEggs,
+          readyToHatchEggs: readyToHatchEggs,
+          stallsTaken: stallsTaken
+        }, () => {
+          if(incubatingEggs.length > 0){
+            this.incubationTimer();
+          }
         });
       }
     } catch (error) {
@@ -83,34 +94,47 @@ export default class HomeScreen extends React.Component {
   incubationTimer = () => {
     clearInterval(this.timer);
     this.timer = setInterval( () => {
-      if(this.incubatingEggs.length < 1){
+      let incubatingEggs = _.clone(this.state.incubatingEggs);
+      if(incubatingEggs.length < 1){
         clearInterval(this.timer);
       }
-      this.incubatingEggs.forEach((egg, index) => {
+      incubatingEggs.forEach((egg, index) => {
         const now = Date.now();
         if(parseInt(now) >= parseInt(egg.willHatchOn)){
-          this.incubatingEggs.splice(index, 1);
-          const eggs = _.clone(this.state.eggs);
-          eggs.find(i => i._id === egg._id).lifeStage = "readyToHatch";
-          this.setState({ eggs: eggs });
+          egg.lifeStage = "readyToHatch";
+          incubatingEggs.splice(index, 1);
+          const readyToHatchEggs = _.clone(this.state.readyToHatchEggs);
+          readyToHatchEggs.push(egg);
+          this.setState({ incubatingEggs: incubatingEggs, readyToHatchEggs: readyToHatchEggs }, () => {
+            AsyncStorage.getItem("user").then( user => {
+              user = JSON.parse(user);
+              user.eggs = user.eggs.map( userEgg => {
+                if(userEgg._id === egg._id){
+                  return egg;
+                }
+                return userEgg;
+              });
+              AsyncStorage.setItem("user", JSON.stringify(user));
+            })
+          });
         }
       });
     }, 1000)
   }
 
-  petOnPress = (index) => {
+  petOnPress = (_id) => {
     const navigateAction = NavigationActions.navigate({
       routeName: 'PetScreen',
-      params: { pet: this.state.stalls[index]._id },
+      params: { pet: _id, currentPetNumber: this.state.stalls.length },
     });
     
     this.props.navigation.dispatch(navigateAction);
   }
 
-  eggOnPress = (index) => {
+  eggOnPress = (_id) => {
     const navigateAction = NavigationActions.navigate({
       routeName: 'EggScreen',
-      params: { egg: this.state.eggs[index]._id },
+      params: { egg: _id, stallsTaken: this.state.stallsTaken },
     });
     
     this.props.navigation.dispatch(navigateAction);
@@ -122,31 +146,23 @@ export default class HomeScreen extends React.Component {
 
   mapPetsAndEggs = () => {
     const renderArray = [];
-    this.state.stalls.map( (stall, index) => {
+    this.state.stalls.map( stall => {
       renderArray.push( <Col key={stall._id} style={{width: 150}} >
-        <PetCard key={stall._id} data={stall} press={() => {this.petOnPress(index)}} />
+        <PetCard key={stall._id} data={stall} press={() => {this.petOnPress(stall._id)}} />
       </Col>)
     });
-    if(this.state.eggs.length > 0){
-      this.state.eggs.map(( egg, index) => {
-        if(egg.lifeStage === "readyToHatch"){
-          renderArray.push( <Col key={egg._id} style={{width: 150}} > 
-            <EggCard key={egg._id} data={egg} lifeStage={egg.lifeStage} press={() => {this.eggOnPress(index)}} />
+    if(this.state.readyToHatchEggs.length > 0){
+      this.state.readyToHatchEggs.map( egg => {
+        renderArray.push( <Col key={egg._id} style={{width: 150}} > 
+            <EggCard key={egg._id} data={egg} press={() => {this.eggOnPress(egg._id)}} />
           </Col>)
-        }
-        else if(egg.lifeStage === "incubating"){
-          const now = Date.now();
-          if(parseInt(now) >= parseInt(egg.willHatchOn)){
-            renderArray.push( <Col key={egg._id} style={{width: 150}} > 
-              <EggCard key={egg._id} data={egg} lifeStage="readyToHatch" press={() => {this.eggOnPress(index)}} />
-            </Col>)
-          }
-          else{
-            renderArray.push( <Col key={egg._id} style={{width: 150}} > 
-              <EggCard key={egg._id} data={egg} lifeStage={egg.lifeStage} press={() => {this.eggOnPress(index)}} />
-            </Col>)
-          }
-        }
+      })
+    }
+    if(this.state.incubatingEggs.length > 0){
+      this.state.incubatingEggs.map( egg => {
+        renderArray.push( <Col key={egg._id} style={{width: 150}} > 
+          <EggCard key={egg._id} data={egg} press={() => {this.eggOnPress(egg._id)}} />
+        </Col>)
       })
     }
     return renderArray;
@@ -174,6 +190,11 @@ export default class HomeScreen extends React.Component {
                   <Text>Eggs</Text> 
               </Button>
             </Row>
+            <Row style={{ alignSelf: "center" }}>
+              {this.state.view === "pets" &&
+                <Text>Stalls Taken: {this.state.stallsTaken}/10</Text>
+              }
+            </Row>
           </Grid>
           <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
             <Grid>
@@ -181,14 +202,17 @@ export default class HomeScreen extends React.Component {
                 {this.state.stalls ? (this.state.view === "pets" ? (this.mapPetsAndEggs().map( card => {
                   return card;
                 }))
-                   : this.state.eggs.length > 0 ? (this.state.eggs.map((egg, index)  => {
+                   : this.state.eggs.length > 0 ? (this.state.eggs.map( egg => {
                     if(egg.lifeStage === "egg"){
                       return <Col key={egg._id} style={{width: 150, height: 200}} > 
-                        <EggCard key={egg._id} data={egg} lifeStage={egg.lifeStage} press={() => {this.eggOnPress(index)}} />
+                        <EggCard key={egg._id} data={egg} press={() => {this.eggOnPress(egg._id)}} />
                       </Col>
                     }
                   }) ) 
-                  : <Text> No Eggs Here </Text>
+                  : <View>
+                      <H1  style={{ alignSelf: "center", paddingTop: 20 }}> No Eggs Here </H1>
+                      <Image style={{ width: (Layout.window.width/2), height: (Layout.window.height/2), alignSelf: "center" }} resizeMode={'contain'} source={require("../assets/images/shopping-basket.png")}/>
+                    </View>
                   )
                 : <Text> Loading Stable </Text>
                 }

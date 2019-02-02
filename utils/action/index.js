@@ -4,7 +4,7 @@ export const convertMongoDateToPST = mongoDate => {
     const date = new Date(mongoDate);
     const options = {
                       year: 'numeric',
-                      month: 'long',
+                      month: 'numeric',
                       day: 'numeric',
                       hour: 'numeric',
                       minute: 'numeric'
