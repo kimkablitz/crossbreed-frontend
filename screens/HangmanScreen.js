@@ -8,20 +8,35 @@ import RaceDisplay from "../components/Match3Game/RaceDisplay";
 import MyModal from "../components/Modal";
 import API from "../utils/API";
 import Alerts from "../utils/Alerts";
+import _ from "lodash";
 
 export default class HangmanScreen extends Component {
     state = {
         petInfo: {},
         difficultyLevel: "",
         gameEnded: false,
-        helpModalVisible: false
+		helpModalVisible: false,
+		word: ['M', 'A', 'G', 'I', 'C'],
+		blanksRemaining = 0,
+		blanks: [],
+		unguessed: ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'],
+		guessedWrong: []
     };
 
     componentWillMount(){
 		const difficultyLevel = this.props.navigation.getParam("difficultyLevel");
 		const petInfo = this.props.navigation.getParam("petInfo");
 		this.backHandler = BackHandler.addEventListener("hardwareBackPress", this.showAlert);
-		this.setState({ petInfo: petInfo, difficultyLevel: difficultyLevel });
+		// eventually we will need to API call for word, and set it up as well.
+		const blanksList = this.state.word.map( () => {
+			return "_"
+		})
+		this.setState({ 
+			petInfo: petInfo, 
+			difficultyLevel: difficultyLevel, 
+			blanksRemaining: this.state.word.length, 
+			blanks: blanksList 
+		});
 	}
 
     showAlert = () => {
@@ -42,35 +57,37 @@ export default class HangmanScreen extends Component {
 		})
 	}
 
-	// get word
-	// include alphabet in state at start
-	// save to state:
-		// word .toUppercase
-		// var word = .toUppercase();
-		// difficulty
-		// word in blanks
-		// var blanksList = word
-		// for (var i = 0; i < word.length; i++) {
-		//     if (word.charAt(i) !== " ") {
-		//         blanks = blanks.push("_");
-		//     }
-		//     else {
-		//         blanks = blanks.push(" ")
-		//     }
-		// }
-
-	// play function:
-		// take letter
-		// runs through word in state and checks for match.
-		// if match push letter to blankslist, slice?
-		// else push from blanks list.
-		// if no push, push to wrong letters
-		// then reset state
-		// check for winning or losing status
+	playGame = (letter) => {
+		let goodGuess = false;
+		let newblanksRemaining = this.state.blanksRemaining;
+		let newBlanks = this.state.blanks.map((blank, index) => {
+			if (this.state.word[index] === letter) {
+				goodGuess = true;
+				newblanksRemaining--;
+				return letter;
+			}
+			else {
+				return blank;
+			}
+		})
+		let newUnguessed = this.state.unguessed.filter((notblank) => {
+				return notblank !== letter;
+		})
+		let newGuessedWrong = goodGuess ? this.state.guessedWrong : _.clone(this.state.guessedWrong).push(letter);
+		this.setState({
+			blanks: newBlanks, 
+			unguessed: newUnguessed, 
+			guessedWrong: newGuessedWrong 
+		})
+		this.winLose();
+	}
 
 	// win lose function:
 		// if wrong letters === limit, lose
 		// if blanks list has no more blanks, win
+	winLose = () => {
+
+	}
 
     render(){
         return(
