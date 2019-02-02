@@ -1,17 +1,20 @@
 import React, { Component } from 'react'
-import { Platform, StyleSheet, View, AsyncStorage } from 'react-native';
-import { Container, Content, Form, Item, Input, Label, Text, Button} from 'native-base';
+import {
+  Platform, StyleSheet, View, AsyncStorage, Image, TouchableOpacity,
+} from 'react-native';
+import { Container, Content, Form, Item, Input, Label, Text, Button } from 'native-base';
 import { NavigationActions } from "react-navigation";
 import * as Expo from 'expo';
 import API from "../utils/API";
 import Alerts from "../utils/Alerts";
+// import { userInfo } from 'os';
 
 export default class AUTHENTICATION extends Component {
   constructor(props) {
     super(props)
     this.state = {
       signedIn: false,
-      authenticating: false, 
+      authenticating: false,
       username: "",
       password: ""
     }
@@ -39,29 +42,33 @@ export default class AUTHENTICATION extends Component {
   }
 
   localSignIn = () => {
-    if(this.state.username === "" || this.state.password === ""){
+    if (this.state.username === "" || this.state.password === "") {
       return Alerts.singleButtonError("Error", "Please fill in all fields");
     }
     this.setState({ authenticating: true }, () => {
       API.login({ username: this.state.username, password: this.state.password })
-      .then(res => this.goToHome(res.data))
-      .catch(err => {
-        this.setState({ authenticating: false }, () => {
-          if(err.response.status === 403){
-            return Alerts.singleButtonError("Unable to login", err.response.data.message);
-          }
-          return Alerts.singleButtonError("Something went wrong!", "Please try again!");
+        .then(res => this.goToHome(res.data))
+        .catch(err => {
+          this.setState({ authenticating: false }, () => {
+            if (err.response.status === 403) {
+              return Alerts.singleButtonError("Unable to login", err.response.data.message);
+            }
+            return Alerts.singleButtonError("Something went wrong!", "Please try again!");
+          })
         })
-      })
     })
   }
 
   googleAPI = (googleUserInfo) => {
     // Need to make API call to back end after google sign in to retrieve user's Mongo _id and pet data
+    console.log(googleUserInfo)
     API.googleLogin(googleUserInfo)
-    // Then call goToHome with the returned data
-    .then(res => this.goToHome(res.data))
-    .catch(err => this.setState({ authenticating: false }, ()=> console.log(err)));
+      // Then call goToHome with the returned data
+      .then(res => {
+        console.log(res.data)
+        return this.goToHome(res.data)
+      })
+      .catch(err => this.setState({ authenticating: false }, () => console.log(err)));
   }
 
   signUp = () => {
@@ -72,53 +79,75 @@ export default class AUTHENTICATION extends Component {
   }
 
   goToHome = async (result) => {
-      try {
-        // Storing user data in react-native's AsyncStorage
-        await AsyncStorage.setItem('user', JSON.stringify(result) );
-        const navigateHome = NavigationActions.navigate({
-          routeName: "Home",
-        });
-        this.props.navigation.dispatch(navigateHome);
-      } catch (error) {
-        console.log(error);
-      }
-    
+    try {
+      // Storing user data in react-native's AsyncStorage
+      await AsyncStorage.setItem('user', JSON.stringify(result));
+      const navigateHome = NavigationActions.navigate({
+        routeName: "Home",
+      });
+      this.props.navigation.dispatch(navigateHome);
+    } catch (error) {
+      console.log(error);
+    }
+
   }
-  
+
   render() {
     return (
-      {...this.state.authenticating 
-      ? <View style={styles.container}>
-        <Text style={styles.centerSelf}>Loading Stable...</Text>
-      </View>
-      : <Container>
-          {/* {Platform.OS === "ios"
-            ? <View style={styles.container}> 
-                <Button style={styles.centerSelf} onPress={ () => this.googleSignIn() }>
-                  <Text>Sign in with Google</Text>
-                </Button>
-              </View> */}
-            {/* : */}
-             <Content padder contentContainerStyle={ styles.formContainer }>
+      {
+        ...this.state.authenticating
+          ? <View style={styles.container}>
+            <Text style={styles.centerSelf}>Loading Stable...</Text>
+          </View>
+          : <Container>
+            {Platform.OS === "ios"
+              ? <View style={styles.container}>
+                <Content padder contentContainerStyle={styles.formContainer}>
+                  <Form>
+                    <Item floatingLabel>
+                      <Label>Username</Label>
+                      <Input onChangeText={(value) => this.setState({ username: value })} />
+                    </Item>
+                    <Item floatingLabel>
+                      <Label>Password</Label>
+                      <Input secureTextEntry={true} onChangeText={(value) => this.setState({ password: value })} />
+                    </Item>
+                    <Button block success style={{ marginVertical: 20 }} onPress={() => this.localSignIn()} >
+                      <Text>Login</Text>
+                    </Button>
+                    <Button block onPress={() => this.signUp()} >
+                      <Text>Register</Text>
+                    </Button>
+                    <TouchableOpacity onPress={() => this.googleSignIn()} >
+                      <Image
+                        style={styles.centerSelf}
+                        source={require('../assets/images/googleSignin.png')}
+                      />
+                    </TouchableOpacity>
+                  </Form>
+                </Content>
+              </View>
+              :
+              <Content padder contentContainerStyle={styles.formContainer}>
                 <Form>
                   <Item floatingLabel>
                     <Label>Username</Label>
-                    <Input onChangeText={(value) => this.setState({username: value})}/>
+                    <Input onChangeText={(value) => this.setState({ username: value })} />
                   </Item>
                   <Item floatingLabel>
                     <Label>Password</Label>
-                    <Input secureTextEntry={true} onChangeText={(value) => this.setState({password: value})}/>
+                    <Input secureTextEntry={true} onChangeText={(value) => this.setState({ password: value })} />
                   </Item>
-                  <Button block success style={{ marginVertical: 20 }} onPress={ () => this.localSignIn() } >
+                  <Button block success style={{ marginVertical: 20 }} onPress={() => this.localSignIn()} >
                     <Text>Login</Text>
                   </Button>
-                  <Button block onPress={ () => this.signUp() } >
+                  <Button block onPress={() => this.signUp()} >
                     <Text>Register</Text>
                   </Button>
                 </Form>
               </Content>
-          {/* } */}
-        </Container>
+            }
+          </Container>
       }
     )
   }
@@ -133,7 +162,7 @@ const styles = StyleSheet.create({
     justifyContent: "center"
   },
   formContainer: {
-    flex: 1 , 
+    flex: 1,
     justifyContent: "flex-start"
   },
   centerSelf: {
