@@ -110,14 +110,13 @@ export default class AUTHENTICATION extends Component {
     this.props.navigation.dispatch(navigateAction);
   };
 
-  forgot = () => {
+  toForgotRoute = () => {
     const navigateAction = NavigationActions.navigate({
       routeName: "Forgot"
     });
     this.props.navigation.dispatch(navigateAction);
   };
 
-  
 
   goToHome = async result => {
     try {
@@ -204,7 +203,7 @@ export default class AUTHENTICATION extends Component {
                     <Text >SIGN IN</Text>
                   </Button>
                   <Row size={ 1 } >
-                  <Button block light style={{ margin: 10}} onPress={() => this.signUp()}>
+                  <Button block light style={{ margin: 10}} onPress={() => this.toForgotRoute()}>
                     <Text>FORGOT PASSWORD?</Text>
                   </Button>
                   <Button block light style={{ margin: 10}} onPress={() => this.signUp()}>
