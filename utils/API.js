@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const baseURL = "http://10.19.5.180:3001" //"https://crossbreed-backend.herokuapp.com"
+const baseURL = "http://10.0.0.110:3001" //"https://crossbreed-backend.herokuapp.com"
 
 
 export default {
@@ -70,5 +70,8 @@ export default {
     },
     getHangmanWord: (difficulty) => {
         return axios.get(`${baseURL}/api/words/${difficulty}`)
+    },
+    getWordHints: (word) => {
+        return axios.get(`${baseURL}/api/words/details/${word}`)
     }
 }
