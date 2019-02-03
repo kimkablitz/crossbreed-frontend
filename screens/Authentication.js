@@ -25,6 +25,8 @@ import Alerts from "../utils/Alerts";
 import { Ionicons } from "@expo/vector-icons";
 import { LinearGradient } from "expo";
 import AppIntroSlider from "react-native-app-intro-slider";
+import { Grid, Row, Col } from "react-native-easy-grid";
+
 
 export default class AUTHENTICATION extends Component {
   constructor(props) {
@@ -155,18 +157,18 @@ export default class AUTHENTICATION extends Component {
         <View style={styles.container} />
       ) : (
         <Container>
-          <AppIntroSlider
+          {Platform.OS === "ios" ? (
+            <View style={styles.container}>
+                      <AppIntroSlider
             slides={slides}
             renderItem={this._renderItem}
             bottomButton
             showPrevButton
             showSkipButton
-            // hideNextButton
-            // hideDoneButton
+            hideNextButton
+            hideDoneButton
             // onSkip={() => console.log("skipped")}
           />
-          {Platform.OS === "ios" ? (
-            <View style={styles.container}>
               <Content padder contentContainerStyle={styles.formContainer}>
                 <Form>
                   <Item floatingLabel>
@@ -182,25 +184,30 @@ export default class AUTHENTICATION extends Component {
                       onChangeText={value => this.setState({ password: value })}
                     />
                   </Item>
-                  {/* <Button
+                  <Button
                     block
-                    success
-                    style={{ marginVertical: 20 }}
+                    full
+                    info 
+                    style={{ margin: 10}}
+                    // style={{ marginVertical: 20 }}
                     onPress={() => this.localSignIn()}
-                  > */}
-                  <View style={styles.myButtons}>
-                    <Text onPress={() => this.localSignIn()}>Login</Text>
-                  {/* </Button> */}
-                  {/* <Button block onPress={() => this.signUp()}> */}
-                    <Text  onPress={() => this.signUp()}>Register</Text>
-                  {/* </Button> */}
-                  </View>
+                  >
+                    <Text >SIGN IN</Text>
+                  </Button>
+                  <Row size={ 1 } >
+                  <Button block light style={{ margin: 10}} onPress={() => this.signUp()}>
+                    <Text>FORGOT PASSWORD?</Text>
+                  </Button>
+                  <Button block light style={{ margin: 10}} onPress={() => this.signUp()}>
+                    <Text>JOIN NOW</Text>
+                  </Button>
                   <TouchableOpacity onPress={() => this.googleSignIn()}>
                     <Image
                       style={styles.centerSelf}
                       source={require("../assets/images/googleSignin.png")}
                     />
                   </TouchableOpacity>
+                  </Row>
                 </Form>
               </Content>
             </View>
@@ -232,6 +239,16 @@ export default class AUTHENTICATION extends Component {
                   <Text>Register</Text>
                 </Button>
               </Form>
+              {/* <AppIntroSlider
+            slides={slides}
+            renderItem={this._renderItem}
+            bottomButton
+            showPrevButton
+            showSkipButton
+            hideNextButton
+            hideDoneButton
+            // onSkip={() => console.log("skipped")}
+          /> */}
             </Content>
           )}
         </Container>
@@ -243,7 +260,6 @@ export default class AUTHENTICATION extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
     alignContent: "stretch",
     justifyContent: "center"
   },
@@ -251,12 +267,9 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "flex-start"
   },
-  myButtons:{
-    flexDirection: "row",
-    marginVertical: 20,
-    justifyContent: "flex-start",
-    alignContent: "space-around"
-  },
+  // myButtons:{
+  //   flexDirection: "row",
+  // },
   centerSelf: {
     alignSelf: "center"
   },
