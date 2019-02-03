@@ -9,24 +9,19 @@ export default class aboutUs extends Component {
     
     render() {
         return(
-        <Container style={styles.content}>
-        <Content>
-        <Image source={require('../../../assets/images/Tassa.png')} />
-        <Image source={require('../../../assets/images/Kimmy.png')} />
-        <Image source={require('../../../assets/images/Jover.jpg')} />
-        <Image source={require('../../../assets/images/Theresa.png')} />
-        </Content>
+        <Container >
+            <Header>
+                <Body>
+                    <Title style={{alignSelf: 'center'}}>About Us</Title>
+                </Body>
+            </Header>
+            <Content>
+                <Image source={require('../../../assets/images/Tassa.png')} />
+                <Image source={require('../../../assets/images/Kimmy.png')} />
+                <Image source={require('../../../assets/images/Jover.jpg')} />
+                <Image source={require('../../../assets/images/Theresa.png')} />
+            </Content>
       </Container>
         )
     }
 }
-
-var styles = StyleSheet.create({
-    content:{
-        flex:1,
-        flexDirection:'row',
-        alignItems:'center',
-        justifyContent:'center'
-    },
-   
-});

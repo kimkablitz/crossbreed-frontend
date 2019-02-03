@@ -184,12 +184,12 @@ export default class PetScreen extends React.Component {
                     keyboardVerticalOffset={0}
                     enabled
                 >
-                <Content style={styles.centeredContent} >
                     <Header>
                         <Body>
                             <Title style={{ alignSelf: 'center' }}>{this.state.pet.name}</Title>
                         </Body>
                     </Header>
+                <Content style={styles.centeredContent} >
                     <Card style={styles.centeredContent}>
                         <CardItem>
                             <Body>
