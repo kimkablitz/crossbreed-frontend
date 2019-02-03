@@ -71,7 +71,7 @@ export default class SignUp extends Component {
             </Item>
             <Item floatingLabel>
               <Label>Email</Label>
-              <Input name="displayName" onChangeText={(value) => this.setState({email: value.trim()})}/>
+              <Input name="email" onChangeText={(value) => this.setState({email: value.trim()})}/>
             </Item>
             <View style={{ marginLeft: 15 }}>
               <PasswordInputText value={this.state.password} onChangeText={ (value) => this.setState({ password: value.trim() })}/>
