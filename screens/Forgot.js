@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { View, AsyncStorage, Button } from "react-native";
+import { View, AsyncStorage } from "react-native";
 import {
   Container,
   Header,
@@ -9,9 +9,10 @@ import {
   Input,
   Label,
   Text,
-  Icon
+  Icon,
+  Button
 } from "native-base";
-import { showMessage, hideMessage } from "react-native-flash-message";
+// import { showMessage, hideMessage } from "react-native-flash-message";
 import Alerts from "../utils/Alerts";
 import API from "../utils/API";
 
@@ -26,13 +27,14 @@ export default class Forgot extends Component {
 
   passwordReset = () => {
     if (this.state.email === "") {
-      return Alerts.singleButtonError("Error", "Please fill in all fields");
+      return Alerts.singleButtonError("Message", "Send us your email to reset password");
     }
-    const resetPasswordUser = email;
+    const email = this.state
+    const thisUserEmail = email;
 
-    API.resetPassword(resetPasswordUser)
+    API.resetPassword(thisUserEmail)
       .then(res => {
-        this.handleForgotPasswordRedirect(res.data);
+        console.log((res.data));
       })
       .catch(err => {
         if (err.response.status === 405) {
@@ -41,16 +43,16 @@ export default class Forgot extends Component {
             err.response.data.message
           );
         }
-        return Alerts.singleButtonError(
-          "Something went wrong",
-          "Please try again!"
-        );
+        // return Alerts.singleButtonError(
+        //   "Something went wrong",
+        //   "Please try again!"
+        // );
       });
   };
 
-  handleForgotPasswordRedirect = thisEmail => {
-    console.log(thisEmail);
-  };
+//   handleForgotPasswordRedirect = thisEmail => {
+//     console.log(thisEmail);
+//   };
 
   render() {
     return (
@@ -65,17 +67,9 @@ export default class Forgot extends Component {
               />
             </Item>
             <View style={{ marginVertical: 20 }}>
-              <Button
-                onPress={() => {
-                  /* HERE WE GONE SHOW OUR FIRST MESSAGE */
-                  showMessage({
-                    message: "Simple message",
-                    type: "info"
-                  });
-                }}
-                title="Reset Password"
-                color="#841584"
-              />
+               <Button > 
+                <Text onPress={this.passwordReset()}>Reset Password</Text>
+               </Button>
             </View>
           </Form>
         </Content>
