@@ -22,5 +22,15 @@ export default {
 			]
 		)
 		return true;
+    },
+
+    hangmanHint: (ears, synonyms, antenae, definition) => {
+        Alert.alert(
+            "Hint:",
+            `${ears ? "Synonyms:" : ""} ${ears && synonyms ? synonyms : ""} ${antenae ? "\n\nDefinition:" : ""} ${antenae && definition ? definition : ""}`,
+            [
+                { text: "Close", style: "cancel" }
+            ]
+        )
     }
 }

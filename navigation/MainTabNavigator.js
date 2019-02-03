@@ -18,9 +18,7 @@ const HomeStack = createStackNavigator(
 { 
   Home: HomeScreen, 
   PetScreen: PetScreen,
-  EggScreen: EggScreen,
-  AboutGame: {screen: AboutGameScreen},
-  AboutUs: {screen: AboutUsScreen},
+  EggScreen: EggScreen
  },
 { initialRouteName: 'Home' }
 );
@@ -90,12 +88,8 @@ GameStack.navigationOptions = ({ navigation }) => {
 
 const AccountStack = createStackNavigator({
   Account: AccountScreen,
-  Settings:{
-    screen: AboutGameScreen,
-    navigationOptions:{
-      gesturesEnabled: false
-    }
-  }
+  AboutGame: {screen: AboutGameScreen},
+  AboutUs: {screen: AboutUsScreen}
 },{
   headerMode: "none",
   initialRouteName: "Account",

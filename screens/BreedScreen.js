@@ -4,7 +4,7 @@ import { View, ScrollView, StyleSheet, AsyncStorage } from 'react-native';
 import PetCard from '../components/Stable/PetCard';
 import TinyPetCard from '../components/Stable/TinyPetCard';
 import { Col, Row, Grid } from 'react-native-easy-grid';
-import { Header, Body, Title, Button, Text, Content } from 'native-base';
+import { Container, Header, Body, Title, Button, Text, Content } from 'native-base';
 import { NavigationActions } from 'react-navigation';
 import Alerts from "../utils/Alerts";
 
@@ -168,13 +168,13 @@ export default class BreedScreen extends React.Component {
 
     render() {
         return (
-            <Content>
+            <Container>
                 <Header>
                     <Body>
                         <Title style={{ alignSelf: 'center' }}>Breed Pets</Title>
                     </Body>
                 </Header>
-                <View style={styles.container}>
+                <Content style={styles.container}>
                     <Grid>
                         <Row style={{ flexWrap: "wrap", justifyContent: 'space-evenly', minHeight: 50 }}>
                             {this.state.tobreed.map((breeder, index) => {
@@ -203,8 +203,8 @@ export default class BreedScreen extends React.Component {
                             </Row>
                         </Grid>
                     </ScrollView>
-                </View>
-            </Content>
+                </Content>
+            </Container>
         );
     }
 }

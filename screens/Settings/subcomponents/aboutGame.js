@@ -9,12 +9,17 @@ export default class aboutGame extends Component {
     
     render() {
         return(
-        <Container style={styles.content}>
-        <Content>
-        <Text>
-        Crossbreed is a react native game that is built in an Expo environment. It has a growing potential among all ages
-        </Text>
-        </Content>
+        <Container>
+            <Header>
+                <Body>
+                    <Title style={{alignSelf: 'center'}}>About Game</Title>
+                </Body>
+            </Header>
+            <Content contentContainerStyle={styles.content}>
+                <Text>
+                    Crossbreed is a react native game that is built in an Expo environment. It has a growing potential among all ages
+                </Text>
+            </Content>
       </Container>
         )
     }

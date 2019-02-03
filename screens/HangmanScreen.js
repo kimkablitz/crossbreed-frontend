@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Alert, BackHandler, AsyncStorage, StyleSheet, View } from "react-native";
-import { Container, Header, Body, Title, Left, Right, Button, Icon, Content, H1, H2, H3, Text } from "native-base";
+import { Container, Header, Body, Title, Left, Right, Button, Icon, Content, H1, H2, H3, Text, Badge } from "native-base";
 import { Grid, Row, Col } from "react-native-easy-grid";
 import { NavigationActions, StackActions } from 'react-navigation';
 import MyModal from "../components/Modal";
@@ -11,6 +11,9 @@ import Alerts from "../utils/Alerts";
 import _ from "lodash";
 
 let modalMessage = '';
+let antenae = true;
+let ears = false;
+let extraGuesses = 2;
 
 export default class HangmanScreen extends Component {
 	state = {
@@ -22,7 +25,10 @@ export default class HangmanScreen extends Component {
 		blanksRemaining: 0,
 		blanks: [],
 		unguessed: [],
-		guessedWrong: []
+		guessedWrong: [],
+		guessesRemaining: 0,
+		hintAvailable: false,
+		hint: {}
 	};
 
 	componentWillMount() {
@@ -38,7 +44,6 @@ export default class HangmanScreen extends Component {
 	}
 
 	startGame = () => {
-		console.log("Starting game");
 		API.getHangmanWord(this.state.difficultyLevel).then(res => {
 			// returns an array of 100, chose one word, convert to array
 			let newWord = res.data[Math.floor(Math.random() * 100)].word.toUpperCase().split('');
@@ -50,13 +55,17 @@ export default class HangmanScreen extends Component {
 					return "_"
 				}
 			})
+			let remaining = 8 + extraGuesses
+			let availability = (ears || antenae) && (remaining <= (this.state.petInfo.level / 5));
 			this.setState({
 				word: newWord,
 				gameEnded: false,
 				blanksRemaining: newWord.length,
 				blanks: blanksList,
 				unguessed: ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'],
-				guessedWrong: []
+				guessedWrong: [],
+				guessesRemaining: remaining,
+				hintAvailable: availability
 			});
 		})
 	}
@@ -83,6 +92,7 @@ export default class HangmanScreen extends Component {
 	playGame = (letter) => {
 		let goodGuess = false;
 		let newblanksRemaining = this.state.blanksRemaining;
+		let newGuessesRemaining = this.state.guessesRemaining;
 		let newBlanks = this.state.blanks.map((blank, index) => {
 			if (this.state.word[index] === letter) {
 				goodGuess = true;
@@ -97,17 +107,38 @@ export default class HangmanScreen extends Component {
 			return notblank !== letter;
 		})
 		let newGuessedWrong = _.clone(this.state.guessedWrong);
-		goodGuess ? this.state.guessedWrong : newGuessedWrong.push(letter);
+		if (!goodGuess) {
+			newGuessedWrong.push(letter);
+			newGuessesRemaining--;
+		}
 		this.setState({
 			blanksRemaining: newblanksRemaining,
 			blanks: newBlanks,
 			unguessed: newUnguessed,
-			guessedWrong: newGuessedWrong
+			guessedWrong: newGuessedWrong,
+			guessesRemaining: newGuessesRemaining
 		}, () => {
-			if (this.state.blanksRemaining <= 0 || this.state.guessedWrong.length >= 8) {
+			if ((this.state.blanksRemaining <= 0) || (this.state.guessesRemaining <= 0)) {
 				this.endGame(this.state.blanksRemaining)
 			}
+			else if ((ears || antenae) && (this.state.guessesRemaining <= (this.state.petInfo.level / 5) + 1)) {
+				this.setState({
+					hintAvailable: true
+				})
+			}
 		})
+	}
+
+	getHints = () => {
+		API.getWordHints(this.state.word.join("")).then(res => {
+			if (res.data.results.length > 0) {
+				this.setState({
+					hint: res.data.results[0]
+				}, () => {
+					return Alerts.hangmanHint(ears, this.state.hint.synonyms, antenae, this.state.hint.definition)
+				})
+			}
+		}).catch(err => {console.log(err)})
 	}
 
 	endGame = (name) => {
@@ -166,9 +197,6 @@ export default class HangmanScreen extends Component {
 		}
 	}
 
-
-
-
 	render() {
 		return (
 			<Container>
@@ -205,10 +233,18 @@ export default class HangmanScreen extends Component {
 					</MyModal>
 					<EndGameModal modalMessage={modalMessage} visible={this.state.gameEnded} navigateToLobby={() => this.navigate("GameLobby")} startGame={() => this.startGame()} navigateToStable={() => this.navigate("Home")} />
 					<View style={{ flex: 1, alignItems: 'center', padding: 20 }}>
-						<Button transparent large style={{ alignSelf: 'center' }}
-							onPress={() => { console.log("Pressed Pet") }}
+						<Button transparent large 
+							style={{ alignSelf: 'center' }}
+							onPress={this.state.hintAvailable ? () => { 
+								this.getHints();
+							} : null}
 						>
-							<SlimePet baseColor={this.state.petInfo.baseColor} outlineColor={this.state.petInfo.outlineColor} height="70" width="70" scale="0.5" />
+							<SlimePet style={{alignSelf: 'center'}} baseColor={this.state.petInfo.baseColor} outlineColor={this.state.petInfo.outlineColor} height="70" width="61" scale="0.5" />
+							{this.state.hintAvailable && (
+								<Badge success>
+									<Text>Hint</Text>
+								</Badge>
+							)}
 						</Button>
 						<H2 style={{ paddingTop: 20 }}>The Magic Word:</H2>
 						<H1>
@@ -227,7 +263,7 @@ export default class HangmanScreen extends Component {
 								)
 							})}
 						</Row>
-						<H3 style={{ paddingTop: 20 }}>Guesses Remaining: {8 - this.state.guessedWrong.length}</H3>
+						<H3 style={{ paddingTop: 20 }}>Guesses Remaining: {this.state.guessesRemaining}</H3>
 						<H2 style={{ paddingTop: 20 }}>Unguessed Letters:</H2>
 						<Row style={{ flex: 1, flexWrap: 'wrap', alignSelf: 'center', alignItems: 'center', justifyContent: 'center' }}>
 							{this.state.unguessed.map(unLetter => {
