@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { View, AsyncStorage } from "react-native";
+import { View, AsyncStorage,TextInput } from "react-native";
 import {
   Container,
   Header,
@@ -25,12 +25,12 @@ export default class Forgot extends Component {
     console.log("love you");
   };
 
-  passwordReset = () => {
+  sendEmailBack = () => {
     if (this.state.email === "") {
       return Alerts.singleButtonError("Message", "Send us your email to reset password");
     }
-    const email = this.state
-    const thisUserEmail = email;
+    const thisUserEmail = this.state.email
+    // const thisUserEmail = email;
 
     API.resetPassword(thisUserEmail)
       .then(res => {
@@ -39,7 +39,7 @@ export default class Forgot extends Component {
       .catch(err => {
         if (err.response.status === 405) {
           return Alerts.singleButtonError(
-            "Err! Something has gone wrong, your password reset cannot be complete at this time",
+            "Err", "your password reset cannot be completed at this time",
             err.response.data.message
           );
         }
@@ -59,16 +59,28 @@ export default class Forgot extends Component {
       <Container>
         <Content padder contentContainerStyle={{ flex: 1 }}>
           <Form>
-            <Item floatingLabel>
+          {/* <Item floatingLabel>
+              <Label>Username</Label>
+              <Input
+                name="username"
+                onChangeText={value => this.setState({ username: value.trim() })}
+              />
+            </Item> */}
+            {/* <Item floatingLabel>
               <Label>Email</Label>
               <Input
                 name="email"
                 onChangeText={value => this.setState({ email: value.trim() })}
               />
-            </Item>
+            </Item> */}
+            <TextInput
+        style={{height: 40, borderColor: 'gray', borderWidth: 1}}
+        onChangeText={(email) => this.setState({email})}
+        value={this.state.email}
+      />
             <View style={{ marginVertical: 20 }}>
                <Button > 
-                <Text onPress={this.passwordReset()}>Reset Password</Text>
+                <Text onPress={this.sendEmailBack}>Reset Password</Text>
                </Button>
             </View>
           </Form>
