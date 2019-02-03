@@ -22,14 +22,14 @@ export default class SignUp extends Component {
         return Alerts.singleButtonError("Error", "Please fill in all fields");
       }
         // deconstruct state object
-        const { username, password, displayName } = this.state;
+        const { username, password, displayName, email } = this.state;
         const passwordMessage = validator.password(password)
         if (passwordMessage !== "Success") {
           return Alerts.singleButtonError(passwordMessage.title, passwordMessage.message)
         }
 
         // create newUser object to be sent to database
-        const newUser = { username, password, displayName };
+        const newUser = { username, password, displayName, email };
 
         API.signUp(newUser)
             .then(res => {
