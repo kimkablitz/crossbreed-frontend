@@ -63,12 +63,12 @@ render() {
 
   return (
     <Container>
-      <Content>
       <Header> 
-          <Body>
-            <Title style={{alignSelf: 'center'}}>Settings</Title>
-          </Body>
-        </Header>
+        <Body>
+          <Title style={{alignSelf: 'center'}}>Settings</Title>
+        </Body>
+      </Header>
+      <Content>
         <List>
           <ListItem>
             <Text  onPress={() => navigate('AboutGame')}>About the game</Text>
