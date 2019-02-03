@@ -110,6 +110,15 @@ export default class AUTHENTICATION extends Component {
     this.props.navigation.dispatch(navigateAction);
   };
 
+  forgot = () => {
+    const navigateAction = NavigationActions.navigate({
+      routeName: "Forgot"
+    });
+    this.props.navigation.dispatch(navigateAction);
+  };
+
+  
+
   goToHome = async result => {
     try {
       // Storing user data in react-native's AsyncStorage
@@ -303,7 +312,7 @@ const slides = [
     title: "Quick setup, good defaults",
     text:
       "React-native-app-intro-slider is easy to setup with a small footprint and no dependencies. And it comes with good default layouts!",
-    icon: "ios-images",
+    icon: "ios-apps",
     colors: ["#63E2FF", "#B066FE"]
   },
   {
@@ -311,14 +320,14 @@ const slides = [
     title: "Super customizable",
     text:
       "The component is also super customizable, so you can adapt it to cover your needs and wants.",
-    icon: "ios-options",
+    icon: "md-git-network",
     colors: ["#A3A1FF", "#3A3897"]
   },
   {
     key: "somethun2",
     title: "No need to buy me beer",
     text: "Usage is all free",
-    icon: "ios-beer",
+    icon: "md-people",
     colors: ["#29ABE2", "#4F00BC"]
   }
 ];
