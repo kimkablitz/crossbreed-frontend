@@ -228,7 +228,7 @@ export default class HomeScreen extends React.Component {
                 }}
               >
                 <Button
-                  info
+                  success
                   bordered={this.state.view === "pets" ? false : true}
                   rounded
                   style={{ flex: 1, margin: 10, justifyContent: "center" }}
@@ -321,5 +321,5 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '100%',
     flex: 1 
-},
+  },
 });
