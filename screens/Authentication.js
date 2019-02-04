@@ -15,7 +15,8 @@ import {
   Item,
   Input,
   Label,
-  Button
+  Button,
+  // Text
 } from "native-base";
 import { NavigationActions } from "react-navigation";
 import * as Expo from "expo";
