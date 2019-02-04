@@ -12,7 +12,7 @@ import _ from "lodash";
 
 let modalMessage = '';
 let antenae = true;
-let ears = false;
+let ears = true;
 let extraGuesses = 2;
 
 export default class HangmanScreen extends Component {
@@ -121,7 +121,7 @@ export default class HangmanScreen extends Component {
 			if ((this.state.blanksRemaining <= 0) || (this.state.guessesRemaining <= 0)) {
 				this.endGame(this.state.blanksRemaining)
 			}
-			else if ((ears || antenae) && (this.state.guessesRemaining <= (this.state.petInfo.level / 5))) {
+			else if ((ears || antenae) && (this.state.guessesRemaining <= (this.state.petInfo.level / 5) + 1)) {
 				this.setState({
 					hintAvailable: true
 				})
