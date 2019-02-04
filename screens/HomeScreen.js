@@ -208,10 +208,11 @@ export default class HomeScreen extends React.Component {
 
   render() {
     return (
-      <ImageBackground style={ styles.imgBackground } 
+      
+        <Container>
+          <ImageBackground style={ styles.imgBackground } 
                  resizeMode='cover' 
                  source={require('../assets/images/background.png')}>
-        <Container>
           <Header>
             <Body>
               <Title style={{ alignSelf: "center" }}>Stable</Title>
@@ -305,8 +306,9 @@ export default class HomeScreen extends React.Component {
               </Grid>
             </ScrollView>
           </Content>
+          </ImageBackground>
         </Container>
-      </ImageBackground>
+      
     );
   }
 }
