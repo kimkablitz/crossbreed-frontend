@@ -12,7 +12,6 @@ import {
   Icon,
   Button
 } from "native-base";
-// import { showMessage, hideMessage } from "react-native-flash-message";
 import Alerts from "../utils/Alerts";
 import API from "../utils/API";
 
@@ -43,36 +42,15 @@ export default class Forgot extends Component {
             err.response.data.message
           );
         }
-        // return Alerts.singleButtonError(
-        //   "Something went wrong",
-        //   "Please try again!"
-        // );
       });
   };
 
-//   handleForgotPasswordRedirect = thisEmail => {
-//     console.log(thisEmail);
-//   };
 
   render() {
     return (
       <Container>
         <Content padder contentContainerStyle={{ flex: 1 }}>
           <Form>
-          {/* <Item floatingLabel>
-              <Label>Username</Label>
-              <Input
-                name="username"
-                onChangeText={value => this.setState({ username: value.trim() })}
-              />
-            </Item> */}
-            {/* <Item floatingLabel>
-              <Label>Email</Label>
-              <Input
-                name="email"
-                onChangeText={value => this.setState({ email: value.trim() })}
-              />
-            </Item> */}
             <TextInput
         style={{height: 40, borderColor: 'gray', borderWidth: 1}}
         onChangeText={(email) => this.setState({email})}
