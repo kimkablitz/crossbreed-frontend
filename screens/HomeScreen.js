@@ -208,10 +208,11 @@ export default class HomeScreen extends React.Component {
 
   render() {
     return (
-      <ImageBackground style={ styles.imgBackground } 
+      
+        <Container>
+          <ImageBackground style={ styles.imgBackground } 
                  resizeMode='cover' 
                  source={require('../assets/images/background.png')}>
-        <Container>
           <Header>
             <Body>
               <Title style={{ alignSelf: "center" }}>Stable</Title>
@@ -227,7 +228,7 @@ export default class HomeScreen extends React.Component {
                 }}
               >
                 <Button
-                  info
+                  success
                   bordered={this.state.view === "pets" ? false : true}
                   rounded
                   style={{ flex: 1, margin: 10, justifyContent: "center" }}
@@ -305,8 +306,9 @@ export default class HomeScreen extends React.Component {
               </Grid>
             </ScrollView>
           </Content>
+          </ImageBackground>
         </Container>
-      </ImageBackground>
+      
     );
   }
 }
@@ -319,5 +321,5 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '100%',
     flex: 1 
-},
+  },
 });

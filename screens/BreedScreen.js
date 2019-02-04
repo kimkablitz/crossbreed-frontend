@@ -1,6 +1,6 @@
 import React from 'react';
 import API from "../utils/API";
-import { View, ScrollView, StyleSheet, AsyncStorage } from 'react-native';
+import { View, ScrollView, StyleSheet, AsyncStorage, ImageBackground } from 'react-native';
 import PetCard from '../components/Stable/PetCard';
 import TinyPetCard from '../components/Stable/TinyPetCard';
 import { Col, Row, Grid } from 'react-native-easy-grid';
@@ -145,65 +145,69 @@ export default class BreedScreen extends React.Component {
                 firstParent: this.state.tobreed[0]._id,
                 secondParent: this.state.tobreed[1]._id
             })
-            .then((res) => {
-                AsyncStorage.getItem("user").then(user => {
-                    user = JSON.parse(user);
-                    const nonEggs = user.eggs.filter( egg => {
-                        return egg.lifeStage !== "egg";
-                    });
-                    const stallsTaken = parseInt(user.pets.length) + parseInt(nonEggs.length);
-                    user.eggs.push({ _id: res.data._id, createdOn: res.data.createdOn, lifeStage: res.data.lifeStage });
-                    AsyncStorage.setItem("user", JSON.stringify(user)).then(() => {
-                        const navigate = NavigationActions.navigate({
-                            routeName: "EggScreen",
-                            params: { egg: res.data._id, stallsTaken: stallsTaken }
+                .then((res) => {
+                    AsyncStorage.getItem("user").then(user => {
+                        user = JSON.parse(user);
+                        const nonEggs = user.eggs.filter(egg => {
+                            return egg.lifeStage !== "egg";
                         });
-                        this.props.navigation.dispatch(navigate);
+                        const stallsTaken = parseInt(user.pets.length) + parseInt(nonEggs.length);
+                        user.eggs.push({ _id: res.data._id, createdOn: res.data.createdOn, lifeStage: res.data.lifeStage });
+                        AsyncStorage.setItem("user", JSON.stringify(user)).then(() => {
+                            const navigate = NavigationActions.navigate({
+                                routeName: "EggScreen",
+                                params: { egg: res.data._id, stallsTaken: stallsTaken }
+                            });
+                            this.props.navigation.dispatch(navigate);
+                        })
                     })
                 })
-            })
-            .catch(err => Alerts.singleButtonError("Error", "Something went wrong! Please try again!"));
+                .catch(err => Alerts.singleButtonError("Error", "Something went wrong! Please try again!"));
         }
     }
 
     render() {
         return (
             <Container>
-                <Header>
-                    <Body>
-                        <Title style={{ alignSelf: 'center' }}>Breed Pets</Title>
-                    </Body>
-                </Header>
-                <Content style={styles.container}>
-                    <Grid>
-                        <Row style={{ flexWrap: "wrap", justifyContent: 'space-evenly', minHeight: 50 }}>
-                            {this.state.tobreed.map((breeder, index) => {
-                                return <Col key={breeder._id} style={{ width: 150 }} >
-                                    <PetCard key={index} data={breeder} press={() => { this.breederOnPress(index) }}
-                                    />
-                                </Col>
-                            })}
-                        </Row>
-                        <Row style={{ justifyContent: 'center' }}>
-                            <Button danger rounded style={{ margin: 10 }}
-                                onPress={() => this.handleBreedPets()}
-                            >
-                                <Text>Breed</Text>
-                            </Button>
-                        </Row>
-                    </Grid>
-                    <ScrollView style={styles.container}>
+                <ImageBackground style={styles.imgBackground}
+                    resizeMode='cover'
+                    source={require('../assets/images/background.png')}>
+                    <Header>
+                        <Body>
+                            <Title style={{ alignSelf: 'center' }}>Breed Pets</Title>
+                        </Body>
+                    </Header>
+                    <Content style={styles.container}>
                         <Grid>
-                            <Row style={{ flexWrap: "wrap", justifyContent: 'space-evenly' }} >
-                                {this.state.pets.map((pet, index) => {
-                                    return <Col key={pet._id} style={{ width: 100 }} >
-                                        <TinyPetCard key={index} data={pet} press={() => { this.petOnPress(index) }} />
+                            <Row style={{ flexWrap: "wrap", justifyContent: 'space-evenly', minHeight: 50 }}>
+                                {this.state.tobreed.map((breeder, index) => {
+                                    return <Col key={breeder._id} style={{ width: 150 }} >
+                                        <PetCard key={index} data={breeder} press={() => { this.breederOnPress(index) }}
+                                        />
                                     </Col>
                                 })}
                             </Row>
+                            <Row style={{ justifyContent: 'center' }}>
+                                <Button danger rounded style={{ margin: 10 }}
+                                    onPress={() => this.handleBreedPets()}
+                                >
+                                    <Text>Breed</Text>
+                                </Button>
+                            </Row>
                         </Grid>
-                    </ScrollView>
-                </Content>
+                        <ScrollView style={styles.container}>
+                            <Grid>
+                                <Row style={{ flexWrap: "wrap", justifyContent: 'space-evenly' }} >
+                                    {this.state.pets.map((pet, index) => {
+                                        return <Col key={pet._id} style={{ width: 100 }} >
+                                            <TinyPetCard key={index} data={pet} press={() => { this.petOnPress(index) }} />
+                                        </Col>
+                                    })}
+                                </Row>
+                            </Grid>
+                        </ScrollView>
+                    </Content>
+                </ImageBackground>
             </Container>
         );
     }
@@ -213,6 +217,10 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         paddingTop: 15,
-        backgroundColor: '#fff',
+    },
+    imgBackground: {
+        width: '100%',
+        height: '100%',
+        flex: 1 
     },
 });
