@@ -67,10 +67,16 @@ export default {
     updateLevelAndXP: (petId, levelObj) => {
         return axios.put(`${baseURL}/api/pets/${petId}`, levelObj);
     },
+  
+    resetPassword: (userEmail) => {
+        return axios.post(`${baseURL}/forgot`, userEmail);
+    }, 
     getHangmanWord: (difficulty) => {
         return axios.get(`${baseURL}/api/words/${difficulty}`)
     },
     getWordHints: (word) => {
         return axios.get(`${baseURL}/api/words/details/${word}`)
+
     }
+
 }
