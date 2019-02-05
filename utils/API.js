@@ -1,7 +1,7 @@
 import axios from "axios";
 
 
-const baseURL = "https://crossbreed-backend.herokuapp.com" //"https://crossbreed-backend.herokuapp.com" http://192.168.2.3:3001 10.232.202.221:19000
+const baseURL = "https://crossbreed-backend.herokuapp.com"
 
 
 export default {
@@ -72,7 +72,7 @@ export default {
   
     resetPassword: (userEmail) => {
         return axios.post(`${baseURL}/forgot`, userEmail);
-
+    }, 
     getHangmanWord: (difficulty) => {
         return axios.get(`${baseURL}/api/words/${difficulty}`)
     },

@@ -8,4 +8,6 @@ export default createStackNavigator({
     Authentication: AuthenticationScreen,
     SignUp: SignUpScreen,
     Forgot: ForgotScreen
+},{
+    headerMode: "none"
 });

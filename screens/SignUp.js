@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { View, AsyncStorage } from "react-native"; 
-import { Container, Header, Content, Form, Item, Input, Label, Button, Text, Icon } from 'native-base';
+import { Container, Header, Body, Title, Content, Form, Item, Input, Label, Button, Text, Icon } from 'native-base';
 import { NavigationActions } from "react-navigation";
 import { Row } from "react-native-easy-grid";
 import PasswordInputText from "react-native-hide-show-password-input";
@@ -59,6 +59,11 @@ export default class SignUp extends Component {
   render() {
     return (
       <Container>
+        <Header>
+          <Body>
+            <Title>Sign Up</Title>
+          </Body>
+        </Header>
         <Content padder contentContainerStyle={{ flex: 1 }}>
           <Form>
             <Item floatingLabel>

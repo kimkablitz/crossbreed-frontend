@@ -6,7 +6,7 @@ import {
   AsyncStorage,
   Image,
   TouchableOpacity,
-  Text
+  KeyboardAvoidingView
 } from "react-native";
 import {
   Container,
@@ -15,7 +15,8 @@ import {
   Item,
   Input,
   Label,
-  Button
+  Button,
+  Text
 } from "native-base";
 import { NavigationActions } from "react-navigation";
 import * as Expo from "expo";
@@ -26,6 +27,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { LinearGradient } from "expo";
 import AppIntroSlider from "react-native-app-intro-slider";
 import { Grid, Row, Col } from "react-native-easy-grid";
+import Layout from "../constants/Layout";
 
 
 export default class AUTHENTICATION extends Component {
@@ -164,8 +166,14 @@ export default class AUTHENTICATION extends Component {
       ...(this.state.authenticating ? (
         <View style={styles.container} />
       ) : (
+        <KeyboardAvoidingView
+                    style={{flex: 1}}
+                    behavior='position'
+                    contentContainerStyle={ {height: Layout.window.height} }
+                    keyboardVerticalOffset={0}
+                    enabled
+        >
         <Container>
-          {Platform.OS === "ios" ? (
             <View style={styles.container}>
                       <AppIntroSlider
             slides={slides}
@@ -192,7 +200,8 @@ export default class AUTHENTICATION extends Component {
                       onChangeText={value => this.setState({ password: value })}
                     />
                   </Item>
-                  <Button
+                </Form>
+                <Button
                     block
                     full
                     info 
@@ -200,66 +209,29 @@ export default class AUTHENTICATION extends Component {
                     // style={{ marginVertical: 20 }}
                     onPress={() => this.localSignIn()}
                   >
-                    <Text >SIGN IN</Text>
+                    <Text >Sign In</Text>
+                </Button>
+                <Row size={ 1 } style={{ justifyContent: "space-evenly"}}>
+                  <Button block light style={{ flex: 1, margin: 10}} onPress={() => this.toForgotRoute()}>
+                    <Text>Forgot Password?</Text>
                   </Button>
-                  <Row size={ 1 } >
-                  <Button block light style={{ margin: 10}} onPress={() => this.toForgotRoute()}>
-                    <Text>FORGOT PASSWORD?</Text>
+                  <Button block light style={{ flex: 1, margin: 10}} onPress={() => this.signUp()}>
+                    <Text>Sign up</Text>
                   </Button>
-                  <Button block light style={{ margin: 10}} onPress={() => this.signUp()}>
-                    <Text>JOIN NOW</Text>
-                  </Button>
-                  <TouchableOpacity onPress={() => this.googleSignIn()}>
+                  </Row>
+                {Platform.OS === "ios" && <Row style={{ margin: 10 , alignSelf: "center", justifyContent: "center", alignContent: "center"}}>
+                  <Button iconLeft block style={{margin: 10}} onPress={() => this.googleSignIn()}>
                     <Image
                       style={styles.centerSelf}
                       source={require("../assets/images/googleSignin.png")}
                     />
-                  </TouchableOpacity>
-                  </Row>
-                </Form>
+                    <Text>Sign in with Google</Text>
+                  </Button>
+                </Row>}
               </Content>
             </View>
-          ) : (
-            <Content padder contentContainerStyle={styles.formContainer}>
-              <Form>
-                <Item floatingLabel>
-                  <Label>Username</Label>
-                  <Input
-                    onChangeText={value => this.setState({ username: value })}
-                  />
-                </Item>
-                <Item floatingLabel>
-                  <Label>Password</Label>
-                  <Input
-                    secureTextEntry={true}
-                    onChangeText={value => this.setState({ password: value })}
-                  />
-                </Item>
-                <Button
-                  block
-                  success
-                  style={{ marginVertical: 20 }}
-                  onPress={() => this.localSignIn()}
-                >
-                  <Text>Login</Text>
-                </Button>
-                <Button block onPress={() => this.signUp()}>
-                  <Text>Register</Text>
-                </Button>
-              </Form>
-              {/* <AppIntroSlider
-            slides={slides}
-            renderItem={this._renderItem}
-            bottomButton
-            showPrevButton
-            showSkipButton
-            hideNextButton
-            hideDoneButton
-            // onSkip={() => console.log("skipped")}
-          /> */}
-            </Content>
-          )}
         </Container>
+        </KeyboardAvoidingView>
       ))
     };
   }
