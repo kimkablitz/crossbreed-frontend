@@ -7,6 +7,7 @@ import { NavigationActions } from "react-navigation";
 import * as Expo from 'expo';
 import API from "../utils/API";
 import Alerts from "../utils/Alerts";
+import PasswordInputText from "react-native-hide-show-password-input";
 // import { userInfo } from 'os';
 
 export default class AUTHENTICATION extends Component {
@@ -108,10 +109,13 @@ export default class AUTHENTICATION extends Component {
                       <Label>Username</Label>
                       <Input onChangeText={(value) => this.setState({ username: value })} />
                     </Item>
-                    <Item floatingLabel>
+                    {/* <Item floatingLabel>
                       <Label>Password</Label>
-                      <Input secureTextEntry={true} onChangeText={(value) => this.setState({ password: value })} />
-                    </Item>
+                      <PasswordInputText secureTextEntry={true} onChangeText={(value) => this.setState({ password: value })} />
+                    </Item> */}
+                    <View style={{ marginLeft: 15 }}>
+                      <PasswordInputText value={this.state.password} onChangeText={ (value) => this.setState({ password: value.trim() })}/>
+                    </View>
                     <Button block success style={{ marginVertical: 20 }} onPress={() => this.localSignIn()} >
                       <Text>Login</Text>
                     </Button>
@@ -134,10 +138,13 @@ export default class AUTHENTICATION extends Component {
                     <Label>Username</Label>
                     <Input onChangeText={(value) => this.setState({ username: value })} />
                   </Item>
-                  <Item floatingLabel>
+                  {/* <Item floatingLabel>
                     <Label>Password</Label>
                     <Input secureTextEntry={true} onChangeText={(value) => this.setState({ password: value })} />
-                  </Item>
+                  </Item> */}
+                  <View style={{ marginLeft: 15 }}>
+                    <PasswordInputText value={this.state.password} onChangeText={ (value) => this.setState({ password: value.trim() })}/>
+                  </View>
                   <Button block success style={{ marginVertical: 20 }} onPress={() => this.localSignIn()} >
                     <Text>Login</Text>
                   </Button>
