@@ -11,9 +11,9 @@ import Alerts from "../utils/Alerts";
 import _ from "lodash";
 
 let modalMessage = '';
-let antenae = true;
-let ears = true;
-let extraGuesses = 2;
+// let antenae = true;
+// let ears = true;
+// let extraGuesses = 2;
 
 export default class HangmanScreen extends Component {
 	state = {
@@ -56,8 +56,8 @@ export default class HangmanScreen extends Component {
 					return "_"
 				}
 			})
-			let remaining = 8 + extraGuesses
-			let availability = (ears || antenae) && (remaining <= (this.state.petInfo.level / 5));
+			let remaining = 8 + parseInt(this.state.petInfo.extraGuesses);
+			let availability = (this.state.petInfo.ears || this.state.petInfo.antennae) && (remaining <= (this.state.petInfo.level / 5));
 			this.setState({
 				word: newWord,
 				gameEnded: false,
@@ -122,7 +122,7 @@ export default class HangmanScreen extends Component {
 			if ((this.state.blanksRemaining <= 0) || (this.state.guessesRemaining <= 0)) {
 				this.endGame(this.state.blanksRemaining)
 			}
-			else if ((ears || antenae) && (this.state.guessesRemaining <= (this.state.petInfo.level / 5) + 1)) {
+			else if ((this.state.petInfo.ears || this.state.petInfo.antennae) && (this.state.guessesRemaining <= (this.state.petInfo.level / 5) + 1)) {
 				this.setState({
 					hintAvailable: true
 				})
@@ -136,7 +136,9 @@ export default class HangmanScreen extends Component {
 				this.setState({
 					hint: res.data.results[0]
 				}, () => {
-					return Alerts.hangmanHint(ears, this.state.hint.synonyms, antenae, this.state.hint.definition)
+					let antennae = this.state.petInfo.antennae !== null;
+					let ears = this.state.petInfo.ears !== null;
+					return Alerts.hangmanHint(ears, this.state.hint.synonyms, antennae, this.state.hint.definition)
 				})
 			}
 		}).catch(err => {console.log(err)})
