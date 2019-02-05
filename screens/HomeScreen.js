@@ -6,7 +6,9 @@ import {
   StyleSheet,
   TouchableOpacity,
   View,
-  AsyncStorage, ImageBackground
+  AsyncStorage, 
+  ImageBackground,
+  StatusBar
 } from "react-native";
 import _ from "lodash";
 import PetCard from "../components/Stable/PetCard";
@@ -210,6 +212,7 @@ export default class HomeScreen extends React.Component {
     return (
       
         <Container>
+          <StatusBar hidden/>
           <ImageBackground style={ styles.imgBackground } 
                  resizeMode='cover' 
                  source={require('../assets/images/background.png')}>

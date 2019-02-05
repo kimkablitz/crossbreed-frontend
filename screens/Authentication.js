@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import {
-  Platform, StyleSheet, View, AsyncStorage, Image, TouchableOpacity,
+  Platform, StyleSheet, View, AsyncStorage, Image, TouchableOpacity, StatusBar
 } from 'react-native';
 import { Container, Content, Form, Item, Input, Label, Text, Button } from 'native-base';
 import { NavigationActions } from "react-navigation";
@@ -101,6 +101,7 @@ export default class AUTHENTICATION extends Component {
             <Text style={styles.centerSelf}>Loading Stable...</Text>
           </View>
           : <Container>
+            <StatusBar hidden/>
             {Platform.OS === "ios"
               ? <View style={styles.container}>
                 <Content padder contentContainerStyle={styles.formContainer}>

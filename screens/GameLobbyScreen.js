@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { AsyncStorage, ScrollView, View } from "react-native";
+import { AsyncStorage, ScrollView, View, StatusBar } from "react-native";
 import { Container, Header, Body, Title, Content, Button, Text } from "native-base";
 import { Grid, Row, Col } from "react-native-easy-grid";
 import { NavigationActions } from "react-navigation";
@@ -77,6 +77,7 @@ export default class GameLobbyScreen extends Component {
     render(){
         return (
             <Container>
+                <StatusBar hidden/>
                 <Header>
         	        <Body>
         	          <Title style={{ alignSelf: "center" }}>Game Lobby</Title>
