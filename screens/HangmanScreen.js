@@ -34,6 +34,7 @@ export default class HangmanScreen extends Component {
 	componentWillMount() {
 		const difficultyLevel = this.props.navigation.getParam("difficultyLevel");
 		const petInfo = this.props.navigation.getParam("petInfo");
+		console.log(petInfo);
 		this.backHandler = BackHandler.addEventListener("hardwareBackPress", this.showAlert);
 		this.setState({
 			petInfo: petInfo,
