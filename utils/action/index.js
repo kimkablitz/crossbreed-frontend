@@ -11,3 +11,12 @@ export const convertMongoDateToPST = mongoDate => {
                     };
     return date.toLocaleDateString('en-US', options)
   }
+
+export const convertUnixToTime = unixStamp => {
+  const time = new Date(parseInt(unixStamp));
+  const options = {
+    hour: 'numeric',
+    minute: 'numeric'
+  }
+  return time.toLocaleTimeString('en-US', options);
+}

@@ -269,7 +269,7 @@ export default class HomeScreen extends React.Component {
                           return (
                             <Col
                               key={egg._id}
-                              style={{ width: 150, height: 200 }}
+                              style={{ width: 150 }}
                             >
                               <EggCard
                                 key={egg._id}
