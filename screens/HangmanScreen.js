@@ -219,10 +219,15 @@ export default class HangmanScreen extends Component {
 				<Content>
 					<MyModal visible={this.state.helpModalVisible}>
 						<Grid style={{ backgroundColor: "rgba(0,0,0,0.9)", justifyContent: "center", alignItems: "center" }}>
-							<Row size={1} >
-								<H2 style={{ alignSelf: "center", color: "white", textAlign: "center" }}>
-									Play Hangman with your pet!
-								</H2>
+							<Row size={ 3 } style={{ justifyContent: "center" }}>
+								<Col style={{ justifyContent: "center" }}>
+									<H3 style={styles.helpText}>
+										Play hangman with your pet!
+									</H3>
+									<Text style={styles.helpText}>
+										Hint: If your pet has the right DNA, it may find a hint for you!
+									</Text>
+								</Col>
 							</Row>
 							<Row size={1}>
 								<Button onPress={() => this.setState({ helpModalVisible: false })}>
@@ -282,3 +287,11 @@ export default class HangmanScreen extends Component {
 		)
 	}
 }
+
+const styles = StyleSheet.create({
+	helpText: {
+		color: "white",
+		textAlign: "center",
+		margin: 20
+	}
+});
