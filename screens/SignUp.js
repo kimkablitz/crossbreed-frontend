@@ -18,14 +18,20 @@ export default class SignUp extends Component {
     }
 
     signUp = () => {
-      if(this.state.username === "" || this.state.password === "" || this.state.displayName === ""){
+      // deconstruct state object
+      const { username, password, displayName, email } = this.state;
+      if(username === "" || password === "" || displayName === "" || email === ""){
         return Alerts.singleButtonError("Error", "Please fill in all fields");
       }
-        // deconstruct state object
-        const { username, password, displayName, email } = this.state;
         const passwordMessage = validator.password(password)
         if (passwordMessage !== "Success") {
           return Alerts.singleButtonError(passwordMessage.title, passwordMessage.message)
+        }
+
+        // Use validator to make sure email is in valid format
+        const emailMessage = validator.email(email);
+        if(emailMessage !== "Success"){
+          return Alerts.singleButtonError(emailMessage.title, emailMessage.message);
         }
 
         // create newUser object to be sent to database

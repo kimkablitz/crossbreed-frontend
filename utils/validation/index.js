@@ -6,6 +6,7 @@ const regexkey = {
         lowLetter: /[a-z]/,
         special: /[ !#$%&*,./?@^_`~]/
     },
+    email: /^([a-zA-Z0-9_\-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([a-zA-Z0-9\-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$/,
     petname: /[^ 0-9a-z]+/i
 };
 
@@ -48,6 +49,20 @@ export default {
             return "Success"
         }
     },
+
+    email: (input) => {
+        if(!regexkey.email.test(input)){
+            console.log("failed regex");
+            return {
+                title: "Invalid Email",
+                message: "Please enter a valid email!"
+            }
+        }
+        else{
+            return "Success"
+        }
+    },
+
     petname: (input) => {
         if(!input) {
             return "Your pet needs a name."
