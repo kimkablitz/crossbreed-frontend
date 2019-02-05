@@ -72,8 +72,12 @@ export default {
   
     resetPassword: (userEmail) => {
         return axios.post(`${baseURL}/forgot`, userEmail);
+<<<<<<< HEAD
     },
 
+=======
+    }, 
+>>>>>>> 2c2b8266a62b083a50d2a97ddaa2b88a36b14d73
     getHangmanWord: (difficulty) => {
         return axios.get(`${baseURL}/api/words/${difficulty}`)
     },
