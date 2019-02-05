@@ -70,20 +70,29 @@ render() {
       </Header>
       <Content>
         <List>
-          <ListItem>
-            <Text  onPress={() => navigate('AboutGame')}>About the game</Text>
+          <ListItem icon onPress={() => navigate('AboutGame')}>
+            <Left>
+              <Icon name="md-information-circle"/>
+            </Left>
+            <Body>
+              <Text>About the game</Text>
+            </Body>
           </ListItem>
-          <ListItem >
-            <Text onPress={() => navigate('AboutUs')}>About the developers</Text>
+          <ListItem icon onPress={() => navigate('AboutUs')}>
+            <Left>
+              <Icon name="md-browsers"/>
+            </Left>
+            <Body>
+              <Text>About the developers</Text>
+            </Body>
           </ListItem>
-          <ListItem last>
-            <Text>How to play</Text>
-          </ListItem>
-          <ListItem>
-            <Text>Help</Text>
-          </ListItem>
-          <ListItem>
-         <Text onPress={() => this.showConfirm()}>Log Out & Exit</Text>
+          <ListItem icon onPress={() => this.showConfirm()}>
+            <Left>
+              <Icon name="md-nuclear"/>
+            </Left>
+            <Body>
+              <Text>Log Out & Exit</Text>
+            </Body>
           </ListItem>
         </List>
       </Content>
