@@ -6,7 +6,8 @@ import {
   AsyncStorage,
   Image,
   TouchableOpacity,
-  KeyboardAvoidingView
+  KeyboardAvoidingView,
+  StatusBar
 } from "react-native";
 import {
   Container,
@@ -174,6 +175,7 @@ export default class AUTHENTICATION extends Component {
                     enabled
         >
         <Container>
+        <StatusBar hidden />
             <View style={styles.container}>
                       <AppIntroSlider
             slides={slides}

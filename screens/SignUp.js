@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, AsyncStorage } from "react-native"; 
+import { View, AsyncStorage, StatusBar } from "react-native"; 
 import { Container, Header, Body, Title, Content, Form, Item, Input, Label, Button, Text, Icon } from 'native-base';
 import { NavigationActions } from "react-navigation";
 import { Row } from "react-native-easy-grid";
@@ -76,6 +76,7 @@ export default class SignUp extends Component {
   render() {
     return (
       <Container>
+        <StatusBar hidden />
         <Header>
           <Body>
             <Title>Sign Up</Title>

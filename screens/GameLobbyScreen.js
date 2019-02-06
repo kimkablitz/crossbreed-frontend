@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { AsyncStorage, ScrollView, View, ImageBackground, StyleSheet } from "react-native";
+import { AsyncStorage, ScrollView, View, ImageBackground, StyleSheet, StatusBar } from "react-native";
 import { Container, Header, Body, Title, Content, Button, Text } from "native-base";
 import { Grid, Row, Col } from "react-native-easy-grid";
 import { NavigationActions } from "react-navigation";
@@ -77,12 +77,13 @@ export default class GameLobbyScreen extends Component {
     render(){
         return (
             <Container>
+                <StatusBar hidden />
                 <ImageBackground style={ styles.imgBackground }
                  resizeMode='cover' 
                  source={require('../assets/images/background.png')}>
-                <Header style={{ backgroundColor: "transparent", borderBottomWidth: 0 }}>
+                <Header style={{ backgroundColor: "transparent", borderBottomWidth: 0, elevation: 0 }}>
         	        <Body>
-        	          <Title style={{ alignSelf: "center" }}>Game Lobby</Title>
+        	          <Title style={{ color: "black", alignSelf: "center" }}>Game Lobby</Title>
         	        </Body>
         	    </Header>
                 <View style={{ flex: 1 }}>

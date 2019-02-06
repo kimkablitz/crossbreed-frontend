@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Alert, BackHandler, AsyncStorage, StyleSheet, View } from "react-native";
+import { Alert, BackHandler, AsyncStorage, StyleSheet, View, StatusBar } from "react-native";
 import { Container, Header, Body, Title, Left, Right, Button, Icon, Content, H1, H2, H3, Text, Badge } from "native-base";
 import { Grid, Row, Col } from "react-native-easy-grid";
 import { NavigationActions, StackActions } from 'react-navigation';
@@ -200,6 +200,7 @@ export default class HangmanScreen extends Component {
 	render() {
 		return (
 			<Container>
+				<StatusBar hidden />
 				<Header>
 					<Left style={{ flex: 1 }}>
 						<Button transparent onPress={this.showAlert}>
