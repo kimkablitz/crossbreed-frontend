@@ -15,6 +15,7 @@ import {
   H3,
   Body
 } from "native-base";
+import { NavigationActions, StackActions } from "react-navigation";
 import Alerts from "../utils/Alerts";
 import API from "../utils/API";
 import Layout from "../constants/Layout";
@@ -37,7 +38,15 @@ export default class Forgot extends Component {
 
     API.resetPassword(thisUserEmail)
       .then(res => {
+        console.log("finished reset password");
         console.log((res.data));
+        Alerts.resetPassword(() => {
+          const reset = StackActions.reset({
+            index: 0,
+            actions: [NavigationActions.navigate({ routeName: 'Authentication' })],
+          })
+          this.props.navigation.dispatch(reset);
+        })
       })
       .catch(err => {
         if (err.response.status === 405) {
