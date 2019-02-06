@@ -6,7 +6,9 @@ import {
   StyleSheet,
   TouchableOpacity,
   View,
-  AsyncStorage, ImageBackground
+  AsyncStorage, 
+  ImageBackground, 
+  StatusBar
 } from "react-native";
 import _ from "lodash";
 import PetCard from "../components/Stable/PetCard";
@@ -210,12 +212,13 @@ export default class HomeScreen extends React.Component {
     return (
       
         <Container>
+          <StatusBar hidden />
           <ImageBackground style={ styles.imgBackground } 
                  resizeMode='cover' 
                  source={require('../assets/images/background.png')}>
-          <Header>
+          <Header style={{ backgroundColor: "transparent", borderBottomWidth: 0, elevation: 0 }}>
             <Body>
-              <Title style={{ alignSelf: "center" }}>Stable</Title>
+              <Title style={{ color: "black", alignSelf: "center" }}>Stable</Title>
             </Body>
           </Header>
           <Content style={styles.container}>
@@ -269,7 +272,7 @@ export default class HomeScreen extends React.Component {
                           return (
                             <Col
                               key={egg._id}
-                              style={{ width: 150, height: 200 }}
+                              style={{ width: 150 }}
                             >
                               <EggCard
                                 key={egg._id}

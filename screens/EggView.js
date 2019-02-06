@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 // import axios from 'axios';
-import { StyleSheet, View, Alert, AsyncStorage } from 'react-native';
+import { StyleSheet, View, Alert, AsyncStorage, StatusBar } from 'react-native';
 import { Svg } from 'expo';
 import { Container, Content, Header, Title, Card, CardItem, Text, Button, Body, H2 } from 'native-base';
 import { Col, Row, Grid } from "react-native-easy-grid";
@@ -200,6 +200,7 @@ export default class EggScreen extends Component {
     if (this.state.egg._id) {
         return (
           <Container>
+            <StatusBar hidden />
             <Header>
                 <Body>
                     <Title style={{ alignSelf: 'center' }}>Egg</Title>

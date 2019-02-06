@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Alert, BackHandler, AsyncStorage, StyleSheet } from "react-native";
+import { Alert, BackHandler, AsyncStorage, StyleSheet, StatusBar } from "react-native";
 import { Container, Header, Body, Title, Left, Right, Button, Icon, Content, H2, H3, Text } from "native-base";
 import { Grid, Row, Col } from "react-native-easy-grid";
 import { NavigationActions, StackActions } from 'react-navigation';
@@ -189,6 +189,7 @@ export default class Match3Screen extends Component {
   render() {
     return (
 		<Container>
+			<StatusBar hidden />
         	<Header>
         	  <Left style={{ flex: 1 }}>
         	    <Button transparent onPress={ this.showAlert }>

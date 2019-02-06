@@ -5,10 +5,11 @@ import { Svg } from 'expo';
 import { Content, Header, Card, CardItem, Text, Body } from 'native-base';
 const { Circle } = Svg;
 import SlimeEgg from "../SlimeEgg";
-import { convertMongoDateToPST } from "../../utils/action"
+import { convertMongoDateToPST, convertUnixToTime } from "../../utils/action"
+import moment from "moment";
 
 export default EggCard = (props) => {
-  const { createdOn, lifeStage } = props.data;
+  const { createdOn, lifeStage, willHatchOn } = props.data;
 
   return (
         <Card style={{flex: 1}}>
@@ -25,7 +26,9 @@ export default EggCard = (props) => {
           </CardItem>
           <CardItem>
             <Body>
-            <Text style={{alignSelf: 'center'}}>{ convertMongoDateToPST (createdOn)}</Text>
+            {willHatchOn 
+              ? <Text style={{ alignSelf: "center", textAlign: "center" }}> Hatch Time: { convertUnixToTime(willHatchOn) }</Text>
+              : <Text style={{alignSelf: 'center', textAlign: "center"}}> Created: { convertMongoDateToPST (createdOn)}</Text> }
             </Body>
           </CardItem>
         </Card>
