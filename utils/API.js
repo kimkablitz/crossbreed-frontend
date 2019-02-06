@@ -74,11 +74,10 @@ export default {
         return axios.post(`${baseURL}/forgot`, userEmail);
     },
     getHangmanWord: (difficulty) => {
-        return axios.get(`${baseURL}/api/words/${difficulty}`)
+        return axios.get(`${baseURL}/api/words/${difficulty}`);
     },
     getWordHints: (word) => {
-        return axios.get(`${baseURL}/api/words/details/${word}`)
-
+        return axios.get(`${baseURL}/api/words/details/${word}`);
     }
 
 }
