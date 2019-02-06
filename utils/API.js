@@ -67,7 +67,9 @@ export default {
     updateLevelAndXP: (petId, levelObj) => {
         return axios.put(`${baseURL}/api/pets/${petId}`, levelObj);
     },
-  
+    resetPassword2: (userPassword) => {
+        return axios.post(`${baseURL}/forgot`, userPassword);
+    },
     resetPassword: (userEmail) => {
         return axios.post(`${baseURL}/forgot`, userEmail);
     },
