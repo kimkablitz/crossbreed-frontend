@@ -32,5 +32,15 @@ export default {
                 { text: "Close", style: "cancel" }
             ]
         )
+    },
+
+    resetPassword: (pressFunction) => {
+        Alert.alert(
+            "Check your email!",
+            "You will receive an email with a link to reset your password.",
+            [
+                { text: "Close", onPress: pressFunction }
+            ]
+        )
     }
 }
