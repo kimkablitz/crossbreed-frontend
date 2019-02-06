@@ -82,7 +82,7 @@ export default class GameLobbyScreen extends Component {
                  source={require('../assets/images/background.png')}>
                 <Header style={{ backgroundColor: "transparent", borderBottomWidth: 0 }}>
         	        <Body>
-        	          <Title style={{ alignSelf: "center" }}>Game Lobby</Title>
+        	          <Title style={{ color: "black", alignSelf: "center" }}>Game Lobby</Title>
         	        </Body>
         	    </Header>
                 <View style={{ flex: 1 }}>

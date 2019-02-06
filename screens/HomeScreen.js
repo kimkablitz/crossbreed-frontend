@@ -215,7 +215,7 @@ export default class HomeScreen extends React.Component {
                  source={require('../assets/images/background.png')}>
           <Header style={{ backgroundColor: "transparent", borderBottomWidth: 0 }}>
             <Body>
-              <Title style={{ alignSelf: "center" }}>Stable</Title>
+              <Title style={{ color: "black", alignSelf: "center" }}>Stable</Title>
             </Body>
           </Header>
           <Content style={styles.container}>

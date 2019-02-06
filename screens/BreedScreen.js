@@ -174,7 +174,7 @@ export default class BreedScreen extends React.Component {
                     source={require('../assets/images/background.png')}>
                     <Header  style={{ backgroundColor: "transparent", borderBottomWidth: 0 }}>
                         <Body>
-                            <Title style={{ alignSelf: 'center' }}>Breed Pets</Title>
+                            <Title style={{ color: "black", alignSelf: 'center' }}>Breed Pets</Title>
                         </Body>
                     </Header>
                     <Content style={styles.container}>
