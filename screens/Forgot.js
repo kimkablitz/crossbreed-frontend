@@ -49,10 +49,9 @@ export default class Forgot extends Component {
         })
       })
       .catch(err => {
-        if (err.response.status === 405) {
+        if (err.response.status === 500) {
           return Alerts.singleButtonError(
-            "Err", "your password reset cannot be completed at this time",
-            err.response.data.message
+            "Error", "Your email does not exist in our database!",
           );
         }
       });
