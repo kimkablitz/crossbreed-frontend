@@ -70,7 +70,7 @@ export default {
   
     resetPassword: (userEmail) => {
         return axios.post(`${baseURL}/forgot`, userEmail);
-    }, 
+    },
     getHangmanWord: (difficulty) => {
         return axios.get(`${baseURL}/api/words/${difficulty}`)
     },
