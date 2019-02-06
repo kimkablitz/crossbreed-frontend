@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { View, AsyncStorage,TextInput, KeyboardAvoidingView } from "react-native";
+import { View, AsyncStorage,TextInput, KeyboardAvoidingView, StatusBar } from "react-native";
 import {
   Container,
   Header,
@@ -54,6 +54,7 @@ export default class Forgot extends Component {
     return (
       
       <Container>
+        <StatusBar hidden />
         <Header>
           <Body>
             <Title>Forgot Password</Title>
