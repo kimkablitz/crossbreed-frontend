@@ -67,7 +67,7 @@ export default class Forgot extends Component {
             <Title>Forgot Password</Title>
           </Body>
         </Header>
-        <Content padder contentContainerStyle={{ flex: 1, justifyContent: "center" }}>
+        <Content padder contentContainerStyle={{ flex: 1, marginTop: 50 }}>
           <KeyboardAvoidingView
                       behavior='padding'
                       keyboardVerticalOffset={10}
