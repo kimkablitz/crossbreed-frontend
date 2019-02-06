@@ -213,7 +213,7 @@ export default class HomeScreen extends React.Component {
           <ImageBackground style={ styles.imgBackground } 
                  resizeMode='cover' 
                  source={require('../assets/images/background.png')}>
-          <Header>
+          <Header style={{ backgroundColor: "transparent", borderBottomWidth: 0 }}>
             <Body>
               <Title style={{ alignSelf: "center" }}>Stable</Title>
             </Body>
@@ -269,7 +269,7 @@ export default class HomeScreen extends React.Component {
                           return (
                             <Col
                               key={egg._id}
-                              style={{ width: 150, height: 200 }}
+                              style={{ width: 150 }}
                             >
                               <EggCard
                                 key={egg._id}
