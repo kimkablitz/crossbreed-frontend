@@ -23,15 +23,26 @@ export default class SignUp extends Component {
       if(username === "" || password === "" || displayName === "" || email === ""){
         return Alerts.singleButtonError("Error", "Please fill in all fields");
       }
-        const passwordMessage = validator.password(password)
-        if (passwordMessage !== "Success") {
-          return Alerts.singleButtonError(passwordMessage.title, passwordMessage.message)
+
+        //Validate each of the fields individually in the order they appear on the page
+        const displayNameMessage = validator.displayName(displayName);
+        if(displayNameMessage !== "Success"){
+          return Alerts.singleButtonError(displayNameMessage.title, displayNameMessage.message);
         }
 
-        // Use validator to make sure email is in valid format
+        const usernameMessage = validator.username(username);
+        if(usernameMessage !== "Success"){
+          return Alerts.singleButtonError(usernameMessage.title, usernameMessage.message);
+        }
+
         const emailMessage = validator.email(email);
         if(emailMessage !== "Success"){
           return Alerts.singleButtonError(emailMessage.title, emailMessage.message);
+        }
+
+        const passwordMessage = validator.password(password)
+        if (passwordMessage !== "Success") {
+          return Alerts.singleButtonError(passwordMessage.title, passwordMessage.message)
         }
 
         // create newUser object to be sent to database
