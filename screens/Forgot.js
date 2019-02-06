@@ -33,9 +33,8 @@ export default class Forgot extends Component {
     if (this.state.email === "") {
       return Alerts.singleButtonError("Message", "Send us your email to reset password");
     }
-    const thisUserEmail = this.state.email
-    // const thisUserEmail = email;
-
+    const thisUserEmail = this.state.email.trim();
+    
     API.resetPassword(thisUserEmail)
       .then(res => {
         console.log("finished reset password");
