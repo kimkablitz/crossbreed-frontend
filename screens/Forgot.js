@@ -15,6 +15,7 @@ import {
   H3,
   Body
 } from "native-base";
+import { NavigationActions, StackActions } from "react-navigation";
 import Alerts from "../utils/Alerts";
 import API from "../utils/API";
 import Layout from "../constants/Layout";
@@ -24,26 +25,32 @@ export default class Forgot extends Component {
     email: ""
   };
 
-  reset = () => {
-    console.log("love you");
-  };
+  // reset = () => {
+  //   console.log("love you");
+  // };
 
   sendEmailBack = () => {
     if (this.state.email === "") {
       return Alerts.singleButtonError("Message", "Send us your email to reset password");
     }
-    const thisUserEmail = this.state.email
-    // const thisUserEmail = email;
-
+    const thisUserEmail = this.state.email.trim();
+    
     API.resetPassword(thisUserEmail)
       .then(res => {
+        console.log("finished reset password");
         console.log((res.data));
+        Alerts.resetPassword(() => {
+          const reset = StackActions.reset({
+            index: 0,
+            actions: [NavigationActions.navigate({ routeName: 'Authentication' })],
+          })
+          this.props.navigation.dispatch(reset);
+        })
       })
       .catch(err => {
-        if (err.response.status === 405) {
+        if (err.response.status === 500) {
           return Alerts.singleButtonError(
-            "Err", "your password reset cannot be completed at this time",
-            err.response.data.message
+            "Error", "Your email does not exist in our database!",
           );
         }
       });
@@ -60,7 +67,7 @@ export default class Forgot extends Component {
             <Title>Forgot Password</Title>
           </Body>
         </Header>
-        <Content padder contentContainerStyle={{ flex: 1, justifyContent: "center" }}>
+        <Content padder contentContainerStyle={{ flex: 1, marginTop: 50 }}>
           <KeyboardAvoidingView
                       behavior='padding'
                       keyboardVerticalOffset={10}

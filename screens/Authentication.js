@@ -23,7 +23,7 @@ import { NavigationActions } from "react-navigation";
 import * as Expo from "expo";
 import API from "../utils/API";
 import Alerts from "../utils/Alerts";
-
+import PasswordInputText from "react-native-hide-show-password-input";
 import { Ionicons } from "@expo/vector-icons";
 import { LinearGradient } from "expo";
 import AppIntroSlider from "react-native-app-intro-slider";
@@ -195,13 +195,9 @@ export default class AUTHENTICATION extends Component {
                       onChangeText={value => this.setState({ username: value })}
                     />
                   </Item>
-                  <Item floatingLabel>
-                    <Label>Password</Label>
-                    <Input
-                      secureTextEntry={true}
-                      onChangeText={value => this.setState({ password: value })}
-                    />
-                  </Item>
+                  <View style={{ marginLeft: 15 }}>
+                    <PasswordInputText value={this.state.password} onChangeText={ value => this.setState({ password: value.trim() })}/>
+                  </View>
                 </Form>
                 <Button
                     block
