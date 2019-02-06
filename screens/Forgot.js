@@ -24,9 +24,9 @@ export default class Forgot extends Component {
     email: ""
   };
 
-  reset = () => {
-    console.log("love you");
-  };
+  // reset = () => {
+  //   console.log("love you");
+  // };
 
   sendEmailBack = () => {
     if (this.state.email === "") {
