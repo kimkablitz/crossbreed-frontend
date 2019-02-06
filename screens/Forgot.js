@@ -1,8 +1,9 @@
 import React, { Component } from "react";
-import { View, AsyncStorage,TextInput } from "react-native";
+import { View, AsyncStorage,TextInput, KeyboardAvoidingView, StatusBar } from "react-native";
 import {
   Container,
   Header,
+  Title,
   Content,
   Form,
   Item,
@@ -10,10 +11,13 @@ import {
   Label,
   Text,
   Icon,
-  Button
+  Button, 
+  H3,
+  Body
 } from "native-base";
 import Alerts from "../utils/Alerts";
 import API from "../utils/API";
+import Layout from "../constants/Layout";
 
 export default class Forgot extends Component {
   state = {
@@ -48,22 +52,37 @@ export default class Forgot extends Component {
 
   render() {
     return (
+      
       <Container>
-        <Content padder contentContainerStyle={{ flex: 1 }}>
-          <Form>
-            <TextInput
-        style={{height: 40, borderColor: 'gray', borderWidth: 1}}
-        onChangeText={(email) => this.setState({email})}
-        value={this.state.email}
-      />
-            <View style={{ marginVertical: 20 }}>
-               <Button > 
-                <Text onPress={this.sendEmailBack}>Reset Password</Text>
-               </Button>
-            </View>
-          </Form>
+        <StatusBar hidden />
+        <Header>
+          <Body>
+            <Title>Forgot Password</Title>
+          </Body>
+        </Header>
+        <Content padder contentContainerStyle={{ flex: 1, justifyContent: "center" }}>
+          <KeyboardAvoidingView
+                      behavior='padding'
+                      keyboardVerticalOffset={10}
+                      enabled
+          >
+            <Form>
+              <H3 style={{textAlign: "center"}}>Please enter the email associated with your account: </H3> 
+              <TextInput
+                style={{height: 40, borderColor: 'gray', borderWidth: 1}}
+                onChangeText={(email) => this.setState({email})}
+                value={this.state.email}
+              />
+              <View style={{ marginVertical: 20, alignSelf: "center" }}>
+                 <Button > 
+                  <Text onPress={this.sendEmailBack}>Reset Password</Text>
+                 </Button>
+              </View>
+            </Form>
+          </KeyboardAvoidingView>
         </Content>
       </Container>
+     
     );
   }
 }
