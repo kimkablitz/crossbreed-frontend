@@ -12,7 +12,11 @@ For our first version, we have two minigames, and pets can be bred to a vast mul
 
 Our app starts with a login page, because we want each user to have their own pets, and be able to find them again. Afterall, the point is to cultivate a unique collection. This page allows signing in, or signing up, and has a button to reset your password by email if needed.
 
->>>>>> login pages
+<p align="center">
+  <img src="https://user-images.githubusercontent.com/36722674/52391487-37997700-2a52-11e9-9a31-57feacb00ee5.png" alt="auto-fill" height="400"/>
+</p>
+
+
 
 On signing up for our app, a new user is given two starter pets, from which they can breed new ones. 
 
