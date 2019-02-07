@@ -34,14 +34,10 @@ Clicking on a pet in the stable will bring you to an individual view for that pe
 </p>
 
 Clicking on an egg will take you to the single egg view, from which eggs can be incubated or discarded. 
-
-<p align="center">
-  <img src="https://user-images.githubusercontent.com/36722674/52392102-551c1000-2a55-11e9-9954-505aff11b3c4.jpg" alt="auto-fill" height="400"/>
-</p>
-
 When an egg's countdown reaches 0, it is ready to hatch, and will get sparkly. Hatching an egg will redirect you to that pet's individual page, and the pet will also be available in the Stable overview.
 
 <p align="center">
+  <img src="https://user-images.githubusercontent.com/36722674/52392102-551c1000-2a55-11e9-9954-505aff11b3c4.jpg" alt="auto-fill" height="400"/>
   <img src="https://user-images.githubusercontent.com/36722674/52392100-54837980-2a55-11e9-9103-20d153008c86.jpg" alt="auto-fill" height="400"/>
   <img src="https://user-images.githubusercontent.com/36722674/52392098-54837980-2a55-11e9-9324-5c80ee48f56b.jpg" alt="auto-fill" height="400"/>
 </p>
