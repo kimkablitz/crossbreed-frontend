@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { AsyncStorage, ScrollView, View } from "react-native";
+import { AsyncStorage, ScrollView, View, ImageBackground, StyleSheet, StatusBar } from "react-native";
 import { Container, Header, Body, Title, Content, Button, Text } from "native-base";
 import { Grid, Row, Col } from "react-native-easy-grid";
 import { NavigationActions } from "react-navigation";
@@ -77,9 +77,13 @@ export default class GameLobbyScreen extends Component {
     render(){
         return (
             <Container>
-                <Header>
+                <StatusBar hidden />
+                <ImageBackground style={ styles.imgBackground }
+                 resizeMode='cover' 
+                 source={require('../assets/images/background.png')}>
+                <Header style={{ backgroundColor: "transparent", borderBottomWidth: 0, elevation: 0 }}>
         	        <Body>
-        	          <Title style={{ alignSelf: "center" }}>Game Lobby</Title>
+        	          <Title style={{ color: "black", alignSelf: "center" }}>Game Lobby</Title>
         	        </Body>
         	    </Header>
                 <View style={{ flex: 1 }}>
@@ -133,7 +137,7 @@ export default class GameLobbyScreen extends Component {
                         <ScrollView style={{ flex: 1 }}>
                             <Row style={{ flexWrap: "wrap", justifyContent: 'space-evenly' }} > 
                               {this.state.userPets.map( (stall, index) => {
-                                const borderColor = this.state.selectedPet._id === stall._id ? "grey" : "white"
+                                const borderColor = this.state.selectedPet._id === stall._id ? "grey" : "transparent"
                                 return (<Col key={stall._id} style={{width: 150, borderWidth: 5, borderColor: borderColor }} >
                                   <PetCard key={index} data={stall} press={() => this.setPet(stall) } />
                                 </Col>)
@@ -142,8 +146,19 @@ export default class GameLobbyScreen extends Component {
                         </ScrollView>
                     
                 </View>
+                </ImageBackground>
             </Container>
         )
     }
 }
 
+const styles = StyleSheet.create({
+    container: {
+      flex: 1
+    },
+    imgBackground: {
+      width: '100%',
+      height: '100%',
+      flex: 1 
+    },
+  });

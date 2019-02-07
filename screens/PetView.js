@@ -2,7 +2,7 @@ import React from 'react';
 import API from '../utils/API';
 import validator from '../utils/validation';
 import Alerts from "../utils/Alerts";
-import { StyleSheet, View, KeyboardAvoidingView, AsyncStorage, Alert } from 'react-native';
+import { StyleSheet, View, KeyboardAvoidingView, AsyncStorage, Alert, StatusBar } from 'react-native';
 import { Svg } from 'expo';
 import { Content, Card, CardItem, Text, Button, Header, Body, Title, Item, Input } from 'native-base';
 import { Col, Row, Grid } from "react-native-easy-grid";
@@ -184,6 +184,7 @@ export default class PetScreen extends React.Component {
                     keyboardVerticalOffset={0}
                     enabled
                 >
+                    <StatusBar hidden />
                     <Header>
                         <Body>
                             <Title style={{ alignSelf: 'center' }}>{this.state.pet.name}</Title>

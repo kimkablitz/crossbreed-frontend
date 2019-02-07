@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Alert, BackHandler, AsyncStorage, StyleSheet, View } from "react-native";
+import { Alert, BackHandler, AsyncStorage, StyleSheet, View, StatusBar } from "react-native";
 import { Container, Header, Body, Title, Left, Right, Button, Icon, Content, H1, H2, H3, Text, Badge } from "native-base";
 import { Grid, Row, Col } from "react-native-easy-grid";
 import { NavigationActions, StackActions } from 'react-navigation';
@@ -11,9 +11,9 @@ import Alerts from "../utils/Alerts";
 import _ from "lodash";
 
 let modalMessage = '';
-let antenae = true;
-let ears = true;
-let extraGuesses = 2;
+// let antenae = true;
+// let ears = true;
+// let extraGuesses = 2;
 
 export default class HangmanScreen extends Component {
 	state = {
@@ -34,6 +34,7 @@ export default class HangmanScreen extends Component {
 	componentWillMount() {
 		const difficultyLevel = this.props.navigation.getParam("difficultyLevel");
 		const petInfo = this.props.navigation.getParam("petInfo");
+		console.log(petInfo);
 		this.backHandler = BackHandler.addEventListener("hardwareBackPress", this.showAlert);
 		this.setState({
 			petInfo: petInfo,
@@ -55,8 +56,8 @@ export default class HangmanScreen extends Component {
 					return "_"
 				}
 			})
-			let remaining = 8 + extraGuesses
-			let availability = (ears || antenae) && (remaining <= (this.state.petInfo.level / 5));
+			let remaining = 8 + parseInt(this.state.petInfo.extraGuesses);
+			let availability = (this.state.petInfo.ears || this.state.petInfo.antennae) && (remaining <= (this.state.petInfo.level / 5));
 			this.setState({
 				word: newWord,
 				gameEnded: false,
@@ -121,7 +122,7 @@ export default class HangmanScreen extends Component {
 			if ((this.state.blanksRemaining <= 0) || (this.state.guessesRemaining <= 0)) {
 				this.endGame(this.state.blanksRemaining)
 			}
-			else if ((ears || antenae) && (this.state.guessesRemaining <= (this.state.petInfo.level / 5) + 1)) {
+			else if ((this.state.petInfo.ears || this.state.petInfo.antennae) && (this.state.guessesRemaining <= (this.state.petInfo.level / 5) + 1)) {
 				this.setState({
 					hintAvailable: true
 				})
@@ -135,7 +136,9 @@ export default class HangmanScreen extends Component {
 				this.setState({
 					hint: res.data.results[0]
 				}, () => {
-					return Alerts.hangmanHint(ears, this.state.hint.synonyms, antenae, this.state.hint.definition)
+					let antennae = this.state.petInfo.antennae !== null;
+					let ears = this.state.petInfo.ears !== null;
+					return Alerts.hangmanHint(ears, this.state.hint.synonyms, antennae, this.state.hint.definition)
 				})
 			}
 		}).catch(err => {console.log(err)})
@@ -200,6 +203,7 @@ export default class HangmanScreen extends Component {
 	render() {
 		return (
 			<Container>
+				<StatusBar hidden />
 				<Header>
 					<Left style={{ flex: 1 }}>
 						<Button transparent onPress={this.showAlert}>
@@ -219,10 +223,15 @@ export default class HangmanScreen extends Component {
 				<Content>
 					<MyModal visible={this.state.helpModalVisible}>
 						<Grid style={{ backgroundColor: "rgba(0,0,0,0.9)", justifyContent: "center", alignItems: "center" }}>
-							<Row size={1} >
-								<H2 style={{ alignSelf: "center", color: "white", textAlign: "center" }}>
-									Play Hangman with your pet!
-								</H2>
+							<Row size={ 3 } style={{ justifyContent: "center" }}>
+								<Col style={{ justifyContent: "center" }}>
+									<H3 style={styles.helpText}>
+										Play hangman with your pet!
+									</H3>
+									<Text style={styles.helpText}>
+										Hint: If your pet has the right DNA, it may find a hint for you!
+									</Text>
+								</Col>
 							</Row>
 							<Row size={1}>
 								<Button onPress={() => this.setState({ helpModalVisible: false })}>
@@ -282,3 +291,11 @@ export default class HangmanScreen extends Component {
 		)
 	}
 }
+
+const styles = StyleSheet.create({
+	helpText: {
+		color: "white",
+		textAlign: "center",
+		margin: 20
+	}
+});

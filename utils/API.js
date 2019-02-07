@@ -1,8 +1,6 @@
 import axios from "axios";
 
-
 const baseURL = "https://crossbreed-backend.herokuapp.com"
-
 
 export default {
     
@@ -69,16 +67,17 @@ export default {
     updateLevelAndXP: (petId, levelObj) => {
         return axios.put(`${baseURL}/api/pets/${petId}`, levelObj);
     },
-  
+    resetPassword2: (userPassword) => {
+        return axios.post(`${baseURL}/forgot`, userPassword);
+    },
     resetPassword: (userEmail) => {
         return axios.post(`${baseURL}/forgot`, userEmail);
-    }, 
+    },
     getHangmanWord: (difficulty) => {
-        return axios.get(`${baseURL}/api/words/${difficulty}`)
+        return axios.get(`${baseURL}/api/words/${difficulty}`);
     },
     getWordHints: (word) => {
-        return axios.get(`${baseURL}/api/words/details/${word}`)
-
+        return axios.get(`${baseURL}/api/words/details/${word}`);
     }
 
 }

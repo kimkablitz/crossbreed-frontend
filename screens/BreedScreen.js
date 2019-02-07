@@ -1,6 +1,6 @@
 import React from 'react';
 import API from "../utils/API";
-import { View, ScrollView, StyleSheet, AsyncStorage, ImageBackground } from 'react-native';
+import { View, ScrollView, StyleSheet, AsyncStorage, ImageBackground, StatusBar } from 'react-native';
 import PetCard from '../components/Stable/PetCard';
 import TinyPetCard from '../components/Stable/TinyPetCard';
 import { Col, Row, Grid } from 'react-native-easy-grid';
@@ -169,12 +169,13 @@ export default class BreedScreen extends React.Component {
     render() {
         return (
             <Container>
+                <StatusBar hidden />
                 <ImageBackground style={styles.imgBackground}
                     resizeMode='cover'
                     source={require('../assets/images/background.png')}>
-                    <Header>
+                    <Header  style={{ backgroundColor: "transparent", borderBottomWidth: 0, elevation: 0 }}>
                         <Body>
-                            <Title style={{ alignSelf: 'center' }}>Breed Pets</Title>
+                            <Title style={{ color: "black", alignSelf: 'center' }}>Breed Pets</Title>
                         </Body>
                     </Header>
                     <Content style={styles.container}>
