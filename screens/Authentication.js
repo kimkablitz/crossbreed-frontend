@@ -253,8 +253,8 @@ const styles = StyleSheet.create({
     justifyContent: "flex-start"
   },
   image: {
-    width: 350,
-    height: 300
+    width: Layout.window.width * .98,
+    height: Layout.window.height * .47
   },
   text: {
     color: "rgba(255, 255, 255, 0.8)",
@@ -274,21 +274,21 @@ const styles = StyleSheet.create({
 const slides = [
   {
     key: "somethun",
-    image: require("../assets/images/HangmanSlider.jpeg"),
+    image: require("../assets/images/BreedPetsSlider.png"),
     imageStyle: styles.image,
     colors: ["#63E2FF", "#B066FE"], 
     topSpacer: 0
   },
   {
     key: "somethun1",
-    image: require("../assets/images/Match3Slider.jpeg"),
+    image: require("../assets/images/HangmanSlider.jpeg"),
     imageStyle: styles.image,
     colors: ["#A3A1FF", "#3A3897"],
     topSpacer: 0
   },
   {
     key: "somethun2",
-    image: require("../assets/images/BreedPetsSlider.png"),
+    image: require("../assets/images/Match3Slider.jpeg"),
     imageStyle: styles.image,
     colors: ["#29ABE2", "#4F00BC"],
     topSpacer: 0
