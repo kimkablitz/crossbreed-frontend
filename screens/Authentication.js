@@ -149,16 +149,12 @@ export default class AUTHENTICATION extends Component {
       start={{ x: 0, y: 0.1 }}
       end={{ x: 0.1, y: 1 }}
     >
-      <Ionicons
-        style={{ backgroundColor: "transparent" }}
-        name={props.icon}
+      <Image
+        style={ props.imageStyle }
+        source={ props.image }
         size={200}
         color="white"
       />
-      <View>
-        <Text style={styles.title}>{props.title}</Text>
-        <Text style={styles.text}>{props.text}</Text>
-      </View>
     </LinearGradient>
   );
 
@@ -177,16 +173,16 @@ export default class AUTHENTICATION extends Component {
         <Container>
         <StatusBar hidden />
             <View style={styles.container}>
-                      <AppIntroSlider
-            slides={slides}
-            renderItem={this._renderItem}
-            bottomButton
-            showPrevButton
-            showSkipButton
-            hideNextButton
-            hideDoneButton
-            // onSkip={() => console.log("skipped")}
-          />
+              <AppIntroSlider
+                slides={slides}
+                renderItem={this._renderItem}
+                bottomButton
+                // showPrevButton
+                hideSkipButton
+                hideNextButton
+                hideDoneButton
+                // onSkip={() => console.log("skipped")}
+              />
               <Content padder contentContainerStyle={styles.formContainer}>
                 <Form>
                   <Item floatingLabel>
@@ -254,11 +250,11 @@ const styles = StyleSheet.create({
   mainContent: {
     flex: 1,
     alignItems: "center",
-    justifyContent: "space-evenly"
+    justifyContent: "flex-start"
   },
   image: {
-    width: 320,
-    height: 320
+    width: 350,
+    height: 300
   },
   text: {
     color: "rgba(255, 255, 255, 0.8)",
@@ -272,31 +268,29 @@ const styles = StyleSheet.create({
     backgroundColor: "transparent",
     textAlign: "center",
     marginBottom: 16
-  }
+  },
 });
 
 const slides = [
   {
     key: "somethun",
-    title: "Quick setup, good defaults",
-    text:
-      "React-native-app-intro-slider is easy to setup with a small footprint and no dependencies. And it comes with good default layouts!",
-    icon: "ios-apps",
-    colors: ["#63E2FF", "#B066FE"]
+    image: require("../assets/images/HangmanSlider.jpeg"),
+    imageStyle: styles.image,
+    colors: ["#63E2FF", "#B066FE"], 
+    topSpacer: 0
   },
   {
     key: "somethun1",
-    title: "Super customizable",
-    text:
-      "The component is also super customizable, so you can adapt it to cover your needs and wants.",
-    icon: "md-git-network",
-    colors: ["#A3A1FF", "#3A3897"]
+    image: require("../assets/images/Match3Slider.jpeg"),
+    imageStyle: styles.image,
+    colors: ["#A3A1FF", "#3A3897"],
+    topSpacer: 0
   },
   {
     key: "somethun2",
-    title: "No need to buy me beer",
-    text: "Usage is all free",
-    icon: "md-people",
-    colors: ["#29ABE2", "#4F00BC"]
+    image: require("../assets/images/BreedPetsSlider.png"),
+    imageStyle: styles.image,
+    colors: ["#29ABE2", "#4F00BC"],
+    topSpacer: 0
   }
 ];
