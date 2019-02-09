@@ -66,6 +66,16 @@ The fourth button on our bottom navigation is for realworld concerns, such as lo
   <img src="https://user-images.githubusercontent.com/36722674/52392103-551c1000-2a55-11e9-909f-26a459f6e719.jpg" alt="auto-fill" height="400"/>
 </p>
 
+ ### Highlights of our game features
+* Diversity of pets
+* Users can reset password
+* Breed Pets and play mini games to level them up
+  
+  
+  
+### Material and Tools
+  All the packages we use and be found at https://github.com/kimkablitz/crossbreed-frontend/network/dependencies
+  
 ### Copyrights and Acknowledgements
   * [Privacy](https://termsfeed.com/privacy-policy/344b6716fd84368a9054bb74db9d8a3e)
   * [Terms & conditions](https://termsfeed.com/terms-conditions/31e7d4c5bc2033527fc80026bd31babf)
