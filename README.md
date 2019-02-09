@@ -66,7 +66,7 @@ The fourth button on our bottom navigation is for realworld concerns, such as lo
   <img src="https://user-images.githubusercontent.com/36722674/52392103-551c1000-2a55-11e9-909f-26a459f6e719.jpg" alt="auto-fill" height="400"/>
 </p>
 
- ### Highlights of our game features
+### Highlights of our game features
 * Diversity of pets
 * Users can reset password
 * Breed Pets and play mini games to level them up
