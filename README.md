@@ -74,7 +74,32 @@ The fourth button on our bottom navigation is for realworld concerns, such as lo
   
   
 ### Material and Tools
-  All the packages we use and be found at https://github.com/kimkablitz/crossbreed-frontend/network/dependencies
+
+  * front end packages and be found at https://github.com/kimkablitz/crossbreed-frontend/network/dependencies
+  * back end packages besides Node JS Express and MongoDB
+    "@sendgrid/mail": "^6.3.1",
+    "async": "^2.6.1",
+    "bcrypt-nodejs": "0.0.3",
+    "bcryptjs": "^2.4.3",
+    "benchmark": "^2.1.4",
+    "body-parser": "^1.18.3",
+    "connect-mongo": "^2.0.3",
+    "dotenv": "^6.2.0",
+    "express": "^4.16.4",
+    "express-session": "^1.15.6",
+    "fs": "0.0.1-security",
+    "joi": "^14.3.1",
+    "lodash": "^4.17.11",
+    "moment": "^2.24.0",
+    "mongoose": "^5.4.9",
+    "morgan": "^1.9.1",
+    "nodemailer": "^5.1.1",
+    "nodemailer-sendgrid-transport": "^0.2.0",
+    "nodemon": "^1.18.9",
+    "passport": "^0.4.0",
+    "passport-google-oauth": "^1.0.0",
+    "passport-local": "^1.0.0"
+  
   
 ### Copyrights and Acknowledgements
   * [Privacy](https://termsfeed.com/privacy-policy/344b6716fd84368a9054bb74db9d8a3e)
