@@ -47,9 +47,9 @@ export default class AUTHENTICATION extends Component {
       this.setState({ authenticating: true });
       const result = await Expo.Google.logInAsync({
         iosClientId:
-          "698044725879-4gdu67fr7qm3gj8conbtip3gtm6l9f5c.apps.googleusercontent.com",
+          "698044725879-4gdu67fr7qm3gj8conbtip3gtm6l9f5c.apps.googleusercontent.com", //crossbreed
         androidClientId:
-          "865415366088-6beq1kml9n1j99ghe7ep8ql9kd7lk6va.apps.googleusercontent.com",
+          "865415366088-v1c7enulq07lir65cvablmdvjijc240b.apps.googleusercontent.com",
         scopes: ["profile", "email"]
       });
       if (result.type === "success") {
