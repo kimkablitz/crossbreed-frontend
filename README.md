@@ -79,3 +79,6 @@ The fourth button on our bottom navigation is for realworld concerns, such as lo
 ### Copyrights and Acknowledgements
   * [Privacy](https://termsfeed.com/privacy-policy/344b6716fd84368a9054bb74db9d8a3e)
   * [Terms & conditions](https://termsfeed.com/terms-conditions/31e7d4c5bc2033527fc80026bd31babf)
+
+### Notes
+  Note that our googlesignin for iOS in version 1.2.1 does not work yet due to Google app versification will take up to several days or weeks. When this change is taken in effect, we will update our app to notify.
